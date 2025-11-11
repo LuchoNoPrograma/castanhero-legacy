@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Contratados - SICOES</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h2>Administracion de Personas Contratadas - SICOES</h2>
+                <hr>
+            </div>
+        </div>
+
+        <div class="row" th:if="${busqueda == 'find'}">
+            <div class="col-12">
+                <button type="button" class="btn btn-primary mb-3" th:onclick="'document.getElementById(\'nuevoForm\').submit();'">
+                    Nuevo Contratado
+                </button>
+
+                <form id="nuevoForm" th:action="@{/sicoes/contratados/nuevo}" method="post" style="display:none;">
+                    <input type="hidden" name="scsPrsContratado" value="">
+                </form>
+
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Nro</th>
+                            <th>Persona</th>
+                            <th>NIT</th>
+                            <th>NUA/CUA</th>
+                            <th>Usuario RUPE</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="contratado, iter : ${contratados}">
+                            <td th:text="${iter.count}">1</td>
+                            <td th:text="${contratado.persona?.nombreCompleto}">Persona</td>
+                            <td th:text="${contratado.scsNit}">123456789</td>
+                            <td th:text="${contratado.scsNuaCua}">987654321</td>
+                            <td th:text="${contratado.scsUsuarioRupe}">usuario</td>
+                            <td>
+                                <form th:action="@{/sicoes/contratados/editar/{id}(id=${contratado.idScsPrsContratado})}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-warning">Editar</button>
+                                </form>
+                                <form th:action="@{/sicoes/contratados/eliminar/{id}(id=${contratado.idScsPrsContratado})}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row" th:if="${operation == 'reg' or operation == 'modif' or operation == 'delet'}">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 th:text="${operation == 'reg' ? 'Registrar Contratado' : (operation == 'modif' ? 'Modificar Contratado' : 'Eliminar Contratado')}">Formulario</h4>
+                    </div>
+                    <div class="card-body">
+                        <form th:object="${scsPrsContratado}"
+                              th:action="${operation == 'reg' ? '/sicoes/contratados' : (operation == 'modif' ? '/sicoes/contratados/actualizar' : '/sicoes/contratados/confirmar-eliminar')}"
+                              method="post" enctype="multipart/form-data">
+
+                            <input type="hidden" th:field="*{idScsPrsContratado}">
+
+                            <div class="form-group">
+                                <label>Persona:</label>
+                                <select class="form-control" th:field="*{persona.idPersona}"
+                                        th:disabled="${operation == 'delet'}" required>
+                                    <option value="">Seleccione...</option>
+                                    <option th:each="persona : ${personas}"
+                                            th:value="${persona.idPersona}"
+                                            th:text="${persona.nombreCompleto}">Persona</option>
+                                </select>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>NIT:</label>
+                                        <input type="text" class="form-control" th:field="*{scsNit}"
+                                               th:readonly="${operation == 'delet'}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>NUA/CUA:</label>
+                                        <input type="text" class="form-control" th:field="*{scsNuaCua}"
+                                               th:readonly="${operation == 'delet'}" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Usuario RUPE:</label>
+                                        <input type="text" class="form-control" th:field="*{scsUsuarioRupe}"
+                                               th:readonly="${operation == 'delet'}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Clave RUPE:</label>
+                                        <input type="password" class="form-control" th:field="*{scsClaveRupe}"
+                                               th:readonly="${operation == 'delet'}" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" th:if="${operation != 'delet'}">
+                                <label>Foto:</label>
+                                <input type="file" class="form-control-file" name="file" accept="image/*">
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <button type="submit" class="btn btn-success"
+                                        th:text="${operation == 'reg' ? 'Registrar' : (operation == 'modif' ? 'Actualizar' : 'Confirmar Eliminacion')}">
+                                    Enviar
+                                </button>
+                                <a th:href="@{/sicoes/contratados}" class="btn btn-secondary">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{uap/usic/siga/gdoc/fragments/common :: head('GDOC - Administrar Titulos')}">
+</head>
+
+<body>
+<div class="container">
+
+    <div th:replace="~{uap/usic/siga/gdoc/fragments/common :: header('Gestion de Titulos')}"></div>
+
+    <section>
+        <div th:replace="~{uap/usic/siga/gdoc/fragments/common :: alerts}"></div>
+
+        <div th:if="${busqueda eq 'find'}">
+            <div class="text-center mb-4">
+                <h3><i class="fa fa-graduation-cap" aria-hidden="true"></i> Listado de Titulos</h3>
+            </div>
+
+            <table class="table table-striped table-hover data-table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nro. Titulo</th>
+                        <th>Tipo Titulo</th>
+                        <th>Grado Academico</th>
+                        <th>Gestion</th>
+                        <th>PDF</th>
+                        <th>Modificar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="titulo : ${listaTitulos}">
+                        <td th:text="${titulo.nroTitulo}"></td>
+                        <td th:text="${titulo.gdocTiposTitulos.gdocTipoTitulo}"></td>
+                        <td th:text="${titulo.prsGradosAcademicos.gradoAcademico}"></td>
+                        <td th:text="${titulo.gestion}"></td>
+                        <td>
+                            <a class="btn btn-sm btn-info"
+                               th:href="@{/titulos/openFile/{id}(id=${titulo.idGdocTitulo})}"
+                               target="_blank">
+                                <i class="fa fa-file-pdf"></i> Ver PDF
+                            </a>
+                        </td>
+                        <td>
+                            <form method="post" th:action="@{/titulos/inicioModificarTitulos}">
+                                <input type="hidden" name="idGdocTitulo" th:value="${titulo.idGdocTitulo}">
+                                <button class="btn btn-sm btn-success" type="submit">
+                                    <i class="fa fa-pencil"></i> Modificar
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" th:action="@{/titulos/eliminarTitulo}">
+                                <input type="hidden" name="idGdocTitulo" th:value="${titulo.idGdocTitulo}">
+                                <button class="btn btn-sm btn-danger" type="submit"
+                                        onclick="return confirm('Esta seguro de eliminar este titulo?')">
+                                    <i class="fa fa-times"></i> Eliminar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${operation eq 'reg' or operation eq 'mod'}">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h4 th:text="${operation eq 'reg' ? 'Registrar Nuevo Titulo' : 'Modificar Titulo'}"></h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post"
+                                  th:action="${operation eq 'reg' ? '@{/titulos/registroTitulos}' : '@{/titulos/actualizarTitulos}'}"
+                                  th:object="${gdocTitulos}"
+                                  enctype="multipart/form-data">
+
+                                <input type="hidden" th:field="*{idGdocTitulo}" th:if="${operation eq 'mod'}">
+
+                                <div class="mb-3">
+                                    <label for="nroTitulo" class="form-label">Nro. Titulo:</label>
+                                    <input type="number" class="form-control" id="nroTitulo" th:field="*{nroTitulo}" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="tipoTitulo" class="form-label">Tipo de Titulo:</label>
+                                    <select class="form-select" id="tipoTitulo" th:field="*{gdocTiposTitulos}" required>
+                                        <option value="">Seleccione...</option>
+                                        <option th:each="tipo : ${listaTiposTitulos}"
+                                                th:value="${tipo.idGdocTipoTitulo}"
+                                                th:text="${tipo.gdocTipoTitulo}"></option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="tipoGrado" class="form-label">Tipo Grado:</label>
+                                    <select class="form-select" id="tipoGrado" th:field="*{gdocTiposTitulosGrados}">
+                                        <option value="">Seleccione...</option>
+                                        <option th:each="grado : ${listaTiposTitulosGrados}"
+                                                th:value="${grado.idTipoTituloGrado}"
+                                                th:text="${grado.tipoTituloGrado}"></option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="file" class="form-label">Archivo PDF:</label>
+                                    <input type="file" class="form-control" id="file" th:field="*{file}" accept="application/pdf">
+                                </div>
+
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a th:href="@{/titulos/inicioTitulos}" class="btn btn-secondary">
+                                        <i class="fa fa-times"></i> Cancelar
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-save"></i> Guardar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div th:replace="~{uap/usic/siga/gdoc/fragments/common :: scripts}"></div>
+
+</body>
+</html>

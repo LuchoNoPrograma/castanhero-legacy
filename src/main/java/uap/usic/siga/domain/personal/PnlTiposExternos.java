@@ -1,0 +1,41 @@
+package uap.usic.siga.domain.personal;
+
+import uap.usic.siga.entidades.SigaUsicRevisiones;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+@Entity
+@Table(name = "pnl_tipos_externos")
+public class PnlTiposExternos extends SigaUsicRevisiones {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_pnl_tipo_externo")
+    private Long idPnlTipoExterno;
+
+    @NotNull
+    @Column(name = "tipo_externo", nullable = false)
+    private String tipoExterno;
+
+    public Long getIdPnlTipoExterno() {
+        return idPnlTipoExterno;
+    }
+
+    public void setIdPnlTipoExterno(Long idPnlTipoExterno) {
+        this.idPnlTipoExterno = idPnlTipoExterno;
+    }
+
+    public String getTipoExterno() {
+        return tipoExterno;
+    }
+
+    public void setTipoExterno(String tipoExterno) {
+        this.tipoExterno = tipoExterno;
+    }
+}

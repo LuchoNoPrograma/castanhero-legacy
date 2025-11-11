@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{uap/usic/siga/gdoc/fragments/common :: head('GDOC - Administrar Convenios')}">
+</head>
+
+<body>
+<div class="container">
+
+    <div th:replace="~{uap/usic/siga/gdoc/fragments/common :: header('Gestion de Convenios')}"></div>
+
+    <section>
+        <div th:replace="~{uap/usic/siga/gdoc/fragments/common :: alerts}"></div>
+
+        <div th:if="${busqueda eq 'find'}">
+            <div class="text-center mb-4">
+                <h3><i class="fa fa-handshake" aria-hidden="true"></i> Listado de Convenios</h3>
+            </div>
+
+            <table class="table table-striped table-hover data-table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nro. Convenio</th>
+                        <th>Tipo</th>
+                        <th>Institucion</th>
+                        <th>Fecha Inicio</th>
+                        <th>Fecha Final</th>
+                        <th>Objeto</th>
+                        <th>PDF</th>
+                        <th>Modificar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="convenio : ${listaConvenios}">
+                        <td th:text="${convenio.nroConvenio}"></td>
+                        <td th:text="${convenio.gdocTiposConvenios.tipoConvenio}"></td>
+                        <td th:text="${convenio.instituciones.institucion}"></td>
+                        <td th:text="${#dates.format(convenio.fecInicio, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${#dates.format(convenio.fecFinal, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${convenio.objetoConvenio}"></td>
+                        <td>
+                            <a class="btn btn-sm btn-info"
+                               th:href="@{/convenios/openFile/{id}(id=${convenio.idGdocConvenio})}"
+                               target="_blank">
+                                <i class="fa fa-file-pdf"></i> Ver PDF
+                            </a>
+                        </td>
+                        <td>
+                            <form method="post" th:action="@{/convenios/inicioModificarConvenios}">
+                                <input type="hidden" name="idGdocConvenio" th:value="${convenio.idGdocConvenio}">
+                                <button class="btn btn-sm btn-success" type="submit">
+                                    <i class="fa fa-pencil"></i> Modificar
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" th:action="@{/convenios/eliminarConvenio}">
+                                <input type="hidden" name="idGdocConvenio" th:value="${convenio.idGdocConvenio}">
+                                <button class="btn btn-sm btn-danger" type="submit"
+                                        onclick="return confirm('Esta seguro de eliminar este convenio?')">
+                                    <i class="fa fa-times"></i> Eliminar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${operation eq 'reg' or operation eq 'mod'}">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h4 th:text="${operation eq 'reg' ? 'Registrar Nuevo Convenio' : 'Modificar Convenio'}"></h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post"
+                                  th:action="${operation eq 'reg' ? '@{/convenios/registroConvenios}' : '@{/convenios/modificarConvenios}'}"
+                                  th:object="${gdocConvenios}"
+                                  enctype="multipart/form-data">
+
+                                <input type="hidden" th:field="*{idGdocConvenio}" th:if="${operation eq 'mod'}">
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="nroConvenio" class="form-label">Nro. Convenio:</label>
+                                        <input type="text" class="form-control" id="nroConvenio" th:field="*{nroConvenio}" required>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="nroFolio" class="form-label">Nro. Folio:</label>
+                                        <input type="number" class="form-control" id="nroFolio" th:field="*{nroFolio}">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="tipoConvenio" class="form-label">Tipo de Convenio:</label>
+                                        <select class="form-select" id="tipoConvenio" th:field="*{gdocTiposConvenios}" required>
+                                            <option value="">Seleccione...</option>
+                                            <option th:each="tipo : ${listaTiposConvenios}"
+                                                    th:value="${tipo.idGdocTipoConvenio}"
+                                                    th:text="${tipo.tipoConvenio}"></option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="institucion" class="form-label">Institucion:</label>
+                                        <select class="form-select" id="institucion" th:field="*{instituciones}" required>
+                                            <option value="">Seleccione...</option>
+                                            <option th:each="inst : ${listaInstituciones}"
+                                                    th:value="${inst.idInstitucion}"
+                                                    th:text="${inst.institucion}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="fecInicio" class="form-label">Fecha Inicio:</label>
+                                        <input type="date" class="form-control" id="fecInicio" th:field="*{fecInicio}" required>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="fecFinal" class="form-label">Fecha Final:</label>
+                                        <input type="date" class="form-control" id="fecFinal" th:field="*{fecFinal}" required>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="objetoConvenio" class="form-label">Objeto del Convenio:</label>
+                                    <textarea class="form-control" id="objetoConvenio" th:field="*{objetoConvenio}" rows="4" required></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="file" class="form-label">Archivo PDF:</label>
+                                    <input type="file" class="form-control" id="file" th:field="*{file}" accept="application/pdf">
+                                </div>
+
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a th:href="@{/convenios/inicioConvenios}" class="btn btn-secondary">
+                                        <i class="fa fa-times"></i> Cancelar
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-save"></i> Guardar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div th:replace="~{uap/usic/siga/gdoc/fragments/common :: scripts}"></div>
+
+</body>
+</html>
