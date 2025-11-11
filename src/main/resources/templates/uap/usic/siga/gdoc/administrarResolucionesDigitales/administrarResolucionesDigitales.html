@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{uap/usic/siga/gdoc/fragments/common :: head('Resoluciones Digitales')}"></head>
+<body>
+    <div class="container">
+        <section class="content-header">
+            <div class="row">
+                <div class="col-md-10 mb-3">
+                    <h1>
+                        <i class="fa fa-money" aria-hidden="true"></i>
+                        Resoluciones Digitales <span th:text="#{gdoc.resol.titulo.modulo}"></span>
+                    </h1>
+                </div>
+                <div class="col-sm-2 text-end" id="reporte">
+                    <div th:if="${busqueda == 'find'}">
+                        <form method="POST" th:action="${urlRIn}">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                <span th:text="#{income.btn.new}">Nuevo</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        </section>
+
+        <section>
+            <!-- Alerts -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="#{AbstractUserDetailsAuthenticationProvider.badCredentials}">Error</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Tabla de Resoluciones Digitales -->
+            <div th:if="${busqueda == 'find'}">
+                <div class="text-center mb-3">
+                    <h3>
+                        <i class="fa fa-list-alt" aria-hidden="true"></i>
+                        <span th:text="#{gdoc.resol.titulo.tabla.reporte}">Lista de Resoluciones</span>
+                    </h3>
+                </div>
+
+                <table id="tComprobantes" class="table table-striped data-table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th th:text="#{gdoc.resol.form.nro.resolucion}">Nro Resolución</th>
+                            <th th:text="#{items.year}">Gestión</th>
+                            <th th:text="#{gdoc.resol.form.autoridad}">Autoridad</th>
+                            <th th:text="#{voucher.viem.pdf}">Ver PDF</th>
+                            <th th:text="#{expenses.modify}">Modificar</th>
+                            <th th:text="#{expenses.remove}">Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="lres : ${lResoluciones}">
+                            <td th:text="${lres.nroResolucion}">Nro</td>
+                            <td th:text="${lres.gestion}">Gestión</td>
+                            <td th:text="${lres.tituloResolucion}">Título</td>
+                            <td>
+                                <form method="post" th:action="${openResol}">
+                                    <input type="hidden" name="idGdocResolucionDigital" th:value="${lres.idGdocResolucionDigital}">
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="fa fa-file-pdf" aria-hidden="true"></i>
+                                        <span th:text="#{expenses.modify}">Abrir</span>
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form method="post" th:action="${urlM}">
+                                    <input type="hidden" name="idGdocResolucionDigital" th:value="${lres.idGdocResolucionDigital}">
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        <span th:text="#{expenses.modify}">Modificar</span>
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form method="post" th:action="${urlEI}">
+                                    <input type="hidden" name="idGdocResolucionDigital" th:value="${lres.idGdocResolucionDigital}">
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                        <span th:text="#{expenses.remove}">Eliminar</span>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th th:text="#{gdoc.resol.form.nro.resolucion}">Nro Resolución</th>
+                            <th th:text="#{items.year}">Gestión</th>
+                            <th th:text="#{gdoc.resol.form.autoridad}">Autoridad</th>
+                            <th th:text="#{voucher.viem.pdf}">Ver PDF</th>
+                            <th th:text="#{expenses.modify}">Modificar</th>
+                            <th th:text="#{expenses.remove}">Eliminar</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Formulario de Registro -->
+            <div th:if="${operation == 'reg'}">
+                <div class="text-center mb-3">
+                    <h3>
+                        <i class="fa fa-th" aria-hidden="true"></i>
+                        <span th:text="#{gdoc.resol.titulo.form.nuevo}">Nueva Resolución Digital</span>
+                    </h3>
+                </div>
+
+                <form th:action="${nRsol}" th:object="${gdocResolucionesDigitales}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" th:field="*{gdocConsejos.idGdocConsejo}" th:value="${bGdocConsejos.idGdocConsejo}">
+                    <input type="hidden" th:field="*{gdocGestionConsejos.idGdocGestionConsejo}" th:value="${bGestionConsejo.idGdocGestionConsejo}">
+                    <input type="hidden" name="sigla" th:value="${bGdocConsejos.sigla}">
+
+                    <!-- Nro Resolución -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{gdoc.resol.form.nro.resolucion}">Nro Resolución</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" th:field="*{nroResolucion}"
+                                   th:placeholder="#{gdoc.resol.form.msg.nro.resolucion}">
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{gdoc.resol.form.msg.nro.resolucion}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('nroResolucion')}"
+                                   th:errors="*{nroResolucion}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Título Resolución -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{expenses.description}">Descripción</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" th:field="*{tituloResolucion}"
+                                      th:placeholder="#{expenses.description.msg}" rows="3"></textarea>
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{expenses.description.msg}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('tituloResolucion')}"
+                                   th:errors="*{tituloResolucion}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Vistos -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{gdoc.resol.form.autoridad}">Vistos</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" th:field="*{vistosResolucion}" rows="5"></textarea>
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{gdoc.resol.form.msg.autoridad}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('vistosResolucion')}"
+                                   th:errors="*{vistosResolucion}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Considerandos -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{gdoc.resol.form.autoridad}">Considerandos</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" th:field="*{considerandosResolucion}" rows="5"></textarea>
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{gdoc.resol.form.msg.autoridad}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('considerandosResolucion')}"
+                                   th:errors="*{considerandosResolucion}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Por lo tanto -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{gdoc.resol.form.autoridad}">Por lo tanto</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" th:field="*{porlotantoResolucion}" rows="5"></textarea>
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{gdoc.resol.form.msg.autoridad}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('porlotantoResolucion')}"
+                                   th:errors="*{porlotantoResolucion}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Resuelve -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{gdoc.resol.form.autoridad}">Resuelve</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" th:field="*{resuelveResolucion}" rows="5"></textarea>
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{gdoc.resol.form.msg.autoridad}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('resuelveResolucion')}"
+                                   th:errors="*{resuelveResolucion}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Es dado -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{gdoc.resol.form.autoridad}">Es dado</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" th:field="*{esdadoResolucion}" rows="5"></textarea>
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{gdoc.resol.form.msg.autoridad}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('resuelveResolucion')}"
+                                   th:errors="*{resuelveResolucion}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Fecha Resolución -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{gdoc.resol.form.fecha.resolucion}">Fecha Resolución</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <input type="date" class="form-control" th:field="*{fecResolucion}">
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{gdoc.resol.form.msg.fecha.resolucion}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('fecResolucion')}"
+                                   th:errors="*{fecResolucion}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Gestión -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{items.year}">Gestión</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" th:field="*{gestion}"
+                                   th:placeholder="#{items.year}" th:value="${gestion}">
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{items.year.msg}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('gestion')}"
+                                   th:errors="*{gestion}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Warning -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label text-end"></label>
+                        <label class="col-sm-10 col-form-label">
+                            <span class="text-warning"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
+                            <span th:text="#{people.warning}">Advertencia</span>
+                        </label>
+                    </div>
+
+                    <hr />
+
+                    <!-- Botones -->
+                    <div class="form-group row mt-4">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-3">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                <span th:text="#{institution.register}">Registrar</span>
+                            </button>
+                        </div>
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-3">
+                            <a th:href="@{/ingresos/formCjaIngresos}" class="btn btn-secondary">
+                                <i class="fa fa-undo" aria-hidden="true"></i>
+                                <span th:text="#{expenses.btn.cancel}">Cancelar</span>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <hr />
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <div th:replace="~{uap/usic/siga/gdoc/fragments/common :: scripts}"></div>
+    <script th:src="@{/resource/gdoc/resolucion.js}"></script>
+</body>
+</html>
