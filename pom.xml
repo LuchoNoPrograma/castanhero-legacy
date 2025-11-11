@@ -103,7 +103,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.servlet.jsp.jstl</groupId>S
+			<groupId>javax.servlet.jsp.jstl</groupId>
 			<artifactId>javax.servlet.jsp.jstl-api</artifactId>
 			<version>1.2.1</version>
 		</dependency>
