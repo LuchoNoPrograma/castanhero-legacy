@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+
+<body>
+
+<nav th:replace="fragments/header :: nav"></nav>
+<!--  ---------------- Primera Secci[on --------------  -->
+    <section id="hero" class="d-flex align-items-center">
+     <div class="container">
+        <div class="row">
+                     <div class="col-lg-10 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                        <h1> <i class="fa fa-money" aria-hidden="true"></i> Administrar Enfrentamientos de  las Olimpiadas </h1>
+                    </div>
+                    <div class="col-lg-2 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                        <div th:if="${busqueda} == find">
+                            <form th:action="@{/enfrenta/inicioFormEnfrenta}" method="post">
+                                <span class="icon-input-btn"><i class="fa fa-user-plus yvela" aria-hidden="true"></i>
+                                    <input type="submit" class="btn btn-success btn-lg" value="Nuevo d"></span>
+                                <input type="hidden" th:value="${idEtapa}" name="idEtapa" />
+                                <div th:text="${idEtapa}"></div>
+                            </form>
+                        </div>
+                    </div>
+                  </div>
+               <div class="row">
+                    <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                       <hr/>
+                   </div>
+                 </div>
+                    
+        		
+            </div>
+                     
+          </section>
+          
+    <section id="clients" class="clients section-bg">
+    	    <div class="container">
+              <div class="row" data-aos="zoom-in">
+                    <div th:if="${busqueda} == etapa">
+                        
+                        <p class="h3 text-center"><i class="fa fa-list-alt" aria-hidden="true"></i> Resumen de Equipos Registrados   </p><br>
+                   			
+                   </div>
+                 <div class="row" data-aos="zoom-in">
+                    <table id="tComprobantes" class="table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>Etapas o Fases </th>
+                                <th>Descripcion</th>
+                                <th>Modificar </th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody th:each="etp,iterStat : ${lEtapas}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+                            <tr>
+                                <td th:text="${etp.idEtapa}"></td>
+                                <td th:text="${etp.etapa}"></td>
+                                <td th:text="${etp.descripcion}"></td>
+
+                                <td>
+                                    <a class="btn btn-primary btn-sm"
+                                        th:href="@{/enfrenta/listarEnfrentamiento/}+${etp.idEtapa}"
+                                        th:text="'Siguiente'"></a>
+                                </td>
+                                <td><p></p></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>id</th>
+                                <th>Etapas o Fases </th>
+                                <th>Descripcion</th>
+                                <th>Modificar </th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+         </div>
+       </div>
+</section>
+
+                <!-- ============= Fin Tabla lista de Etapas  de las Olimpiadas ==============  -->
+
+           
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+
+<div th:replace="fragments/jsScripts :: scripts"></div>
+</body>
+
+</html>

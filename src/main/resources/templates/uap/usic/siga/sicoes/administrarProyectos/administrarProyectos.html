@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+<body>
+
+<nav th:replace="fragments/header :: nav"></nav>
+<!--  ---------------- Primera Secci[on --------------  -->
+    <section id="hero" class="d-flex align-items-center">
+     <div class="container">
+        <div class="row">
+                     <div class="col-lg-10 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                        <h1 class="text-dark"><i class="fa fa-folder-open-o" aria-hidden="true"></i> Administrar Proyectos   </h1>
+                    </div>
+                    <div class="col-lg-2 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                        <div th:if="${busqueda} == find">
+                           <form th:action="@{/aProyectos/scdNuevoProyecto}" method="post">
+                                   <span class="icon-input-btn"><i class="fa fa-user-plus yvela" aria-hidden="true"></i>
+                                    <input type="submit" class="btn btn-success btn-lg" value="Nuevo"></span>
+                                  <div th:text="${idEtapa}"></div>
+                            </form>
+                        </div>
+                    </div>
+                  </div>
+               <div class="row">
+                    <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                       <hr/>
+                   </div>
+                 </div>                            	
+            </div>                   
+     </section>
+
+<!-- ======================== Seccion Tablas ============  -->         
+         
+<div th:if="${busqueda} == find">         
+   <section id="clients" class="clients section-bg">
+    	    <div class="container">
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">   		
+
+                   <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Resumen de Registro de Proyectos  </h2><br>                   			                                                  
+                    <table  id="tContratos"  class="table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Número</th>
+                            <th>Gestión</th>
+                            <th>Proyecto</th>
+                            <th>Institución</th>                            
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                     <tbody th:each="lSpr,iterStat : ${lScsProyectos}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">                                       
+                        <tr>
+                         		<td th:text="${lSpr.scsCodigoProyecto}"></td>
+                                <td th:text="${lSpr.scsNroProyecto}"></td>
+                                <td th:text="${lSpr.gestion}"></td>
+                                <td th:text="${lSpr.scsProyecto}"></td>
+                                <td th:text="${lSpr.insUnidadesFuncionales.unidadFuncional}"></td>                                                             
+                                <td>
+                                     <form th:action="@{/aProyectos/inicioModificarProyecto}" method="post">
+                                  		   <input type="hidden" th:value="${lSpr.idScsProyecto}" name="idScsProyecto" />
+                                  	 	   <span class="icon-input-btn"> <input type="submit" class="btn btn-primary btn-lg" value="Modificar"></span>                                  
+                            		</form>                                  
+                                </td>
+                                <td>
+                                    <form th:action="@{/aProyectos/inicioEliminarProyecto}" method="post">
+                                  		  <input type="hidden" th:value="${lSpr.idScsProyecto}" name="idScsProyecto" />
+                                  	 	   <span class="icon-input-btn"> <input type="submit" class="btn btn-danger btn-lg" value="Eliminar"></span>                                  
+                            		</form>
+                                </td>
+                            </tr>
+                 </tbody>
+                    <tfoot>
+                        <tr>
+                          <th>Código</th>
+                            <th>Número</th>
+                            <th>Gestión</th>
+                            <th>Proyecto</th>
+                            <th>Institución</th>                            
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </tfoot>
+                </table>                   
+                 </div>
+              </div>
+         </div>
+       
+	</section>
+</div>
+  <!-- ============= Fin Tabla lista de Proyectos  ==============  -->
+
+ <!-- ============= Inicio Formulario de Registro de  Proyectos  ==============  -->
+ <div th:if="${operation} == reg">
+     <section id="clients" class="clients section-bg">
+    	    <div class="container">
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                    		
+                   <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Registro de Proyectos </h2><br>                   			                               
+                           <form method="post" th:object="${scsProyectos}" th:action="@{/aProyectos/registrarProyectosSicoes}" enctype="multipart/form-data" >
+				                   <div class="form-group row mb-4">
+				                        <label  class="col-2 col-form-label text-dark">Unidad Funcional </label>
+				                        <label class="col-1 col-form-label text-right">  <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+				                        <div class="col-6">
+				                        	 <select class="form-control form-control-lg"  id="comp" th:field="*{insUnidadesFuncionales.idUnidadFuncional}">
+										  	    <option th:each="lun : ${lUnidades}" th:value="${lun.idUnidadFuncional}" th:text="${lun.unidadFuncional}"></option>
+										    </select>				                        					                         
+				                        </div>
+				              	     <div class="col-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Seleccione Unidad Funcional  
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{insUnidadesFuncionales.idUnidadFuncional}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			     <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Proyecto</label>
+				                        <label class="col-1 col-form-label text-right"></i></label>
+				                        <div class="col-6">
+				                        	<input id="uni" class="form-control form-control-lg"   th:field="*{scsProyecto}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese Nombre de Proyecto   
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{scsProyecto}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			   <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Código de Proyecto </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	<input id="uni" class="form-control form-control-lg"   th:field="*{scsCodigoProyecto}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese Código de Proyecto   
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{scsCodigoProyecto}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                    		   <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Número Proyecto  </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	    	<input id="uni" class="form-control form-control-lg"   th:field="*{scsNroProyecto}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese Número de Proyecto   
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{scsNroProyecto}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                       <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Gestión </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	    	<input id="uni" class="form-control form-control-lg"   th:field="*{gestion}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese la Gestión  
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{gestion}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                          
+                      <div class="form-group row mb-4 align-text-left" >
+                        <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                        <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle" aria-hidden="true"></i>  Los campos con * son obligatorios </span>;&nbsp  </label>
+                    </div>   
+
+                    <hr align="left" noshade="noshade" size="10" width="100%" />
+                    <div class="form-group row mt-12">
+                        <div class="col-sm-3" id="combo1">
+                        </div> 
+                        <div class="col-sm-3" id="combo1">
+                            <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input class="btn btn-success" type="submit" value="Guardar"></span>
+                        </div>
+                        <div class="col-sm-3" id="combo1"> 
+                        </div>
+                        <div class="col-sm-3" id="combo1">
+                             <a  th:href="@{/aProyectos/inicioProyectos}"  class="btn btn-yvela-green"> <i class="fa fa-undo" aria-hidden="true"></i> Cancelar </a>
+                        </div> 
+                    </div> 
+                </form>
+                <br>
+                <hr align="left" noshade="noshade" size="10" width="100%" />                                
+            </div>
+            </div>
+         </div>
+       
+ </section>
+    </div>
+ <!-- ============= Fin Formulario de Registro de Proyectos  ==============  -->
+ 
+ <!-- ============= Inicio Formulario de ModificaciÃ³n de Proyectos  ==============  -->
+   <div th:if="${operation} == modif">
+        <section id="clients" class="clients section-bg">
+    	    <div class="container">
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                    		
+                   <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Modificación de Proyectos </h2><br>                   			                               
+                           <form method="post" th:object="${scsProyectos}" th:action="@{/aProyectos/actualizarProyectosSicoes}" enctype="multipart/form-data" >
+				                
+				                  <input type="hidden" name="idScsProyecto" th:value="${scsProyectos.idScsProyecto}" th:field="${scsProyectos.idScsProyecto}">
+				                   <div class="form-group row mb-4">
+				                        <label  class="col-2 col-form-label text-dark">Unidad Funcional </label>
+				                        <label class="col-1 col-form-label text-right">  <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+				                        <div class="col-6">
+				                        	 <select class="form-control form-control-lg"  id="comp" th:field="*{insUnidadesFuncionales.idUnidadFuncional}">
+										  	    <option th:each="lun : ${lUnidades}" th:value="${lun.idUnidadFuncional}" th:text="${lun.unidadFuncional}"></option>
+										    </select>				                        					                         
+				                        </div>
+				              	     <div class="col-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Seleccione Unidad Funcional  
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{insUnidadesFuncionales.idUnidadFuncional}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			     <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Proyecto</label>
+				                        <label class="col-1 col-form-label text-right"></i></label>
+				                        <div class="col-6">
+				                        	<input id="uni" class="form-control form-control-lg"   th:field="*{scsProyecto}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese Nombre de Proyecto   
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{scsProyecto}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			   <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Código de Proyecto </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	<input id="uni" class="form-control form-control-lg"   th:field="*{scsCodigoProyecto}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese Código de Proyecto   
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{scsCodigoProyecto}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                    		   <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Número Proyecto  </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	    	<input id="uni" class="form-control form-control-lg"   th:field="*{scsNroProyecto}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese Número de Proyecto   
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{scsNroProyecto}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                       <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Gestión </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	    	<input id="uni" class="form-control form-control-lg"   th:field="*{gestion}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese la Gestión 
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{gestion}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                          
+                      <div class="form-group row mb-4 align-text-left" >
+                        <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                        <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle" aria-hidden="true"></i>  Los campos con * son obligatorios </span>;&nbsp  </label>
+                    </div>   
+
+                    <hr align="left" noshade="noshade" size="10" width="100%" />
+                    <div class="form-group row mt-12">
+                        <div class="col-sm-3" id="combo1">
+                        </div> 
+                        <div class="col-sm-3" id="combo1">
+                            <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input class="btn btn-success" type="submit" value="Guardar"></span>
+                        </div>
+                        <div class="col-sm-3" id="combo1"> 
+                        </div>
+                        <div class="col-sm-3" id="combo1">
+                             <a  th:href="@{/aProyectos/inicioProyectos}"  class="btn btn-yvela-green"> <i class="fa fa-undo" aria-hidden="true"></i> Cancelar </a>
+                        </div> 
+                    </div> 
+                </form>
+                <br>
+                <hr align="left" noshade="noshade" size="10" width="100%" />                                
+            </div>
+            </div>
+         </div>
+       
+ </section>
+</div>
+
+  <!-- ============= Inicio Formulario de Eliminacion  de Proyectos  ==============  -->
+   <div th:if="${operation} == delet">
+     <section id="clients" class="clients section-bg">
+    	    <div class="container">
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                     <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Eliminación de Contratados </h2><br>
+                     <div class="form-group row">
+                        <div class="col-sm-8" id="combo1"> 
+                 			  <form method="post" th:object="${scsProyectos}" th:action="@{/aProyectos/eliminarProyectosSicoes}" enctype="multipart/form-data" >
+                 			    <input type="hidden" name="idScsProyecto" th:value="${scsProyectos.idScsProyecto}" th:field="${scsProyectos.idScsProyecto}">
+				                    				                
+  					 <div class="form-group row mb-4">
+                        <label for="ciExpedido" class="col-sm-4 col-form-label text-dark">Unidad Funcional </label>
+                        <div class="col-sm-8">
+                         	<select class="form-control form-control-lg"  id="comp" th:field="*{insUnidadesFuncionales.idUnidadFuncional}">
+							 	    <option th:each="lun : ${lUnidades}" th:value="${lun.idUnidadFuncional}" th:text="${lun.unidadFuncional}"></option>
+							  </select>
+                        </div>
+                     </div>
+                                        
+                    <div class="form-group row mb-4">
+                        <label for="codigo" class="col-sm-4 col-form-label text-dark">Proyecto </label>
+                        <div class="col-sm-8">
+                           <input id="uni" class="form-control form-control-lg"   th:field="*{scsProyecto}"   /> 
+                        </div>
+                     </div>
+
+                     <div class="form-group row mb-4">
+                        <label for="codigo" class="col-sm-4 col-form-label text-dark">Código Proyecto </label>
+                        <div class="col-sm-8">
+                         		<input id="uni" class="form-control form-control-lg"   th:field="*{scsCodigoProyecto}"   /> 
+                        </div>
+                    </div>
+                     
+                    <div class="form-group row mb-4">
+                        <label for="codigo" class="col-sm-4 col-form-label text-dark"> Número Proyecto  </label>
+                        <div class="col-sm-8">
+                          <input id="uni" class="form-control form-control-lg"   th:field="*{scsNroProyecto}"   /> 
+                        </div>
+                     </div>                    
+                    <div class="form-group row mb-4">
+                        <label for="sedes" class="col-sm-4 col-form-label text-dark">Gestión </label>
+                        <div class="col-sm-8" id="combo1"> 
+                            <input id="uni" class="form-control form-control-lg"   th:field="*{gestion}"   />
+                        </div>
+                    </div>                          
+                     
+             <hr align="left" noshade="noshade" size="10" width="100%" />
+                <div class="form-group row">
+                       <div class="col-sm-2" id="combo1"> 
+                       </div>
+                       <div class="col-sm-2" id="combo1">
+                            <span class="icon-input-btn"><i class="fa fa-times yvela" aria-hidden="true"></i> 
+                               <input type="submit"  class="btn btn-danger" value="Confirmar"></span>
+                        </div>
+                        <div class="col-sm-2" id="combo1"> 
+                     </div>
+                     <div class="col-sm-2" id="combo1"> 
+                          <a  th:href="@{/aProyectos/inicioProyectos}"  class="btn btn-yvela-green"> <i class="fa fa-undo" aria-hidden="true"></i> Cancelar </a>
+                      </div>
+                     </div>
+                    </form>
+                   </div>
+                     <div class="col-sm-4" id="combo1"> 
+                            <fieldset class="col-md-12">    	
+                                <legend><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>  Precaución </legend>
+                                <p>Esta a Punto de eliminar los datos que refiere en el formulario</p>
+                               </fieldset>
+                        </div>
+  					</div>				
+  					  							 <br>
+                <hr align="left" noshade="noshade" size="10" width="100%" />                                
+            
+            </div>
+         </div>
+       </div>
+  </section>
+  </div>							
+                
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+
+<div th:replace="fragments/jsScripts :: scripts"></div>
+</body>
+
+</html>

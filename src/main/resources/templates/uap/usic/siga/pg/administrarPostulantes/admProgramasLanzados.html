@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+
+<body>
+
+	<nav th:replace="fragments/header :: nav"></nav>
+	<!--  ---------------- Primera Secci[on --------------  -->
+	<section>
+	</section>
+	
+	<!-- ======================== SECCION TABLAS ======================  -->
+	<th:block th:if="${tabla} == postulantes">
+		<section id="clients" class="clients section-bg">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+						data-aos="fade-up" data-aos-delay="200">
+						<h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Resumen de registro de
+							Preinscritos </h2><br>
+						<table id="example" class="table" style="width:100%">
+							<thead>
+								<tr>
+									<th>Nombre Programa - Sigla</th>
+									<th>Carga horaria</th>
+									<th>Modalidad</th>
+									<th>Cant. modulos</th>
+									<th>Ver postulantes</th>
+								</tr>
+							</thead>
+							<tbody th:each="prg,iterStat : ${lProgramas}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+								<tr>
+									<td th:text="${prg.programa+' - '+prg.sigla}"></td>
+									<td th:text="${prg.horasVirtuales}+${prg.horasInvestigacion}+' Horas'"></td>
+									<td th:text="${prg.cantidadModulos}+' Mod.'"></td>
+									<td th:text="${prg.modalidad.modalidad}"></td>
+									<td>
+										<!-- <form th:action="@{/aPostulantes/listarPostulantesPorPrograma}" method="post">
+											<input type="hidden" th:value="${prg.idPrograma}" name="idPrograma" />
+											<button type="submit" class="btn btn-primary">
+												<i class="fa-solid fa-users"></i>
+											</button>
+										</form> -->
+										<a th:href="@{/aPostulantes/listarPostulantesPorPrograma={id}(id=${prg.idPrograma})}">
+											<i class="btn btn-primary fa-solid fa-users"></i>
+										</a>
+									</td>
+								</tr>
+							</tbody>
+							<tfoot>
+								<tr>
+									<th>Nombre Programa - Sigla</th>
+									<th>Carga horaria</th>
+									<th>Modalidad</th>
+									<th>Cant. modulos</th>
+									<th>Ver postulantes</th>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+			</div>
+
+		</section>
+	</th:block>
+
+
+	<th:block th:if="${tabla} == admitidos">
+		<section id="clients" class="clients section-bg">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+						data-aos="fade-up" data-aos-delay="200">
+						<h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Resumen de Registro de
+							Admitidos </h2><br>
+							<!-- <div class="row d-flex flex-row-reverse">
+								<select class="col-lg-4 js-states form-control form-control-lg" id="s4" required>
+									<option  th:each="pstprs : ${lAdmitidos}" th:value="${pstprs.idPstPersona}"
+										th:text="${pstprs.nombres+' '+pstprs.paterno+' '+pstprs.materno+'-'+pstprs.ci}">
+									</option>
+									<th:block th:replace="fragments/select :: select"></th:block>
+								</select>
+							</div> -->
+						<table id="example" class="table" style="width:100%">
+							<thead>
+								<tr>
+									<th>Nombre Programa - Sigla</th>
+									<th>Carga horaria</th>
+									<th>Cant. modulos</th>
+									<th>Modalidad</th>
+									<th>Ver postulantes</th>
+								</tr>
+							</thead>
+							<tbody th:each="prg,iterStat : ${lProgramas}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+								<tr>
+									<td th:text="${prg.programa+' - '+prg.sigla}"></td>
+									<td th:text="${prg.horasVirtuales}+${prg.horasInvestigacion}+' Horas'"></td>
+									<td th:text="${prg.cantidadModulos}+' Mod.'"></td>
+									<td th:text="${prg.modalidad.modalidad}"></td>
+									<td>
+										<!-- <form th:action="@{/aPostulantesAdmitidos/listarAdmitidosPorPrograma}" method="post">
+											<input type="hidden" th:value="${prg.idPrograma}" name="idPrograma" />
+											<button type="submit" class="btn btn-primary">
+												<i class="fa-solid fa-users"></i>
+											</button>
+										</form> -->
+										<a class="btn btn-primary" th:href="@{/aPostulantesAdmitidos/listarAdmitidosPorPrograma={idPrograma}(idPrograma = ${prg.idPrograma})}">
+											<i class="fa-solid fa-users"></i>
+										</a>
+									</td>
+									<!-- <td>
+										<form th:action="@{/reporteProgramas/certificado}" method="post">
+											<input title="Plan de Estudio" type="hidden" th:value="${prg.idPrograma}" name="idPrograma" />
+											<button title="<b>Imprimir</b>" type="submit" class="btn btn-success" data-bs-toggle="tooltip"
+												data-bs-html="true">
+												<i class="fa-sharp fa-solid fa-book" aria-hidden="true"></i>
+											</button>
+										</form>
+									</td> -->
+
+									<!-- <td>
+										<form th:action="@{/aPstPersonas/inicioEliminarPstPersona}" method="post">
+											<input type="hidden" th:value="${prg.idPrograma}" name="idPrograma" />
+											<button type="submit" class="btn btn-danger btn-lg">
+												Eliminar
+												<i class="fa fa-trash" aria-hidden="true"></i>
+											</button>
+										</form>
+									</td> -->
+								</tr>
+							</tbody>
+							<tfoot>
+								<tr>
+									<th>Nombre Programa - Sigla</th>
+									<th>Carga horaria</th>
+									<th>Cant. modulos</th>
+									<th>Modalidad</th>
+									<th>Ver postulantes</th>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+	</th:block>
+	<!-- ============= SECCION TABLAS ==============  -->
+	
+	<footer th:replace="fragments/footer :: footer"></footer>
+	<div th:replace="fragments/jsScripts :: scripts"></div>
+
+	<!-- ============= Inicio busqueda con filtro listado  ==============  -->
+	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script th:src="@{/js/utiles/jquery.dataTables.min.js}"></script>
+	<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+	<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+	<script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			var table = $('#example').DataTable({
+				lengthChange: false,
+			});
+		})
+	</script>
+</body>
+
+</html>

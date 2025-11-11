@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+<body>
+
+<nav th:replace="fragments/header :: nav"></nav>
+<!--  ---------------- Primera Secci[on --------------  -->
+    <section id="hero" class="d-flex align-items-center">
+     <div class="container">
+        <div class="row">
+                     <div class="col-lg-10 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                        <h1 class="text-dark"><i class="fa fa-folder-open-o " aria-hidden="true"></i> Reportes Por Contratados   </h1>
+                    </div>
+                    <div class="col-lg-2 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                        <div th:if="${busqueda} == find">
+                        <!--
+                           <form th:action="@{/aContratados/foraNuevaContratado}" method="post">
+                                   <span class="icon-input-btn"><i class="fa fa-user-plus yvela" aria-hidden="true"></i>
+                                    <input type="submit" class="btn btn-success btn-lg" value="Nuevo d"></span>
+                                  <div th:text="${idEtapa}"></div>
+                            </form>
+                           --> 
+                        </div>
+                    </div>
+                  </div>
+               <div class="row">
+                    <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                       <hr/>
+                   </div>
+                 </div>                            	
+            </div>                   
+     </section>
+
+ <!-- ============= Inicio Formulario de Contratados  ==============  -->
+ <div th:if="${operation} == form">
+     <section id="clients" class="clients section-bg">
+     	   <div class="container">
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                  
+                   <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Reporte Por Contratados  </h2><br>                   			                               
+                      <form th:action="@{/rContratados/listarContratosContratado}"  method="post">
+				                   
+				    <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Gestion</label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	  <input id="uni" class="form-control form-control-lg"   name ="gestion"  value="0"  />				                        					                          
+				                        </div>
+				              	     
+                   			 </div>
+                   			      	    
+                            <div class="form-group row mb-4">
+				                        <label  class="col-2 col-form-label align-text-left text-dark">Contratado</label>
+				                        <label class="col-1 col-form-label text-right">  <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+				                        <div class="col-6">
+				                        	 <select class="form-control form-control-lg" name="idPersona"  id="mdl" >
+										  	    <option th:each="lprs : ${lPersonas}" th:value="${lprs.idPersona}" th:text="${lprs.nombres} +' '+${lprs.paterno} +' '+${lprs.materno} "></option>
+										    </select>				                        					                         
+				                        </div>
+				              	     
+                   			 </div>
+                   			 
+                   			 
+                      <div class="form-group row">
+                        <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                        <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle" aria-hidden="true"></i></span> &nbsp;&nbsp;&nbsp;<spring:message  code="people.warning"/> </label>
+                    </div>   
+
+                    <hr align="left" noshade="noshade" size="10" width="100%" />
+                    <div class="form-group row mt-12">
+                        <div class="col-sm-3" id="combo1">
+                        </div> 
+                        <div class="col-sm-3" id="combo1">
+                            <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input class="btn btn-success" type="submit" value="Siguiente"/></span>
+                        </div>
+                        <div class="col-sm-3" id="combo1"> 
+                        </div>
+                        <div class="col-sm-3" id="combo1">
+                            a 
+                        </div> 
+                    </div> 
+                </form>
+                <br><br>
+                <hr align="left" noshade="noshade" size="10" width="100%" />                                
+            </div>
+            </div>
+         </div>       		
+ 	</section>
+ </div>
+
+
+ <!-- ============= Fin Formulario de Contratados  ==============  -->
+ 
+     <div th:if="${operation} == list">
+      <section id="clients" class="clients section-bg">
+    	    <div class="container">
+               <div class="row">
+                 <div class="col-lg-10 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+   					
+                  	<h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Contratos por Contratados </h2><br>                   			                               
+                   <table  id="tContratos"  class="table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Contratado</th>
+                            <th>Cargo de Servicio</th>
+                            <th>Fecha Adjudicada</th>
+                            <th>Monto Total</th>
+                            <th>Proyecto</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody th:each="lCc,iterStat : ${lContratosPersonas}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+                        <tr>
+                         		
+                                <td th:text="${lCc.scsPrsContratados.personas.nombres} +' '+ ${lCc.scsPrsContratados.personas.paterno} +' '+ ${lCc.scsPrsContratados.personas.materno}" ></td>
+                                <td th:text="${lCc.scsCargoServicio}"></td>
+                                <td th:text="${lCc.fecInicio}+' - '+${lCc.fecFinal}"></td>
+                                <td th:text="${lCc.montoTotal}"></td>
+                                <td th:text="${lCc.scsProyectos.scsProyecto}"></td>                                                                  
+                               
+                            </tr>
+                 </tbody>
+                    <tfoot>
+                        <tr>
+                           <th>Contratado</th>
+                            <th>Cargo de Servicio</th>
+                            <th>Fecha Adjudicada</th>
+                            <th>Monto Total</th>
+                            <th>Proyecto</th>
+                        </tr>
+                    </tfoot>
+                </table>     
+                    
+                <form th:action="@{/rContratados/imprimirReporteContratosContratados}"  method="post"  target="blank">
+                         <input type="hidden" name="gestion" th:value="${gestion}" >
+                         <input type="hidden" name="idPersona" th:value="${idPersona}">
+              
+                      <hr align="left" noshade="noshade" size="10" width="100%" />
+                    <div class="form-group row mt-12">
+                        <div class="col-sm-3" id="combo1">
+                        </div> 
+                        <div class="col-sm-3" id="combo1">
+                            <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input class="btn btn-success" type="submit" value="Imprimir"/></span>
+                        </div>
+                        <div class="col-sm-3" id="combo1"> 
+                        </div>
+                        <div class="col-sm-3" id="combo1">
+                            <a  th:href="@{/rContratados/inicioRepContratado}"  class="btn btn-yvela-green"> <i class="fa fa-undo" aria-hidden="true"></i> Cancelar </a>
+                        </div> 
+                    </div> 
+                 </form>
+                <br><br>
+                <hr align="left" noshade="noshade" size="10" width="100%" />
+                              
+                 </div>
+              </div>
+         </div>       
+  </section>
+  </div>
+
+  <!-- ============= Fin Tabla lista de Etapas  de las Olimpiadas ==============  -->
+ 
+
+  
+           
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+
+<div th:replace="fragments/jsScripts :: scripts"></div>
+</body>
+
+</html>

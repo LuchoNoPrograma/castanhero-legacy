@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+<script src="https://kit.fontawesome.com/bcd4d50ab7.js" crossorigin="anonymous"></script>
+
+<body>
+
+  <nav th:replace="fragments/header :: nav"></nav>
+  <!--  ---------------- Primera Secci[on --------------  -->
+  <section>
+  </section>
+
+  <!-- ======================== Seccion Tablas ============  -->
+  <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" 
+  th:if="${mensaje != null}" th:text="${mensaje}" class="alert" data-aos="fade-up">
+  </div>
+  <!-- ============= Inicio Tabla lista de Proyectos  ==============  -->
+  <div th:if="${busqueda} == find">
+    <section id="clients" class="clients section-bg">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+            data-aos="fade-up" data-aos-delay="200">
+
+            <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Resumen de Registro de Modulos
+            </h2>
+            <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" 
+            th:if="${mensaje != null}" th:text="${mensaje}" class="alert" data-aos="fade-up">
+            </div>
+            <br>
+            <div class="table-responsive">
+              <table id="example" class="table" style="width:100%">
+              <thead>
+                <tr>
+                  <th scope="col">Nombre Modulo</th>
+                  <th scope="col">Horas Academicas</th>
+                  <th scope="col">Sigla del Modulo</th>
+                  <th scope="col">Horas Academicas</th>
+                  <th scope="col">Sigla del Modulo</th>
+                </tr>
+              </thead>
+              <tbody th:each="pl,iterStat : ${lModulos}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+                <tr>
+                  <td th:text="${pl.modulo}"></td>
+                  <td th:text="${pl.sigla}"></td>
+                  <td th:text="${pl.horasColavorativas}+${pl.horasTeoricas}+' Horas'"></td>
+                  <td>
+                    <form th:action="@{/aModulos/inicioModificarModulos}" method="post">
+                       <input type="hidden" th:value="${pl.idModulo}" name="idModulo" />
+                       <span class="icon-input-btn"> <input type="submit" class="btn btn-primary btn-lg" value="Modificar"></span>                                  
+                    </form>  
+                  </td>
+                  <td>
+                    <form th:action="@{/aPlanes/inicioEliminarPlanes}" method="post">
+                      <input type="hidden" th:value="${pl.idModulo}" name="idPgPrgPlanes" />
+                      <span class="icon-input-btn"> <input type="submit" class="btn btn-danger btn-lg"
+                          value="Eliminar"></span>
+                    </form>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+  <!-- ============= Fin Tabla lista de Proyectos  ==============  -->
+  
+  <!-- =============   Inicio Registro Modulos   ==============  -->
+  <div th:if="${operation} == reg">
+    <section id="clients" class="clients section-bg">
+      <div class="container">
+        <div align="left" data-aos="fade-up" data-aos-delay="200">
+          <form th:action="@{/aModulos/listaPorPorPlan}" method="post">
+            <input type="hidden" th:value="${planes.idPgPrgPlanes}" name="idPgPrgPlanes"/>
+            <input type="hidden" th:value="${programas.idPrograma}" name="idPrograma" />
+            <button title="Ver <b>Modulos</b>" type="submit" class="btn btn-success" data-bs-toggle="tooltip" data-bs-html="true">Atras
+            </button>
+          </form>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up"
+            data-aos-delay="200">
+            <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Registro de Modulos
+            </h2>
+            <h4 th:text="${'Los modulos disponibles son: '+programas.disponibilidad}"></h4>
+            <br>
+
+            <form method="post" th:object="${modulos}" th:action="@{/aModulos/registroModulos}"
+              enctype="multipart/form-data" class="text-dark">
+              <input type="hidden" th:value="${programas.idPrograma}" name="idPrograma"/>
+              <input type="hidden" name="idPgPrgPlanes" th:value="${planes.idPgPrgPlanes}">
+              <div class="form-group row mb-4">
+                <label class="col-2 col-form-label">Seleccione el Plan </label>
+                <label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+                    aria-hidden="true"></i></label>
+                <div class="col-6">
+                  <select class="form-control form-control-lg" id="comp" th:field="*{plan.idPgPrgPlanes}">
+                    <option th:value="${planes.idPgPrgPlanes}" th:text="${planes.plan}" selected></option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label">Nombre del Modulo</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                  <input id="uni" class="form-control form-control-lg" th:field="*{modulo}" />
+                </div>
+                <div class="col-sm-3" id="comd">
+                  <small class="form-text text-muted">
+                    Ingrese el nombre del Modulo
+                  </small>
+                  <small id="ci" class="form-text text-muted formFieldError">
+                    <span class="help-inline" th:errors="*{modulo}"></span>
+                  </small>
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label">Horas Teoricas del Modulo</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                  <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasTeoricas}" />
+                </div>
+                <div class="col-sm-3" id="comd">
+                  <small class="form-text text-muted">
+                    Ingrese Las Horas Teoricas del Modulo
+                  </small>
+                  <small id="ci" class="form-text text-muted formFieldError">
+                    <span class="help-inline" th:errors="*{horasTeoricas}"></span>
+                  </small>
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label">Horas Colaborativas del Modulo</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                  <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasColavorativas}" />
+                </div>
+                <div class="col-sm-3" id="comd">
+                  <small class="form-text text-muted">
+                    Ingrese Las Horas Colaborativas del Modulo
+                  </small>
+                  <small id="ci" class="form-text text-muted formFieldError">
+                    <span class="help-inline" th:errors="*{horasColavorativas}"></span>
+                  </small>
+                </div>
+              </div>
+              <div class="form-group row mb-4 align-text-left">
+                <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle"
+                      aria-hidden="true"></i> Los campos con * son obligatorios </span>;&nbsp
+                </label>
+              </div>
+              <hr align="left" noshade="noshade" size="10" width="100%" />
+              <div class="form-group row mt-12">
+                <div class="col-sm-3" id="combo1">
+                </div>
+                <div class="col-sm-3" id="combo1">
+                  <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input
+                      class="btn btn-success" type="submit" value="Guardar"></span>
+                </div>
+                <div class="col-sm-3" id="combo1">
+                </div>
+                <div class="col-sm-3" id="combo1">
+                  <a th:href="@{/aPersonas/inicioPersonas}" class="btn btn-yvela-green"> <i class="fa fa-undo"
+                      aria-hidden="true"></i> Cancelar </a>
+                </div>
+              </div>
+            </form>
+            <br>
+            <hr align="left" noshade="noshade" size="10" width="100%" />
+          </div>
+        </div>
+      </div>
+  
+    </section>
+  </div>
+<!-- ============================================================================================= -->
+
+<!-- ================================== Inicio Modificacion Modulos =============================-->
+<div th:if="${operation} == modif">
+  <section id="clients" class="clients section-bg">
+    <div class="container">
+      <div align="left" data-aos="fade-up" data-aos-delay="200">
+        <form th:action="@{/aModulos/listaPorPorPlan}" method="post">
+          <input type="hidden" th:value="${planes.idPgPrgPlanes}" name="idPgPrgPlanes"/>
+          <input type="hidden" th:value="${programas.idPrograma}" name="idPrograma" />
+          <button title="Ver <b>Modulos</b>" type="submit" class="btn btn-success" data-bs-toggle="tooltip" data-bs-html="true">Atras
+          </button>
+        </form>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up"
+          data-aos-delay="200">
+
+          <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de modificar Modulos
+          </h2><br>
+          <form method="post" th:object="${modulos}" th:action="@{/aModulos/actualizarModulos}"
+            enctype="multipart/form-data" class="text-dark">
+
+            <input type="hidden" th:value="${programas.idPrograma}" name="idPrograma"/>
+            <input type="hidden" name="idPgPrgPlanes" th:value="${planes.idPgPrgPlanes}">
+            <input type="hidden" name="idModulo" th:value="${modulos.idModulo}" th:field="${modulos.idModulo}">
+            
+            <div class="form-group row mb-4">
+              <label for="ciExpedido" class="col-sm-2 col-form-label">Nombre del Modulo</label>
+              <label class="col-1 col-form-label text-right"></i></label>
+              <div class="col-6">
+                <input id="uni" class="form-control form-control-lg" th:field="*{modulo}" />
+              </div>
+              <div class="col-sm-3" id="comd">
+                <small class="form-text text-muted">
+                  Ingrese el nombre del Modulo
+                </small>
+                <small id="ci" class="form-text text-muted formFieldError">
+                  <span class="help-inline" th:errors="*{modulo}"></span>
+                </small>
+              </div>
+            </div>
+
+            <div class="form-group row mb-4">
+              <label for="ciExpedido" class="col-sm-2 col-form-label">Horas Teoricas del Modulo</label>
+              <label class="col-1 col-form-label text-right"></i></label>
+              <div class="col-6">
+                <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasTeoricas}" />
+              </div>
+              <div class="col-sm-3" id="comd">
+                <small class="form-text text-muted">
+                  Ingrese Las Horas Teoricas del Modulo
+                </small>
+                <small id="ci" class="form-text text-muted formFieldError">
+                  <span class="help-inline" th:errors="*{horasTeoricas}"></span>
+                </small>
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label for="ciExpedido" class="col-sm-2 col-form-label">Horas Colaborativas del Modulo</label>
+              <label class="col-1 col-form-label text-right"></i></label>
+              <div class="col-6">
+                <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasColavorativas}" />
+              </div>
+              <div class="col-sm-3" id="comd">
+                <small class="form-text text-muted">
+                  Ingrese Las Horas Colaborativas del Modulo
+                </small>
+                <small id="ci" class="form-text text-muted formFieldError">
+                  <span class="help-inline" th:errors="*{horasColavorativas}"></span>
+                </small>
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label for="ciExpedido" class="col-sm-2 col-form-label">Sigla del Modulo</label>
+              <label class="col-1 col-form-label text-right"></i></label>
+              <div class="col-6">
+                <input type="text" id="uni" class="form-control form-control-lg" th:field="*{sigla}" />
+              </div>
+              <div class="col-sm-3" id="comd">
+                <small class="form-text text-muted">
+                  Ingrese Sigla del Modulo
+                </small>
+                <small id="ci" class="form-text text-muted formFieldError">
+                  <span class="help-inline" th:errors="*{sigla}"></span>
+                </small>
+              </div>
+            </div>
+
+
+        <div class="form-group row mb-4 align-text-left">
+          <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+          <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle"
+                aria-hidden="true"></i> Los campos con * son obligatorios </span>;&nbsp
+          </label>
+        </div>
+        <hr align="left" noshade="noshade" size="10" width="100%" />
+        <div class="form-group row mt-12">
+          <div class="col-sm-3" id="combo1">
+          </div>
+          <div class="col-sm-3" id="combo1">
+            <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input
+                class="btn btn-success" type="submit" value="Guardar"></span>
+          </div>
+          <div class="col-sm-3" id="combo1">
+          </div>
+          <div class="col-sm-3" id="combo1">
+            <a th:href="@{/aPlanes/inicioPlanes}" class="btn btn-yvela-green"> <i class="fa fa-undo"
+                aria-hidden="true"></i> Cancelar </a>
+          </div>
+        </div>
+        </form>
+        <br>
+        <hr align="left" noshade="noshade" size="10" width="100%" />
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================================== Inicio Eliminar Programas =============================-->
+<!-- =================================== Lista Modulos Por Plan ===============================-->
+  <div>
+    <section>
+      <div th:if="${listaPlanes} == list">
+        <section id="clients" class="clients section-bg">
+          <div class="container">
+            <div align="left" data-aos="fade-up" data-aos-delay="200">
+              <form th:action="@{/aPlanes/listaPorProgramas}" method="post">
+                <input type="hidden" th:value="${programas.idPrograma}" name="idPrograma" />
+                <button title="Ver <b>Plan</b>" type="submit" class="btn btn-success" data-bs-toggle="tooltip" data-bs-html="true">Atras
+                </button>
+              </form>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+                data-aos="fade-up" data-aos-delay="200">
+    
+                <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Resumen de Modulos Reistrados
+                </h2>
+                <h1 th:text="*{planes.plan}"></h1>
+                <div align="right">
+                  <a class="btn btn-primary" title="Nuevo <b>Modulo</b>" th:href="@{/aModulos/FronModulos={idPgPrgPlanes}(idPgPrgPlanes = ${planes.idPgPrgPlanes})}"
+                    data-bs-toggle="tooltip" data-bs-html="true">Nuevo Modulo
+                    <i class="fa-solid fa-book" aria-hidden="true"></i>
+                  </a>
+              </div>
+                <br>
+                <div class="table-responsive">
+                  <table id="example" class="table" style="width:100%">
+                  <thead>
+                    <tr>
+                      <th scope="col">Nombre Modulo</th>
+                      <th scope="col">Sigla1</th>
+                      <th scope="col">Horas Academicas</th>
+                      <th scope="col">Modificar</th>
+                    </tr>
+                  </thead>
+                  <tbody th:each="pl,iterStat : ${listaP}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+                    <tr>
+                      <td th:text="${pl.modulo}"></td>
+                      <td th:text="${pl.sigla}"></td>
+                      <td th:text="${pl.horasColavorativas}+${pl.horasTeoricas}+' Horas'"></td>
+                      <td>
+                        <a class="btn btn-primary" title="Modificar <b>Modulo</b>" th:href="@{/aModulos/inicioModificarModulos={idModulo}(idModulo = ${pl.idModulo})}"
+                          data-bs-toggle="tooltip" data-bs-html="true">
+                          <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                </div>
+    
+              </div>
+            </div>
+          </div>
+    </section>
+  </div>				
+
+
+
+
+
+
+  <footer th:replace="fragments/footer :: footer"></footer>
+
+
+  <div th:replace="fragments/jsScripts :: scripts"></div>
+
+
+    <!-- ============= Fin Select con Filtro  ==============  --> 
+
+<!-- ============= Inicio busqueda con filtro listado  ==============  --> 
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
+
+<script>
+$(document).ready(function() {
+  var table = $('#example').DataTable( {
+      lengthChange: false,
+      buttons: [ 'copy', 'excel', 'pdf', 'print' ,'colvis' ]
+  } );
+
+  table.buttons().container()
+      .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+} );
+ </script>
+ 
+ <!-- ============= Fin busqueda con filtro listado  ==============  -->
+
+</body>
+
+</html>

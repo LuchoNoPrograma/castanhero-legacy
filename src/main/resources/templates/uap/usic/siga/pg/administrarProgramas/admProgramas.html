@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+
+<body>
+
+  <nav th:replace="fragments/header :: nav"></nav>
+  <!--  ---------------- Primera Secci[on --------------  -->
+  <section>
+  </section>
+  <!-- ======================== Seccion Tablas ============  -->
+  <!-- ============= Inicio Tabla lista de Proyectos  ==============  -->
+  <div th:if="${busqueda} == find">
+    <section id="clients" class="clients section-bg">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+            data-aos="fade-up" data-aos-delay="200">
+            <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Resumen de Registro de Programas
+            </h2>
+            <div align="right">
+              <form method="post" th:action="@{/aProgramas/formProgramas}">
+                <span class="icon-input-btn">
+                  <input type="submit" class="btn btn-success" value="Nuevo Programa"></span>
+              </form>
+            </div>
+            <br>
+            <div class="table-responsive">
+            <table id="example" class="table" style="width:100%">
+              <thead>
+                <tr>
+                  <th>Nombre Programa - Sigla</th>
+                  <th>Carga Horaria</th>
+                  <th>Creditos</th>
+                  <th>Cant. Modulos</th>
+                  <th>Modalidad</th>
+                  <th>Modificacion</th>
+                  <th>Eliminar</th>
+                  <th>Plan Estudio</th>
+                  <th>Precio</th>
+                </tr>
+              </thead>
+              <tbody th:each="pro,iterStat : ${lProgramas}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+                <tr>
+                  <td th:text="${pro.programa+' - '+pro.sigla}"></td>
+                  <td th:text="${pro.horasVirtuales}+${pro.horasInvestigacion}+' Horas'"></td>
+                  <td th:text="${pro.creditos}+' Cred.'"></td>
+                  <td th:text="${pro.cantidadModulos}+' Mod.'"></td>
+                  <td th:text="${pro.modalidad.modalidad}"></td>
+                  <td>
+                    <a class="btn btn-primary" title="Modificar <b>Programa</b>" th:href="@{/aProgramas/inicioModificarProgramas={idPrograma}(idPrograma = ${pro.idPrograma})}"
+                      data-bs-toggle="tooltip" data-bs-html="true">
+                      <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a class="btn btn-success" title="Eliminar <b>Programa</b>" th:href="@{/aProgramas/inicioEliminarPrograma={idPrograma}(idPrograma = ${pro.idPrograma})}"
+                      data-bs-toggle="tooltip" data-bs-html="true">
+                      <i class="fa-solid fa-dumpster-fire" aria-hidden="true"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a class="btn btn-danger" title="Ver <b>Plan de Estudio</b>" th:href="@{/aPlanes/listaPorProgramas={idPrograma}(idPrograma = ${pro.idPrograma})}"
+                      data-bs-toggle="tooltip" data-bs-html="true">
+                      <i class="fa-sharp fa-solid fa-book" aria-hidden="true"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a class="btn btn-info" title="Arancel <b>Programa</b>" th:href="@{/aProgramas/formArancel={idPrograma}(idPrograma = ${pro.idPrograma})}"
+                      data-bs-toggle="tooltip" data-bs-html="true">
+                      <i class="fa-solid fa-dollar-sign" aria-hidden="true"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Nombre Programa - Sigla</th>
+                  <th>Carga Horaria</th>
+                  <th>Creditos</th>
+                  <th>Cant. Modulos</th>
+                  <th>Modalidad</th>
+                  <th>Modificacion</th>
+                  <th>Eliminar</th>
+                  <th>Plan Estudio</th>
+                  <th>Precio</th>
+                </tr>
+              </tfoot>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!-- ============= Fin Tabla lista de Proyectos  ==============  -->
+  <!-- =============   Inicio Registro Programas   ==============  -->
+  <div th:if="${operation} == reg">
+    <section id="clients" class="section-bg">
+      <div class="container">
+        <div class="">
+          <div class="pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+
+            <h2 class="text-dark"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Formulario de Registro de Programas
+            </h2><br>
+            <form id="from-registro" method="post" th:object="${programas}" th:action="@{/aProgramas/registroProgramas}"
+              enctype="multipart/form-data" class="text-dark">
+
+              <div class="form-group row">
+                <div class="col-lg-4">
+                  <label class="text-right"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+									<label for="NombrePrograma">Nombre del Programa:</label>
+                  <input id="NombrePrograma" class="form-control form-control-lg" th:field="*{programa}" placeholder="Ingrese el Nombre del Programa"
+                  onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+                  <small class="form-text text-muted	">
+										Ingrese el Nombre del Programa
+									</small>
+                  <small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{programa}"></span>
+									</small>
+                </div>
+                <div class="col-lg-4">
+                  <label class="text-right"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+									<label for="NombrePrograma">Horas de Trabajo Virtual:</label>
+                  <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasVirtuales}" placeholder="Horas de Trabajo Virtual"
+                  onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                  <small class="form-text text-muted	">
+										Ingrese el valor de las Horas Trabajo Virtuales del Programa
+									</small>
+                  <small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{horasVirtuales}"></span>
+									</small>
+                </div>
+                <div class="col-lg-4">
+                  <label class="text-right"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+									<label for="NombrePrograma">Horas de Trabajo De Investigacion:</label>
+                  <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasInvestigacion}" placeholder="Horas de Investigacion"
+                  onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                  <small class="form-text text-muted	">
+										Ingrese el valor de las Horas de Investigacion del Programa
+									</small>
+                  <small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{horasInvestigacion}"></span>
+									</small>
+                </div>
+              </div>
+              <hr class="bg-secondary border-top border-secondary mb-5">
+
+              <div class="form-group row">
+                  <div class="col-lg-4">
+                    <label class="text-right"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                    <label for="NombrePrograma">Valores que Otorga el Programa:</label>
+                    <input type="number" id="uni" class="form-control form-control-lg" th:field="*{creditos}" placeholder="Creditos del Programa"
+                    onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                    <small class="form-text text-muted	">
+                      Ingrese el valor Total de Creditos del Programa
+                    </small>
+                    <small id="ci" class="form-text text-muted formFieldError">
+                      <span class="help-inline" th:errors="*{creditos}"></span>
+                    </small>
+                  </div>
+                  <div class="col-lg-4">
+                    <label class="text-right"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                    <label for="NombrePrograma">Cantidad de Modulos del Programa:</label>
+                    <input type="number" id="uni" class="form-control form-control-lg" th:field="*{cantidadModulos}" placeholder="Cantidad de Modulos"
+                    onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                    <small class="form-text text-muted	">
+                      Ingrese la Cantidad de Modulos del Programa
+                    </small>
+                    <small id="ci" class="form-text text-muted formFieldError">
+                      <span class="help-inline" th:errors="*{cantidadModulos}"></span>
+                    </small>
+                  </div>
+                  <div class="col-lg-4">
+                    <label class="text-right"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                    <label for="NombrePrograma">Siglas del Programa:</label>
+                    <input type="text" id="uni" class="form-control form-control-lg" th:field="*{sigla}" placeholder="Siglas del Programa"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+                    <small class="form-text text-muted	">
+                      Ingrese la Sigla Representativas del Programa
+                    </small>
+                    <small id="ci" class="form-text text-muted formFieldError">
+                      <span class="help-inline" th:errors="*{sigla}"></span>
+                    </small>
+                  </div>
+              </div>
+              <hr class="bg-secondary border-top border-secondary mb-5">
+
+              <div class="form-group row">
+                <div class="col-lg-4">
+                    <label class="text-right"> <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                    <label>Modalidad del Programa: </label>
+                    <select class="form-control form-control-lg" id="comp" th:field="*{modalidad.id_modalidad}">
+                      <option th:each="m : ${lModalidad}" th:value="${m.id_modalidad}" th:text="${m.modalidad}"></option>
+                    </select>
+                    <small class="form-text text-muted">
+                      Seleccione la Modalidad del Programa
+                    </small>
+                    <small id="ci" class="form-text text-muted formFieldError">
+                      <span class="help-inline" th:errors="*{modalidad.id_modalidad}"></span>
+                    </small>
+                </div>
+                <div class="col-lg-4">
+                  <label class="text-right"> <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                  <label>Grado del Programa: </label>
+                  <select class="form-control form-control-lg" id="comp" th:field="*{grado.id_grado}">
+                    <option th:each="a : ${lGrado}" th:value="${a.id_grado}" th:text="${a.gradoacademico}"></option>
+                  </select>
+                  <small class="form-text text-muted">
+                    Seleccione el Grado Academico del Programa
+                  </small>
+                  <small id="ci" class="form-text text-muted formFieldError">
+                    <span class="help-inline" th:errors="*{grado.id_grado}"></span>
+                  </small>
+              </div>
+              </div>
+
+              <div class="form-group row mb-4 align-text-left">
+                <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i
+                      class="fa fa-info-circle" aria-hidden="true"></i> Los campos con * son obligatorios </span>
+                </label>
+              </div>
+              <hr align="left" noshade="noshade" size="10" width="100%" />
+              <div class="form-group row mt-12">
+                <div class="col-sm-3" id="combo1">
+                </div>
+                <div class="col-sm-3" id="combo1">
+                  <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input
+                      class="btn btn-success" type="submit" value="Guardar"></span>
+                </div>
+                <div class="col-sm-3" id="combo1">
+                </div>
+                <div class="col-sm-3" id="combo1">
+                  <a th:href="@{/aProgramas/inicioProgramas}" class="btn btn-yvela-green"> <i class="fa fa-undo"
+                      aria-hidden="true"></i> Cancelar </a>
+                </div>
+              </div>
+            </form>
+            <br>
+            <hr align="left" noshade="noshade" size="10" width="100%" />
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+  <!-- ============================================================================================= -->
+  <!-- =========================================== REGISTRO ARANCEL ================================ -->
+  <div th:if="${operation} == reg-arancel">
+    <section id="clients" class="clients section-bg">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up"
+            data-aos-delay="200">
+  
+            <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Registro de Aranceles Economicos del Programa
+            </h2><br>
+            <form method="post" th:object="${aranceles}" th:action="@{/aProgramas/registroArancel}" enctype="multipart/form-data"
+              class="text-dark">
+              <div class="form-group row mb-4">
+                <label class="col-2 col-form-label">El Programa Seleccionado es: </label>
+                <label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+                  aria-hidden="true"></i></label>
+                <div class="col-6">
+                  <select class="form-control form-control-lg" id="comp" th:field="*{programa.idPrograma}">
+                    <option th:value="${programas.idPrograma}" th:text="${programas.programa}" selected></option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label">Valor de la Matricula del Programa</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                  <input type="number" id="uni" class="form-control form-control-lg" th:field="*{matricula}"
+                  placeholder="Costo de la Matricula 600 Bs." onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label">Valor de los Modulos del Programa para pagos Parcelados</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                  <input type="number" id="uni" class="form-control form-control-lg" th:field="*{modulos}"
+                  placeholder="Costo Unitario del Modulo 600 Bs." onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label">Valor de la Colegiatura Completa para pagos al Contado</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                  <input type="number" id="uni" class="form-control form-control-lg" th:field="*{constoPrograma}"
+                  placeholder="Costo de la Colegiatura 600 Bs." onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label">Descripcion del Arancel</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                  <textarea class="form-control form-control-lg" name="comentarios" rows="2" cols="40" 
+                  placeholder="Descripcion de referencia"
+                  th:field="*{descripcion}" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                </div>
+              </div>
+              <div class="form-group row mb-4 align-text-left">
+                <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle"
+                      aria-hidden="true"></i> Los campos con * son obligatorios </span>;&nbsp
+                </label>
+              </div>
+
+              <hr align="left" noshade="noshade" size="10" width="100%" />
+              <div class="form-group row mt-12">
+                <div class="col-sm-3" id="combo1">
+                </div>
+                <div class="col-sm-3" id="combo1">
+                  <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input
+                      class="btn btn-success" type="submit" value="Guardar"></span>
+                </div>
+                <div class="col-sm-3" id="combo1">
+                </div>
+                <div class="col-sm-3" id="combo1">
+                  <a th:href="@{/aProgramas/inicioProgramas}" class="btn btn-yvela-green"> <i class="fa fa-undo"
+                      aria-hidden="true"></i> Cancelar </a>
+                </div>
+              </div>
+            </form>
+            <br>
+            <hr align="left" noshade="noshade" size="10" width="100%" />
+          </div>
+        </div>
+      </div>
+  
+    </section>
+  </div>
+  <!-- ================================== Inicio Modificacion Programas =============================-->
+  <div th:if="${operation} == modif">
+    <section id="clients" class="section-bg">
+      <div class="container">
+        <div class="">
+          <div class="pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+            <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de modificar Programas
+            </h2><br>
+            <form method="post" th:object="${programas}" th:action="@{/aProgramas/actualizarProgramas}"
+              enctype="multipart/form-data" class="text-dark">
+
+              <input type="hidden" name="idPrograma" th:value="${programas.idPrograma}"
+                th:field="${programas.idPrograma}">
+
+                <div class="form-group row">
+                  <div class="col-lg-4">
+                    <label class="text-right"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                    <label for="NombrePrograma">Nombre del Programa:</label>
+                    <input id="NombrePrograma" class="form-control form-control-lg" th:field="*{programa}" placeholder="Ingrese el Nombre del Programa"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+                    <small class="form-text text-muted	">
+                      Ingrese el Nombre del Programa
+                    </small>
+                    <small id="ci" class="form-text text-muted formFieldError">
+                      <span class="help-inline" th:errors="*{programa}"></span>
+                    </small>
+                  </div>
+                  <div class="col-lg-4">
+                    <label class="text-right"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                    <label for="NombrePrograma">Horas de Trabajo Virtual:</label>
+                    <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasVirtuales}" placeholder="Horas de Trabajo Virtual"
+                    onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                    <small class="form-text text-muted	">
+                      Ingrese el valor de las Horas Trabajo Virtuales del Programa
+                    </small>
+                    <small id="ci" class="form-text text-muted formFieldError">
+                      <span class="help-inline" th:errors="*{horasVirtuales}"></span>
+                    </small>
+                  </div>
+                  <div class="col-lg-4">
+                    <label class="text-right"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                    <label for="NombrePrograma">Horas de Trabajo De Investigacion:</label>
+                    <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasInvestigacion}" placeholder="Horas de Investigacion"
+                    onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                    <small class="form-text text-muted	">
+                      Ingrese el valor de las Horas de Investigacion del Programa
+                    </small>
+                    <small id="ci" class="form-text text-muted formFieldError">
+                      <span class="help-inline" th:errors="*{horasInvestigacion}"></span>
+                    </small>
+                  </div>
+                </div>
+                <hr class="bg-secondary border-top border-secondary mb-5">
+  
+                <div class="form-group row">
+                    <div class="col-lg-4">
+                      <label class="text-right"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                      <label for="NombrePrograma">Valores que Otorga el Programa:</label>
+                      <input type="number" id="uni" class="form-control form-control-lg" th:field="*{creditos}" placeholder="Creditos del Programa"
+                      onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                      <small class="form-text text-muted	">
+                        Ingrese el valor Total de Creditos del Programa
+                      </small>
+                      <small id="ci" class="form-text text-muted formFieldError">
+                        <span class="help-inline" th:errors="*{creditos}"></span>
+                      </small>
+                    </div>
+                    <div class="col-lg-4">
+                      <label class="text-right"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                      <label for="NombrePrograma">Cantidad de Modulos del Programa:</label>
+                      <input type="number" id="uni" class="form-control form-control-lg" th:field="*{cantidadModulos}" placeholder="Cantidad de Modulos"
+                      onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                      <small class="form-text text-muted	">
+                        Ingrese la Cantidad de Modulos del Programa
+                      </small>
+                      <small id="ci" class="form-text text-muted formFieldError">
+                        <span class="help-inline" th:errors="*{cantidadModulos}"></span>
+                      </small>
+                    </div>
+                    <div class="col-lg-4">
+                      <label class="text-right"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                      <label for="NombrePrograma">Siglas del Programa:</label>
+                      <input type="text" id="uni" class="form-control form-control-lg" th:field="*{sigla}" placeholder="Siglas del Programa"
+                      onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+                      <small class="form-text text-muted	">
+                        Ingrese la Sigla Representativas del Programa
+                      </small>
+                      <small id="ci" class="form-text text-muted formFieldError">
+                        <span class="help-inline" th:errors="*{sigla}"></span>
+                      </small>
+                    </div>
+                </div>
+                <hr class="bg-secondary border-top border-secondary mb-5">
+  
+                <div class="form-group row">
+                  <div class="col-lg-4">
+                      <label class="text-right"> <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                      <label>Modalidad del Programa: </label>
+                      <select class="form-control form-control-lg" id="comp" th:field="*{modalidad.id_modalidad}">
+                        <option th:each="m : ${lModalidad}" th:value="${m.id_modalidad}" th:text="${m.modalidad}"></option>
+                      </select>
+                      <small class="form-text text-muted">
+                        Seleccione la Modalidad del Programa
+                      </small>
+                      <small id="ci" class="form-text text-muted formFieldError">
+                        <span class="help-inline" th:errors="*{modalidad.id_modalidad}"></span>
+                      </small>
+                  </div>
+                  <div class="col-lg-4">
+                    <label class="text-right"> <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                    <label>Grado del Programa: </label>
+                    <select class="form-control form-control-lg" id="comp" th:field="*{grado.id_grado}">
+                      <option th:each="a : ${lGrado}" th:value="${a.id_grado}" th:text="${a.gradoacademico}"></option>
+                    </select>
+                    <small class="form-text text-muted">
+                      Seleccione el Grado Academico del Programa
+                    </small>
+                    <small id="ci" class="form-text text-muted formFieldError">
+                      <span class="help-inline" th:errors="*{grado.id_grado}"></span>
+                    </small>
+                </div>
+                </div>
+
+              <div class="form-group row mb-4 align-text-left">
+                <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i
+                      class="fa fa-info-circle" aria-hidden="true"></i> Los campos con * son obligatorios </span>;&nbsp
+                </label>
+              </div>
+              <hr align="left" noshade="noshade" size="10" width="100%" />
+              <div class="form-group row mt-12">
+                <div class="col-sm-3" id="combo1">
+                </div>
+                <div class="col-sm-3" id="combo1">
+                  <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input
+                      class="btn btn-success" type="submit" value="Guardar"></span>
+                </div>
+                <div class="col-sm-3" id="combo1">
+                </div>
+                <div class="col-sm-3" id="combo1">
+                  <a th:href="@{/aProgramas/inicioProgramas}" class="btn btn-yvela-green"> <i class="fa fa-undo"
+                      aria-hidden="true"></i> Cancelar </a>
+                </div>
+              </div>
+            </form>
+            <br>
+            <hr align="left" noshade="noshade" size="10" width="100%" />
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!-- ================================== Inicio Eliminar Programas =============================-->
+  <div th:if="${operation} == delet">
+    <section id="clients" class="clients section-bg">
+      <div class="container">
+        <div class="col-sm-3" id="combo1">
+          <a th:href="@{/aProgramas/inicioProgramas}" title="Programas" class="btn btn-success" data-aos="fade-up" data-aos-delay="200"
+          data-bs-toggle="tooltip" data-bs-html="true">Atras</a>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up"
+            data-aos-delay="200">
+            <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Eliminación de
+              Programas </h2><br>
+            <div class="form-group row">
+              <div class="col-sm-8" id="combo1">
+                <form method="post" th:object="${programas}" th:action="@{/aProgramas/eliminarProgramas}"
+                  enctype="multipart/form-data">
+                  <input type="hidden" name="idPrograma" th:value="${programas.idPrograma}"
+                    th:field="${programas.idPrograma}">
+
+                    <div class="form-group row mb-4">
+                      <label for="ciExpedido" class="col-sm-2 col-form-label">Nombre del Programa</label>
+                      <label class="col-1 col-form-label text-right"></i></label>
+                      <div class="col-6">
+                        <input id="uni" class="form-control form-control-lg" th:field="*{programa}" readonly/>
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label for="ciExpedido" class="col-sm-2 col-form-label">Valor Horas Virtuales</label>
+                      <label class="col-1 col-form-label text-right"></i></label>
+                      <div class="col-6">
+                        <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasVirtuales}" readonly/>
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label for="ciExpedido" class="col-sm-2 col-form-label">Ingrese las Horas de Investigacion</label>
+                      <label class="col-1 col-form-label text-right"></i></label>
+                      <div class="col-6">
+                        <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasInvestigacion}" readonly/>
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label for="ciExpedido" class="col-sm-2 col-form-label">Ingrese el Valor total de Creditos</label>
+                      <label class="col-1 col-form-label text-right"></i></label>
+                      <div class="col-6">
+                        <input type="number" id="uni" class="form-control form-control-lg" th:field="*{creditos}" readonly/>
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label for="ciExpedido" class="col-sm-2 col-form-label">Ingrese La cantidad de Modulos</label>
+                      <label class="col-1 col-form-label text-right"></i></label>
+                      <div class="col-6">
+                        <input type="number" id="uni" class="form-control form-control-lg" th:field="*{cantidadModulos}" readonly/>
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label for="ciExpedido" class="col-sm-2 col-form-label">Ingrese La Sigla del  Programa</label>
+                      <label class="col-1 col-form-label text-right"></i></label>
+                      <div class="col-6">
+                        <input type="text" id="uni" class="form-control form-control-lg" th:field="*{sigla}" readonly/>
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label class="col-2 col-form-label">Seleccione la Modalidad </label>
+                      <label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+                          aria-hidden="true"></i></label>
+                      <div class="col-6">
+                        <select class="form-control form-control-lg" id="comp" th:field="*{modalidad.id_modalidad}">
+                          <option th:each="m : ${lModalidad}" th:value="${m.id_modalidad}" th:text="${m.modalidad}"></option>
+                        </select>
+                      </div>
+                      <div class="col-3" id="comd">
+                        <small class="form-text text-muted">
+                          Seleccione un Tipo de Modalidad
+                        </small>
+                        <small id="ci" class="form-text text-muted formFieldError">
+                          <span class="help-inline"></span>
+                        </small>
+                      </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                      <label class="col-2 col-form-label">Seleccione el Grado Academico</label>
+                      <label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+                          aria-hidden="true"></i></label>
+                      <div class="col-6">
+                        <select class="form-control form-control-lg" id="comp" th:field="*{grado.id_grado}">
+                          <option th:each="a : ${lGrado}" th:value="${a.id_grado}" th:text="${a.gradoacademico}"></option>
+                        </select>
+                      </div>
+                      <div class="col-3" id="comd">
+                        <small class="form-text text-muted">
+                          Seleccione un Tipo de Grado Academico
+                        </small>
+                        <small id="ci" class="form-text text-muted formFieldError">
+                          <span class="help-inline"></span>
+                        </small>
+                      </div>
+                    </div>
+
+                  <hr align="left" noshade="noshade" size="10" width="100%" />
+                  <div class="form-group row">
+                    <div class="col-sm-2" id="combo1">
+                    </div>
+                    <div class="col-sm-2" id="combo1">
+                      <span class="icon-input-btn">
+                        <input type="submit" class="btn btn-danger" value="Confirmar"></span>
+                    </div>
+                    <div class="col-sm-2" id="combo1">
+                    </div>
+                    <div class="col-sm-2" id="combo1">
+                      <a th:href="@{/aProgramas/inicioProgramas}" class="btn btn-yvela-green"> <i class="fa fa-undo"
+                          aria-hidden="true"></i> Cancelar </a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="col-sm-4" id="combo1">
+                <fieldset class="col-md-12">
+                  <legend><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Precaución </legend>
+                  <p>Esta a Punto de eliminar los datos que refiere en el formulario</p>
+                </fieldset>
+              </div>
+            </div>
+            <br>
+            <hr align="left" noshade="noshade" size="10" width="100%" />
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <footer th:replace="fragments/footer :: footer"></footer>
+
+
+  <div th:replace="fragments/jsScripts :: scripts"></div>
+
+  <!-- ============= Fin Select con Filtro  ==============  --> 
+
+<!-- ============= Inicio busqueda con filtro listado  ==============  --> 
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
+
+<script>
+$(document).ready(function() {
+  var table = $('#example').DataTable( {
+      lengthChange: false,
+      buttons: [ 'copy', 'excel', 'pdf', 'print' ,'colvis' ]
+  } );
+
+  table.buttons().container()
+      .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+} );
+
+
+ </script>
+ 
+ <!-- ============= Fin busqueda con filtro listado  =============-->
+</body>
+
+</html>

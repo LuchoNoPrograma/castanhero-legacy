@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+<script src="https://kit.fontawesome.com/bcd4d50ab7.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+<body>
+
+  <nav th:replace="fragments/header :: nav"></nav>
+  <!--  ---------------- Primera Secci[on --------------  -->
+  <section>
+
+  </section>
+
+  <!-- ======================== Seccion Tablas ============  -->
+  <!-- ============= Inicio Tabla lista de Programas a Lanzar  ==============  -->
+  <div th:if="${busqueda} == find">
+    <section id="clients" class="clients section-bg">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+            data-aos="fade-up" data-aos-delay="200">
+
+            <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Resumen de Programas Registrados
+            </h2>
+            <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" 
+            th:if="${mensaje != null}" th:text="${mensaje}" class="alert" data-aos="fade-up">
+            </div>
+            <br>
+            <div class="table-responsive">
+              <table id="example" class="table dt-responsive nowrap" style="width:100%">
+              <thead>
+                <tr>
+                  <th>Nombre Programa</th>
+                  <th>Plan de Estudios</th>
+                  <th>Registra Version</th>
+                </tr>
+              </thead>
+              <tbody th:each="pl,iterStat : ${lPlanes}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+                <tr>
+                  <td th:text="${pl.programa.programa+' - '+pl.programa.sigla}"></td>
+                  <td th:text="${pl.plan}"></td>
+                  <td>
+                    <form th:action="@{/aLanzamientos/listaVersionesPorPrograma}" method="post">
+											<input type="hidden" th:value="${pl.programa.idPrograma}" name="idPrograma"/>
+                      <input type="hidden" th:value="${pl.idPgPrgPlanes}" name="idPgPrgPlanes"/>
+											<button title="ver <b>Version</b>" type="submit" class="btn btn-danger btn-lg" data-bs-toggle="tooltip" data-bs-html="true">
+												<i class="fa-solid fa-code-compare" aria-hidden="true"></i>
+											</button>
+										</form>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Nombre Programa</th>
+                  <th>Plan de Estudios</th>
+                  <th>Registra Version</th>
+                </tr>
+              </tfoot>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!-- ============= Fin Tabla lista de Proyectos  ==============  -->
+ <!-- ============= Inicio Tabla lista de Versiones ==============  -->
+ <div th:if="${listaVersiones} == lista">
+  <section id="clients" class="clients section-bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+          data-aos="fade-up" data-aos-delay="200">
+
+          <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Resumen de Versiones Registradas
+          </h2>
+          <h1 th:text="${programas.programa}"></h1>
+          <div align="right">
+            <form th:action="@{/aLanzamientos/formLanz}" method="post">
+              <input type="hidden" th:value="*{programas.idPrograma}" name="idPrograma"/>
+              <input type="hidden" th:value="${planes.idPgPrgPlanes}" name="idPgPrgPlanes"/>
+              <button title="Registrar Modulos" type="submit" class="btn btn-success">Nueva Version
+                <i class="fa-solid fa-book" aria-hidden="true"></i>
+              </button>
+            </form>
+        </div>
+          <br>
+          <div class="table-responsive">
+            <table id="example" class="table dt-responsive nowrap" style="width:100%">
+            <thead>
+              <tr>
+                <th>Num.</th>
+                <th>Version</th>
+                <th>Fecha Finalizacion</th>
+              </tr>
+            </thead>
+            <tbody th:each="pro,iterStat : ${listaVer}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+              <tr>
+                <td th:text="${pro.idPgPrgPlnVersiones}"></td>
+                <td th:text="${pro.version}"></td>
+                <td th:text="${pro.fechaFinalizacion}"></td>
+                <td>
+                  <form th:action="@{/aLanzamientos/formGrupo}" method="post">
+                    <input type="hidden" th:value="${pro.idPgPrgPlnVersiones}" name="idPgPrgPlnVersiones"/>
+                    <button title="Grupo" type="submit" class="btn btn-danger btn-lg">
+                      <i class="fa-solid fa-code-compare" aria-hidden="true"></i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>num.</th>
+                <th>Version</th>
+                <th>Fecha Finalizacion</th>
+              </tr>
+            </tfoot>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<!-- ======================================== Lista Versiones Activas =============================-->
+<div th:if="${listVer} == activas">
+  <section id="clients" class="clients section-bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+          data-aos="fade-up" data-aos-delay="200">
+
+          <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Resumen de Versiones Registradas
+          </h2>
+          <br>
+          <div class="table-responsive">
+            <table id="example" class="table dt-responsive nowrap" style="width:100%">
+            <thead>
+              <tr>
+                <th>Num.</th>
+                <th>Version</th>
+                <th>Fecha Finalizacion</th>
+                <th>Registrar Grupo</th>
+                <th>Imprimir Comprobante</th>
+              </tr>
+            </thead>
+            <tbody th:each="pro,iterStat : ${lVersiones}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+              <tr>
+                <td th:text="${pro.idPgPrgPlnVersiones}"></td>
+                <td th:text="${pro.version}"></td>
+                <td th:text="${pro.fechaFinalizacion}"></td>
+                <td>
+                  <form th:action="@{/aLanzamientos/ListaGrupoPorVersion}" method="post">
+                    <input type="hidden" th:value="${pro.idPgPrgPlnVersiones}" name="idPgPrgPlnVersiones"/>
+                    <button title="Grupo" type="submit" class="btn btn-danger btn-lg">
+                      <i class="fa-solid fa-code-compare" aria-hidden="true"></i>
+                    </button>
+                  </form>
+                </td>
+                <td>
+                  <a class="btn add" th:href="@{/aLanzamientos/openFile/}+${pro.idPgPrgPlnVersiones}"><i class="fa fa-plus-square-o" aria-hidden="true"></i>  </a>
+                </td>
+                <td>
+                  <form th:action="@{/reporteProgramas/certificado}" method="post">
+                    <input title="Plan de Estudio" type="hidden" th:value="${pro.programa.idPrograma}" name="idPrograma" />
+                    <input title="Plan de Estudio" type="hidden" th:value="${pro.plan.idPgPrgPlanes}" name="idPgPrgPlanes" />
+                    <button title="<b>Imprimir</b>" type="submit" class="btn btn-success" data-bs-toggle="tooltip"
+                      data-bs-html="true">
+                      <i class="fa-solid fa-file-pdf" aria-hidden="true"></i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>num.</th>
+                <th>Version</th>
+                <th>Fecha Finalizacion</th>
+                <th>Registrar Grupo</th>
+                <th>Imprimir Comprobante</th>
+              </tr>
+            </tfoot>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<!-- ==============================================================================================-->
+<!-- ======================================== Registro version =================================== -->
+<div th:if="${operation} == reg">
+  <section id="clients" class="clients section-bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up"
+          data-aos-delay="200">
+          <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i>Version Programa
+          </h2><span class="text-dark" th:text="${programa.programa}"></span><br>
+          </h2><span class="text-dark" th:text="${planes.plan}"></span><br>
+          <form method="post" th:object="${version}" th:action="@{/aLanzamientos/registroLanz}"
+            enctype="multipart/form-data" class="text-dark">
+            <input type="hidden" th:value="${programa.idPrograma}" name="idPrograma"/>
+            <input type="hidden" th:value="${planes.idPgPrgPlanes}" name="idPgPrgPlanes"/>
+            <div class="form-group row mb-4">
+              <label class="col-2 col-form-label">El Programa Seleccionado es: </label>
+              <label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+                aria-hidden="true"></i></label>
+              <div class="col-6">
+                <select name="idPrograma" class="form-control form-control-lg" id="comp" th:field="*{programa.idPrograma}">
+                  <option th:value="${programa.idPrograma}" th:text="${programa.programa}" selected></option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label class="col-2 col-form-label">El Programa Seleccionado es: </label>
+              <label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+                aria-hidden="true"></i></label>
+              <div class="col-6">
+                <select name="idPrograma" class="form-control form-control-lg" id="comp" th:field="*{plan.idPgPrgPlanes}">
+                  <option th:value="${planes.idPgPrgPlanes}" th:text="${planes.plan}" selected></option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row mb-4">
+              <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Nombre de la Version: </label>
+              <label class="col-1 col-form-label text-right"></i></label>
+              <div class="col-6">
+                <input type="text" id="uni" class="form-control form-control-lg" th:field="*{version}" />
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Fecha de Inicio de la Version: </label>
+              <label class="col-1 col-form-label text-right"></i></label>
+              <div class="col-6">
+                <input type="text" id="current_date" class="form-control form-control-lg"
+                th:value="*{#dates.format(#dates.createNow(),'dd/MM/YYYY')}" readOnly/>
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Fecha de Final de la Version: </label>
+              <label class="col-1 col-form-label text-right"></i></label>
+              <div class="col-6">
+                <input type="date" id="uni" class="form-control form-control-lg" th:field="*{fechaFinalizacion}"/>
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label for="ciExpedido" class="col-sm-2 col-form-label">Adjuntar Resolucion H.C.P. </label>
+              <label class="col-sm-1 col-form-label text-right"></i></label>
+              <div class="col-sm-6">
+                <input id="uni" class="form-control form-control-lg" th:field="*{file}" type="file" />
+              </div>
+            
+            </div>
+      <div class="form-group row mb-4">
+        <label for="ciExpedido" class="col-sm-2 col-form-label">Numero de la Resolucion H.C.P. </label>
+        <label class="col-sm-1 col-form-label text-right"></i></label>
+        <div class="col-sm-6">
+          <input id="uni" class="form-control form-control-lg" th:field="*{nombreArchivo}" placeholder="Ej: Resolucion H.C.P. N" />
+        </div>
+      
+      </div>
+            <div class="form-group row mb-4 align-text-left">
+              <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+              <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle"
+                    aria-hidden="true"></i> Los campos con * son obligatorios </span>
+              </label>
+            </div>
+            <hr align="left" noshade="noshade" size="10" width="100%" />
+            <div class="form-group row mt-12">
+              <div class="col-sm-3" id="combo1">
+              </div>
+              <div class="col-sm-3" id="combo1">
+                <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input
+                    class="btn btn-success" type="submit" value="Guardar"></span>
+              </div>
+              <div class="col-sm-3" id="combo1">
+              </div>
+              <div class="col-sm-3" id="combo1">
+                <a th:href="@{/aPersonas/inicioPersonas}" class="btn btn-yvela-green"> <i class="fa fa-undo"
+                    aria-hidden="true"></i> Cancelar </a>
+              </div>
+            </div>
+          </form>
+          <br>
+          <hr align="left" noshade="noshade" size="10" width="100%" />
+
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+<!-- ================================== Lista Grupos Por Version ==============================-->
+<div th:if="${opet} == listaVersion">
+  <section id="clients" class="clients section-bg">
+    <div class="container">
+      <div class="col-sm-3" id="combo1" align="left">
+        <a th:href="@{/aLanzamientos/listaVersionesActivas}" title="Programas" class="btn btn-success" data-aos="fade-up" data-aos-delay="200"
+        data-bs-toggle="tooltip" data-bs-html="true">Atras</a>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+          data-aos="fade-up" data-aos-delay="200">
+
+          <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i>Grupos Habilitados
+          </h2>
+          <h3 th:text="${version.version}"></h3>
+          <div align="right">
+            <form th:action="@{/aLanzamientos/formGrupo}" method="post">
+              <input type="hidden" th:value="*{version.idPgPrgPlnVersiones}" name="idPgPrgPlnVersiones"/>
+              <button title="Registrar Modulos" type="submit" class="btn btn-success">Nuevo Grupo
+                <i class="fa-solid fa-book" aria-hidden="true"></i>
+              </button>
+            </form>
+          </div>
+          <br>
+          <div class="table-responsive">
+            <table id="example" class="table dt-responsive nowrap" style="width:100%">
+            <thead>
+              <tr>
+                <th>Nombre Grupo.</th>
+                <th>Capacidad Grupo</th>
+              </tr>
+            </thead>
+            <tbody th:each="g,iterStat : ${lGrupoVersion}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+              <tr>
+                <td th:text="${g.grupo}"></td>
+                <td th:text="${g.capacidadGrupo}"></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>Nombre Grupo.</th>
+                <th>Capacidad Grupo</th>
+              </tr>
+            </tfoot>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<!-- ==========================================================================================-->
+<!-- ======================================== Registro Grupo ==================================-->
+<div th:if="${opet} == registro">
+  <section id="clients" class="clients section-bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up"
+          data-aos-delay="200">
+          <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i>Registro de Grupo1
+          </h2><span class="text-dark"></span><br>
+          <form method="post" th:object="${grupos}" th:action="@{/aLanzamientos/registroGrupo}"
+            enctype="multipart/form-data" class="text-dark">
+
+            <input type="hidden" th:value="${version.idPgPrgPlnVersiones}" name="idPgPrgPlnVersiones"/>
+
+            <div class="form-group row mb-4">
+              <label class="col-2 col-form-label">Version en la que se Registrara: </label>
+              <label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+              <div class="col-6">
+                <select class="js-states form-control form-control-lg" id="version" style="width: 100%" required>
+                      <option th:value="${version.idPgPrgPlnVersiones}" th:text="${version.version}" selected></option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Nombre del Grupo: </label>
+              <label class="col-1 col-form-label text-right"></i></label>
+              <div class="col-6">
+                <input type="text" id="uni" class="js-states form-control form-control-lg" th:field="*{grupo}"
+                placeholder="Nombre del Grupo"/>
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Capacidad del Grupo: </label>
+              <label class="col-1 col-form-label text-right"></i></label>
+              <div class="col-6">
+                <input type="number" id="uni" class="form-control form-control-lg"
+                 placeholder="Numero de Participantes del grupo" th:field="*{capacidadGrupo}"/>
+              </div>
+            </div>
+            <div class="form-group row mb-4 align-text-left">
+              <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+              <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle"
+                    aria-hidden="true"></i> Los campos con * son obligatorios </span>
+              </label>
+            </div>
+            <hr align="left" noshade="noshade" size="10" width="100%" />
+            <div class="form-group row mt-12">
+              <div class="col-sm-3" id="combo1">
+              </div>
+              <div class="col-sm-3" id="combo1">
+                <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input
+                    class="btn btn-success" type="submit" value="Guardar"></span>
+              </div>
+              <div class="col-sm-3" id="combo1">
+              </div>
+              <div class="col-sm-3" id="combo1">
+                <a th:href="@{/aLanzamientos/listaVersionesActivas}" class="btn btn-yvela-green"> <i class="fa fa-undo"
+                    aria-hidden="true"></i> Cancelar </a>
+              </div>
+            </div>
+          </form>
+          <br>
+          <hr align="left" noshade="noshade" size="10" width="100%" />
+
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+<!-- ================================== Inicio Publicar Programas =============================-->
+<div th:if="${operation} == delet">
+     <section id="clients" class="clients section-bg">
+    	    <div class="container">
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                     <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Datos del Programa a Publicar </h2><br>
+                     <div class="form-group row">
+                        <div class="col-sm-8" id="combo1"> 
+                 			  <form method="post" th:object="${programas}" th:action="@{/aLanzamientos/publicarProgramas}" enctype="multipart/form-data" >
+                 			   <input type="hidden" name="idPrograma" th:value="${programas.idPrograma}" th:field="${programas.idPrograma}">          				                
+  					<div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Nombre del Programa:</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                  <input id="uni" class="form-control form-control-lg" th:field="*{programa}" readOnly/>
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Valor Horario Curricular:</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                  <input id="uni" class="form-control form-control-lg" th:value="*{cargahoraria}" readOnly/>
+              </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label class="col-2 col-form-label text-dark">Seleccione la Modalidad:</label>
+                <label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                <div class="col-6">
+                  <select class="form-control form-control-lg" id="comp" th:field="*{modalidad.id_modalidad}">
+                    <option th:value="*{modalidad.id_modalidad}" th:text="*{modalidad.modalidad}" selected></option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label class="col-2 col-form-label text-dark" >Seleccione el Grado Academico:</label>
+                <label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                <div class="col-6">
+                  <select class="form-control form-control-lg" id="comp" th:field="*{grado.id_grado}">
+                    <option th:value="*{grado.id_grado}" th:text="*{grado.gradoacademico}" selected></option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Validacion de Programa:</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                <input id="uni" class="form-control form-control-lg" th:value="*{validacion}"/>
+              </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label text-dark">Detalles del Lanzamiento:</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                <input id="uni" class="form-control form-control-lg" th:value="*{detallesLanzamientos}"/>
+              </div>
+              </div>  
+                     
+             <hr align="left" noshade="noshade" size="10" width="100%" />
+                <div class="form-group row">
+                       <div class="col-sm-2" id="combo1"> 
+                       </div>
+                       <div class="col-sm-2" id="combo1">
+                            <span class="fa-duotone fa-wifi-fair"><i class="fa fa-times yvela" aria-hidden="true"></i> 
+                               <input type="submit"  class="btn btn-danger" value="Publicar"></span>
+                        </div>
+                        <div class="col-sm-2" id="combo1"> 
+                     </div>
+                     <div class="col-sm-2" id="combo1"> 
+                          <a  th:href="@{/aProgramas/inicioProgramas}"  class="btn btn-yvela-green"> <i class="fa fa-undo" aria-hidden="true"></i> Cancelar </a>
+                      </div>
+                     </div>
+                    </form>
+                   </div>
+                     <div class="col-sm-4" id="combo1" text-black> 
+                            <fieldset class="col-md-12">    	
+                                <legend class="text-dark"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>  Precaución </legend>
+                                <p class="text-dark">Esta a Punto de publicar el programa para el inicio de la pre-inscripcion</p>
+                        </div>
+  					</div>				
+  					  							 <br>
+                <hr align="left" noshade="noshade" size="10" width="100%" />                                
+            
+            </div>
+         </div>
+       </div>
+  </section>
+  </div>					
+
+
+
+
+
+
+  <footer th:replace="fragments/footer :: footer"></footer>
+
+  <div th:replace="fragments/jsScripts :: scripts"></div>
+
+  <!-- ============= Inicio Select con Filtro  ==============  -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+<script src="/js/selectpicker.js"></script>
+
+<!-- Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script>
+   $("#s1").select2({
+       placeholder: "Seleccione...",
+       type: "number;"
+   });
+   $("#s2").select2({
+    placeholder: "Seleccione...",
+});
+   $("#s3").select2({
+       placeholder: "Seleccione...",
+   });
+   $("#s4").select2({
+       placeholder: "Seleccione...",
+   });
+</script>
+<!-- ============= Fin Select con Filtro  ==============  --> 
+
+<!-- ============= Inicio busqueda con filtro listado  ==============  --> 
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
+
+<script>
+$(document).ready(function() {
+  var table = $('#example').DataTable( {
+      lengthChange: false,
+      buttons: [ 'copy', 'excel', 'pdf', 'print' ,'colvis' ]
+  } );
+
+  table.buttons().container()
+      .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+} );
+ </script>
+ 
+ <!-- ============= Fin busqueda con filtro listado  ==============  -->
+</body>
+
+</html>

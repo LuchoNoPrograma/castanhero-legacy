@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+
+<body>
+
+	<nav th:replace="fragments/header :: nav"></nav>
+	<!--  ---------------- Primera Secci[on --------------  -->
+	<section>
+		
+	</section>
+
+	
+	<!-- =============ADMITIDOS POR PROGRAMA ============  -->
+	<div class="row mx-4" th:if="${operation} == formExcel">
+		<form th:action="@{/api/v1/leerExcel}" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="documentoExcel" class="form-label">Registrar Postulantes</label>
+                <input type="file" name="excel" id="documentoExcel" required>
+                <button type="submit" class="btn btn-success">Subir</button>
+            </div>
+        </form>
+	</div>
+	<!-- ============= ADMITIDOS GENERAL =========  -->
+	<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

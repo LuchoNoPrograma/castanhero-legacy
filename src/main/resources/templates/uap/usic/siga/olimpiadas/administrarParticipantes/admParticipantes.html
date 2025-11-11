@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+
+<body>
+
+	<nav th:replace="fragments/header :: nav"></nav>
+	<div layout:fragment="content">
+		<div class="jumbotron">
+
+			<!--  --------------  Primera Secci[on --------------- -->>
+			<section class="content-header">
+				<div class="row">
+					<div class="col-md-10 mb-3">
+						<p class="h1"> <i class="fa fa-money" aria-hidden="true"></i> Administrar Participantes </p>
+					</div>
+					<div class="col-sm-2 text-right" id="reporte">
+						<div th:if="${busqueda} == find">
+							<form th:action="@{/participantes/inicioForm}" method="post">
+								<span class="icon-input-btn"><i class="fa fa-user-plus yvela" aria-hidden="true"></i> <input
+										type="submit" class="btn btn-success btn-lg" value="Nuevo"></span>
+							</for
+						</div>
+					</div>
+				</div>
+				<hr align="left" noshade="noshade" size="10" width="100%" />
+			</section>
+			<!--  ---------------- Fin Primera Secci[on --------------  -->
+
+			<!--  ---------------- Inicio Segunda Secci[on --------------  -->
+			<section>
+				<!-- ============= Tabla lista de Todos los Ingresos Registrados ==============  -->
+				<div th:if="${busqueda} == find">
+					<center><br>
+						<p class="h3"><i class="fa fa-list-alt" aria-hidden="true"></i> Resumen de Participantes Registrados </p>
+						<br>
+					</center>
+					<table id="tComprobantes" class="table" style="width:100%">
+						<thead>
+							<tr>
+								<th>id_participante</th>
+								<th>Nombre Completo</th>
+								<th>CI</th>
+
+								<th>Modificar </th>
+								<th>Eliminar</th>
+							</tr>
+						</thead>
+						<tbody th:each="par,iterStat : ${lParticipantes}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+							<tr>
+								<td th:text="${par.idParticipante}"></td>
+								<td th:text="${par.personas.nombres}+' '+${par.personas.paterno}+' '+${par.personas.materno} "></td>
+								<td th:text="${par.personas.ci}"></td>
+
+
+								<td>
+									<a class="btn btn-primary btn-sm"
+										th:href="@{/participantes/inicioModParticipante/} + ${par.idParticipante}" th:text="'editar'"></a>
+								</td>
+								<td>
+									<!-- 
+                                        <form name="Delet" action="${urlEI}" method="post">
+                                            <input type="hidden" name="idGdocConvenio" value="${lcnv.idGdocConvenio}">
+                                            <span class="icon-input-btn"> <i class="fa fa-times yvela" aria-hidden="true"> </i> <input class="btn btn-danger" type="submit"  value="<spring:message  code="expenses.remove"/>"> </span>
+                                        </form>
+                                        -->
+								</td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<th>id_participante</th>
+								<th>Nombre Completo</th>
+								<th>CI</th>
+
+								<th>Modificar </th>
+								<th>Eliminar</th>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+
+				<!-- ============= Fin Tabla lista de Todos los Ingresos Registrados ==============  -->
+
+				<!-- ============= Inicio Formulario de Registro  ==============  -->
+				<div th:if="${operation} == reg">
+					<center> <br>
+						<p class="h3"><i class="fa fa-th" aria-hidden="true"></i>Formulario de Registro de Participantes</p>
+					</center>
+					<br>
+					<form method="post" th:object="${ooParticipantes}" th:action="@{/participantes/registroParticipantes}"
+						enctype="multipart/form-data">
+
+
+						<div class="form-group row">
+							<label for="ciExpedido" class="col-sm-2 col-form-label">Persona </label>
+							<label class="col-sm-1 col-form-label text-right"> <i class="fa fa-info-circle"
+									aria-hidden="true"></i></label>
+							<div class="col-sm-6">
+
+								<select class="form-control form-control-lg" id="per" th:field="*{personas.idPersona}">
+									<option th:each="per : ${lPersonas}" th:value="${per.idPersona}"
+										th:text="${per.nombres}+' '+${per.paterno}+' '+${per.materno}"></option>
+								</select>
+
+							</div>
+							<div class="col-sm-3" id="comd">
+								<small class="form-text text-muted">
+									Seleccione una Persona
+								</small>
+								<small id="ci" class="form-text text-muted formFieldError">
+									<span class="help-inline" th:errors="*{personas.idPersona}"></span>
+								</small>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="ciExpedido" class="col-sm-2 col-form-label">Equipo </label>
+							<label class="col-sm-1 col-form-label text-right"> <i class="fa fa-info-circle"
+									aria-hidden="true"></i></label>
+							<div class="col-sm-6">
+
+								<select class="form-control form-control-lg" id="eqp"
+									th:field="*{ooEquiposParticipantes.idEquipoParticipante}">
+									<option th:each="eqp: ${lEquipos}" th:value="${eqp.idEquipoParticipante}" th:text="${eqp.nombre}">
+									</option>
+								</select>
+
+							</div>
+							<div class="col-sm-3" id="comd">
+								<small class="form-text text-muted">
+									Seleccione un Equipo
+								</small>
+								<small id="ci" class="form-text text-muted formFieldError">
+									<span class="help-inline" th:errors="*{personas.idPersona}"></span>
+								</small>
+							</div>
+						</div>
+
+
+
+
+
+
+
+						<div class="form-group row">
+							<label for="imagen" class="col-sm-2 col-form-label">Imagen:</label>
+							<label class="col-sm-1 col-form-label text-right"> <i class="fa fa-info-circle"
+									aria-hidden="true"></i></label>
+							<div class="col-sm-6" id="combo1">
+								<input type="file" id="imagen" class="form-control form-control-lg" name="file" />
+							</div>
+
+						</div>
+
+
+
+						<div class="form-group row">
+							<label for="msg" class="col-sm-2 col-form-label text-right"></label>
+							<label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle"
+										aria-hidden="true"></i></span> Los Campos con * son obligatorios </label>
+						</div>
+
+						<hr align="left" noshade="noshade" size="10" width="100%" />
+						<div class="form-group row mt-12">
+							<div class="col-sm-3" id="combo1">
+							</div>
+							<div class="col-sm-3" id="combo1">
+								<span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input
+										class="btn btn-success" type="submit" value="Guardar"></span>
+							</div>
+							<div class="col-sm-3" id="combo1">
+							</div>
+
+						</div>
+
+
+
+					</form>
+
+				</div>
+				<!-- ============= Fin Formulario de Registro  ==============  -->
+				<!-- ============= Inicio Formulario de Modificacion  ==============  -->
+				<div th:if="${operation} == modf">
+					<center> <br>
+						<p class="h3"><i class="fa fa-th" aria-hidden="true"></i> Formulario de Modificacion de Participantes</p>
+					</center>
+					<br>
+					<form method="post" th:object=${ooParticipantes} th:action="@{/participantes/modificarParticipante}">
+
+						<div class="form-group row">
+							<label for="ciExpedido" class="col-sm-2 col-form-label">Persona </label>
+							<label class="col-sm-1 col-form-label text-right"> <i class="fa fa-info-circle"
+									aria-hidden="true"></i></label>
+							<div class="col-sm-6">
+								<select class="form-control form-control-lg" id="per" th:field="*{personas.idPersona}">
+									<option th:each="per : ${lPersonas}" th:value="${per.idPersona}"
+										th:text="${per.nombres}+' '+${per.paterno}+' '+${per.materno}"></option>
+								</select>
+							</div>
+							<div class="col-sm-3" id="comd">
+								<small class="form-text text-muted">
+									Seleccione una Persona
+								</small>
+								<small id="ci" class="form-text text-muted formFieldError">
+									<span class="help-inline" th:errors="*{personas.idPersona}"></span>
+								</small>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="ciExpedido" class="col-sm-2 col-form-label">Equipo </label>
+							<label class="col-sm-1 col-form-label text-right"> <i class="fa fa-info-circle"
+									aria-hidden="true"></i></label>
+							<div class="col-sm-6">
+
+								<select class="form-control form-control-lg" id="eqp"
+									th:field="*{ooEquiposParticipantes.idEquipoParticipante}">
+									<option th:each="eqp: ${lEquipos}" th:value="${eqp.idEquipoParticipante}" th:text="${eqp.nombre}">
+									</option>
+								</select>
+
+							</div>
+							<div class="col-sm-3" id="comd">
+								<small class="form-text text-muted">
+									Seleccione un Equipo
+								</small>
+								<small id="ci" class="form-text text-muted formFieldError">
+									<span class="help-inline" th:errors="*{personas.idPersona}"></span>
+								</small>
+							</div>
+						</div>
+
+
+
+
+						<div class="form-group row">
+							<label for="imagen" class="col-sm-2 col-form-label">Imagen:</label>
+							<label class="col-sm-1 col-form-label text-right"> <i class="fa fa-info-circle"
+									aria-hidden="true"></i></label>
+							<div class="col-sm-6" id="combo1">
+								<input type="file" id="imagen" class="form-control form-control-lg" name="file" />
+							</div>
+
+						</div>
+
+
+
+
+						<div class="form-group row">
+							<label for="msg" class="col-sm-2 col-form-label text-right"></label>
+							<label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle"
+										aria-hidden="true"></i></span> Los Campos con * son obligatorios </label>
+						</div>
+
+						<hr align="left" noshade="noshade" size="10" width="100%" />
+						<div class="form-group row mt-12">
+							<div class="col-sm-3" id="combo1">
+							</div>
+							<div class="col-sm-3" id="combo1">
+								<span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input
+										class="btn btn-success" type="submit" value="Guardar"></span>
+							</div>
+							<div class="col-sm-3" id="combo1">
+							</div>
+
+						</div>
+
+					</form>
+
+				</div>
+				<!-- ============= Fin Formulario de Modificar   ==============  -->
+
+			</section>
+
+			<!--  ---------------- Fin Segunda Secci[on --------------  -->
+
+
+
+		</div>
+	</div>
+
+	<script>
+		$("#s1").select2({
+			placeholder: "Seleccione...",
+			type: "number;"
+		});
+
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+	<footer th:replace="fragments/footer :: footer"></footer>
+
+
+	<div th:replace="fragments/jsScripts :: scripts"></div>
+</body>
+
+</html>

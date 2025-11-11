@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+
+<body>
+
+  <nav th:replace="fragments/header :: nav"></nav>
+  <!--  ---------------- Primera Secci[on --------------  -->
+  <section>
+  </section>
+  <!-- ======================== Seccion Tablas ============  -->
+  <!-- =============   Inicio Registro Plan   ==============  -->
+  <div th:if="${operation} == reg">
+    <section id="clients" class="clients section-bg">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up"
+            data-aos-delay="200">
+  
+            <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Registro de Planes Estudio
+            </h2><br>
+            <form method="post" th:object="${planes}" th:action="@{/aPlanes/registroPlanes}" enctype="multipart/form-data"
+              class="text-dark">
+              
+              <input type="hidden" name="idPrograma" th:value="${programas.idPrograma}">
+  
+              <div class="form-group row mb-4">
+                <label class="col-2 col-form-label">El Programa Seleccionado es: </label>
+                <label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+                  aria-hidden="true"></i></label>
+                <div class="col-6">
+                  <select class="form-control form-control-lg" id="comp" th:field="*{programa.idPrograma}">
+                    <option th:value="${programas.idPrograma}" th:text="${programas.programa}" selected></option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label">Nombre del Plan</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                  <input id="uni" class="form-control form-control-lg" th:field="*{plan}"
+                  placeholder="Ingrese el Nombre del Plan de Estudio"
+                  onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label">Horas Totales del Programa</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                  <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasAcademicas}"
+                  placeholder="Horas del Plan" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label">Gestion de Posgrado</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                  <textarea class="form-control form-control-lg" name="comentarios" rows="2" cols="40" 
+                  placeholder="Director/a de Posgrado &#10;Jefe/a Univad de Coordinacion Academica"
+                  th:field="*{gestion}" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label for="ciExpedido" class="col-sm-2 col-form-label">Validacion del Plan Estudio</label>
+                <label class="col-1 col-form-label text-right"></i></label>
+                <div class="col-6">
+                  <textarea class="form-control form-control-lg" name="comentarios" rows="2" cols="40" 
+                  placeholder="Personas Responsables de la Validacion del Plan de Estudio"
+                  th:field="*{validacion}" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                </div>
+              </div>
+              
+  
+              <div class="form-group row mb-4 align-text-left">
+                <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle"
+                      aria-hidden="true"></i> Los campos con * son obligatorios </span>;&nbsp
+                </label>
+              </div>
+
+              <hr align="left" noshade="noshade" size="10" width="100%" />
+              <div class="form-group row mt-12">
+                <div class="col-sm-3" id="combo1">
+                </div>
+                <div class="col-sm-3" id="combo1">
+                  <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input
+                      class="btn btn-success" type="submit" value="Guardar"></span>
+                </div>
+                <div class="col-sm-3" id="combo1">
+                </div>
+                <div class="col-sm-3" id="combo1">
+                  <a th:href="@{/aProgramas/inicioProgramas}" class="btn btn-yvela-green"> <i class="fa fa-undo"
+                      aria-hidden="true"></i> Cancelar </a>
+                </div>
+              </div>
+            </form>
+            <br>
+            <hr align="left" noshade="noshade" size="10" width="100%" />
+          </div>
+        </div>
+      </div>
+  
+    </section>
+  </div>
+<!-- ============================================================================================= -->
+
+<!-- ================================== Inicio Modificacion de Planes =============================-->
+<div th:if="${operation} == modif">
+  <section id="clients" class="clients section-bg">
+    <div class="container">
+      <div align="left">
+        <form th:action="@{/aPlanes/listaPorProgramas}" method="post">
+          <input title="idPrograma" type="hidden" th:value="${programas.idPrograma}" name="idPrograma"/>
+          <button title=" Plan de Estudio " type="submit" class="btn btn-success" data-bs-toggle="tooltip" data-bs-html="true"
+          data-aos="fade-up" data-aos-delay="200">Atras
+          </button>
+        </form>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up"
+          data-aos-delay="200">
+
+          <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Modificacion de Planes Estudio
+          </h2><h1 th:text="${planes.plan}"></h1><br>
+          <form method="post" th:object="${planes}" th:action="@{/aPlanes/actualizarPlanes}" enctype="multipart/form-data"
+            class="text-dark">
+
+            <input type="hidden" name="idPrograma" th:value="${programas.idPrograma}">
+
+            <input type="hidden" name="idPgPrgPlanes" th:value="${planes.idPgPrgPlanes}"
+                th:field="${planes.idPgPrgPlanes}">
+
+                <div class="form-group row mb-4">
+                  <label class="col-2 col-form-label">El Programa Seleccionado es: </label>
+                  <label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+                    aria-hidden="true"></i></label>
+                  <div class="col-6">
+                    <select class="form-control form-control-lg" id="comp" th:field="*{programa.idPrograma}">
+                      <option th:value="${programas.idPrograma}" th:text="${programas.programa}" selected></option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row mb-4">
+                  <label for="ciExpedido" class="col-sm-2 col-form-label">Nombre del Plan</label>
+                  <label class="col-1 col-form-label text-right"></i></label>
+                  <div class="col-6">
+                    <input id="uni" class="form-control form-control-lg" th:field="*{plan}" />
+                  </div>
+                </div>
+                <div class="form-group row mb-4">
+                  <label for="ciExpedido" class="col-sm-2 col-form-label">Horas Totales del Programa</label>
+                  <label class="col-1 col-form-label text-right"></i></label>
+                  <div class="col-6">
+                    <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasAcademicas}" />
+                  </div>
+                </div>
+                <div class="form-group row mb-4">
+                  <label for="ciExpedido" class="col-sm-2 col-form-label">Gestion de Posgrado</label>
+                  <label class="col-1 col-form-label text-right"></i></label>
+                  <div class="col-6">
+                    <textarea class="form-control form-control-lg" name="comentarios" rows="2" cols="40" 
+                    placeholder="Director/a de Posgrado &#10;Jefe/a Univad de Coordinacion Academica"
+                    th:field="*{gestion}"></textarea>
+                  </div>
+                </div>
+                <div class="form-group row mb-4">
+                  <label for="ciExpedido" class="col-sm-2 col-form-label">Validacion del Plan Estudio</label>
+                  <label class="col-1 col-form-label text-right"></i></label>
+                  <div class="col-6">
+                    <textarea class="form-control form-control-lg" name="comentarios" rows="2" cols="40" 
+                    placeholder="Personas Responsables de la Validacion del Plan de Estudio"
+                    th:field="*{validacion}"></textarea>
+                  </div>
+                </div>
+            
+            <div class="form-group row mb-4 align-text-left">
+              <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+              <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle"
+                    aria-hidden="true"></i> Los campos con * son obligatorios </span>
+              </label>
+            </div>
+
+            <hr align="left" noshade="noshade" size="10" width="100%" />
+            <div class="form-group row mt-12">
+              <div class="col-sm-3" id="combo1">
+              </div>
+              <div class="col-sm-3" id="combo1">
+                <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input
+                    class="btn btn-success" type="submit" value="Guardar"></span>
+              </div>
+              <div class="col-sm-3" id="combo1">
+              </div>
+              <div class="col-sm-3" id="combo1">
+                <a th:href="@{/aProgramas/inicioProgramas}" class="btn btn-yvela-green"> <i class="fa fa-undo"
+                    aria-hidden="true"></i> Cancelar </a>
+              </div>
+            </div>
+          </form>
+          <br>
+          <hr align="left" noshade="noshade" size="10" width="100%" />
+        </div>
+      </div>
+    </div>
+
+
+  </section>
+</div>
+<!-- ================================== Inicio Modificacion Programas =============================-->
+<!-- ================================== Inicio Eliminar Programas =============================-->
+<div th:if="${operation} == delet">
+     <section id="clients" class="clients section-bg">
+    	    <div class="container">
+            <div align="left">
+              <form th:action="@{/aPlanes/listaPorProgramas}" method="post">
+                <input title="idPrograma" type="hidden" th:value="${programas.idPrograma}" name="idPrograma"/>
+                <button title=" Plan de Estudio " type="submit" class="btn btn-success" data-bs-toggle="tooltip" data-bs-html="true"
+                data-aos="fade-up" data-aos-delay="200">Atras
+                </button>
+              </form>
+            </div>
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                     <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Eliminación de Planes </h2><br>
+                     <div class="form-group row">
+                        <div class="col-sm-8" id="combo1"> 
+                 			 <form method="post" th:object="${planes}" th:action="@{/aPlanes/eliminarPlanes}"
+            enctype="multipart/form-data" class="text-dark">
+            
+            <input type="hidden" name="idPrograma" th:value="${programas.idPrograma}">
+
+            <input type="hidden" name="idPgPrgPlanes" th:value="${planes.idPgPrgPlanes}" th:field="${planes.idPgPrgPlanes}">
+				    
+            <div class="form-group row mb-4">
+              <label class="col-2 col-form-label">El Programa Seleccionado es: </label>
+              <label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+                aria-hidden="true"></i></label>
+              <div class="col-6">
+                <select class="form-control form-control-lg" id="comp" th:field="*{programa.idPrograma}">
+                  <option th:value="${programas.idPrograma}" th:text="${programas.programa}" selected></option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label for="ciExpedido" class="col-sm-2 col-form-label">Nombre del Plan</label>
+              <label class="col-1 col-form-label text-right"></i></label>
+              <div class="col-6">
+                <input id="uni" class="form-control form-control-lg" th:field="*{plan}" />
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label for="ciExpedido" class="col-sm-2 col-form-label">Horas Totales del Programa</label>
+              <label class="col-1 col-form-label text-right"></i></label>
+              <div class="col-6">
+                <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasAcademicas}" />
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label for="ciExpedido" class="col-sm-2 col-form-label">Gestion de Posgrado</label>
+              <label class="col-1 col-form-label text-right"></i></label>
+              <div class="col-6">
+                <textarea class="form-control form-control-lg" name="comentarios" rows="2" cols="40" 
+                placeholder="Director/a de Posgrado &#10;Jefe/a Univad de Coordinacion Academica"
+                th:field="*{gestion}"></textarea>
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label for="ciExpedido" class="col-sm-2 col-form-label">Validacion del Plan Estudio</label>
+              <label class="col-1 col-form-label text-right"></i></label>
+              <div class="col-6">
+                <textarea class="form-control form-control-lg" name="comentarios" rows="2" cols="40" 
+                placeholder="Personas Responsables de la Validacion del Plan de Estudio"
+                th:field="*{validacion}"></textarea>
+              </div>
+            </div>      
+             <hr align="left" noshade="noshade" size="10" width="100%" />
+                <div class="form-group row">
+                       <div class="col-sm-2" id="combo1"> 
+                       </div>
+                       <div class="col-sm-2" id="combo1">
+                            <span class="icon-input-btn"><i class="fa fa-times yvela" aria-hidden="true"></i> 
+                               <input type="submit"  class="btn btn-danger" value="Confirmar"></span>
+                        </div>
+                        <div class="col-sm-2" id="combo1"> 
+                     </div>
+                     <div class="col-sm-2" id="combo1"> 
+                          <a  th:href="@{/aProgramas/inicioProgramas}"  class="btn btn-yvela-green"> <i class="fa fa-undo" aria-hidden="true"></i> Cancelar </a>
+                      </div>
+                     </div>
+                    </form>
+                   </div>
+                     <div class="col-sm-4" id="combo1"> 
+                            <fieldset class="col-md-12">    	
+                                <legend><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>  Precaución </legend>
+                                <p>Esta a Punto de eliminar los datos que refiere en el formulario</p>
+                               </fieldset>
+                        </div>
+  					</div>				
+  					  							 <br>
+                <hr align="left" noshade="noshade" size="10" width="100%" />                                
+            
+            </div>
+         </div>
+       </div>
+  </section>
+  </div>
+  <!-- ================================= Lista Planes Por Programas ======================= -->
+  <div>
+      <div th:if="${listaPlanes} == list">
+        <section id="clients" class="clients section-bg">
+          <div class="container">
+            <div class="col-sm-3" id="combo1" align="left">
+              <a th:href="@{/aProgramas/inicioProgramas}" title="Programas" class="btn btn-success" data-aos="fade-up" data-aos-delay="200"
+              data-bs-toggle="tooltip" data-bs-html="true">Atras</a>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+                data-aos="fade-up" data-aos-delay="200">
+                <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Resumen de Plan Registrado
+                </h2>
+                <h1 th:text="${programas.programa}"></h1>
+                <div align="right">
+                  <a class="btn btn-success" title="Registrar <b>Plan</b>" th:href="@{/aPlanes/formPlanes={idPrograma}(idPrograma = ${programas.idPrograma})}"
+                    data-bs-toggle="tooltip" data-bs-html="true">Nuevo Plan
+                    <i class="fa-solid fa-book" aria-hidden="true"></i>
+                  </a>
+              </div>
+                <br>
+                <div class="table-responsive">
+                  <table id="example" class="table" style="width:100%">
+                  <thead>
+                    <tr>
+                      <th scope="col">Nombre Plan</th>
+                      <th scope="col">Horas Academicas</th>
+                      <th scope="col">Gestion</th>
+                    </tr>
+                  </thead>
+                  <tbody th:each="pl,iterStat : ${listaPla}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+                    <tr>
+                      <td th:text="${pl.plan}"></td>
+                      <td th:text="${pl.horasAcademicas} +' Horas'"></td>
+                      <td th:text="${pl.gestion}" style="width:240px;"></td>
+                      <td>
+                        <a class="btn btn-primary" title="Modificar <b>Plan</b>" th:href="@{/aPlanes/inicioModificarPlanes={idPgPrgPlanes}(idPgPrgPlanes = ${pl.idPgPrgPlanes})}"
+                          data-bs-toggle="tooltip" data-bs-html="true">
+                          <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                        </a>
+                      </td>
+                      <td>
+                        <a class="btn btn-danger" title="Eliminar <b>Plan</b>" th:href="@{/aPlanes/inicioEliminarPlanes={idPgPrgPlanes}(idPgPrgPlanes = ${pl.idPgPrgPlanes})}"
+                          data-bs-toggle="tooltip" data-bs-html="true">
+                          <i class="fa-solid fa-dumpster-fire" aria-hidden="true"></i>
+                        </a>
+                      </td>
+                      <td>
+                        <a class="btn btn-success" title="Ver <b>Modulos</b>" th:href="@{/aModulos/listaPorPorPlan={idPgPrgPlanes}(idPgPrgPlanes = ${pl.idPgPrgPlanes})}"
+                          data-bs-toggle="tooltip" data-bs-html="true">
+                          <i class="fa-solid fa-book" aria-hidden="true"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                </div>
+              </div>
+            </div>
+          </div>
+    </section>
+  </div>
+  <!-- ===================================================================================== -->
+
+  <footer th:replace="fragments/footer :: footer"></footer>
+
+
+  <div th:replace="fragments/jsScripts :: scripts"></div>
+
+   <!-- ============= Fin Select con Filtro  ==============  --> 
+
+<!-- ============= Inicio busqueda con filtro listado  ==============  --> 
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+      var table = $('#example').DataTable( {
+          lengthChange: false,
+          buttons: [ 'copy', 'excel', 'pdf', 'print' ,'colvis' ]
+      } );
+    
+      table.buttons().container()
+          .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+    } );
+</script>
+     
+     <!-- ============= Fin busqueda con filtro listado  ==============  -->
+</body>
+
+</html>

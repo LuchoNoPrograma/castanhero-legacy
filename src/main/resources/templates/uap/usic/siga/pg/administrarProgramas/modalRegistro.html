@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+
+<body>
+  <div class="modal fade" id="registrar" tabindex="-1" aria-hidden="true" aria-labelledby="modalTitle" data-bs-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-weight-bold" id="modalTitle">NUEVO REGISTRO DE PROGRAMA DE POSGRADO</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="from-registro" method="post" th:object="${programas}" th:action="@{/aProgramas/registroProgramas}"
+              enctype="multipart/form-data" class="text-dark">
+
+              <div class="form-group row">
+                <div class="col-lg-12">
+				  <label class="font-weight-bold" for="NombrePrograma">Nombre del Programa: </label>
+                  <input id="NombrePrograma" class="form-control form-control-lg" th:field="*{programa}" placeholder="Ingrese el Nombre del Programa"
+                  onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+                </div>
+              </div>
+
+              <hr class="bg-secondary border-top border-secondary mb-2">
+
+              <div class="form-group row">
+                  <div class="col-lg-4">
+                    <label class="font-weight-bold" for="NombrePrograma">Valores que Otorga el Programa:</label>
+                    <input type="number" id="uni" class="form-control form-control-lg" th:field="*{creditos}" placeholder="Creditos del Programa"
+                    onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                  </div>
+                  <div class="col-lg-4">
+                    <label class="font-weight-bold" for="NombrePrograma">Horas de Trabajo Virtual:</label>
+                    <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasVirtuales}" placeholder="Horas de Trabajo Virtual"
+                    onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                  </div>
+                  <div class="col-lg-4">
+                    <label class="font-weight-bold" for="NombrePrograma">Horas de Trabajo De Investigacion:</label>
+                    <input type="number" id="uni" class="form-control form-control-lg" th:field="*{horasInvestigacion}" placeholder="Horas de Investigacion"
+                    onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                  </div>
+              </div>
+
+              <hr class="bg-primary border-top border-secondary mb-2">
+
+              <div class="form-group row">
+                <div class="col-lg-3">
+                  <label class="font-weight-bold" for="NombrePrograma">Siglas del Programa:</label>
+                  <input type="text" id="uni" class="form-control form-control-lg" th:field="*{sigla}" placeholder="Siglas del Programa"
+                  onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+                </div>
+                <div class="col-lg-3">
+                  <label class="font-weight-bold" for="NombrePrograma">Cantidad de Modulos del Programa:</label>
+                  <input type="number" id="uni" class="form-control form-control-lg" th:field="*{cantidadModulos}" placeholder="Cantidad de Modulos"
+                  onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1"/>
+                </div>
+                <div class="col-lg-3">
+                    <label class="font-weight-bold">Modalidad: </label>
+                    <select class="form-control form-control-lg" id="comp" th:field="*{modalidad.id_modalidad}">
+                      <option th:each="m : ${lModalidad}" th:value="${m.id_modalidad}" th:text="${m.modalidad}"></option>
+                    </select>
+                </div>
+                <div class="col-lg-3">
+                  <label class="font-weight-bold">Grado del Programa: </label>
+                  <select class="form-control form-control-lg" id="comp" th:field="*{grado.id_grado}">
+                    <option th:each="a : ${lGrado}" th:value="${a.id_grado}" th:text="${a.gradoacademico}"></option>
+                  </select>
+              </div>
+
+              <div class="form-group row mb-4 align-text-left">
+                <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"></span>
+                </label>
+              </div>
+              <hr align="left" noshade="noshade" size="10" width="100%" />
+              <div class="form-group row mt-12">
+                <div class="col-sm-3" id="combo1">
+                </div>
+                <div class="col-sm-3" id="combo1">
+                  <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i><input
+                      class="btn btn-success" type="submit" value="Guardar"></span>
+                </div>
+                <div class="col-sm-3" id="combo1">
+                </div>
+                <div class="col-sm-3" id="combo1">
+                  <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+              </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+
+<div class="modal left fade" tabindex="-1" role="dialog" id="regisPrueba" th:fragment="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Prueba Modal</h5>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  <style>
+  .modal-dialog {
+	position: relative;
+	margin-right: auto;
+  margin-left: auto;
+	height: auto;
+  max-width: 90%;
+	width: 100%;
+	right:0;
+	border: 1;
+  }
+  </style>
+
+
+</body>
+
+</html>

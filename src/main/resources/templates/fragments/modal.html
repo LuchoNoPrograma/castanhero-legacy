@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+</head>
+
+<body>
+    <!--CONFIRM MODAL-->
+    <div class="modal fade" tabindex="-1" role="dialog" id="myModal" th:fragment="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    <h4 class="modal-title">Atenção</h4>
+                </div>
+                <div class="modal-body">
+                    <div th:text="${session.userModal}"></div>
+                    <br>
+                    <div th:text="${yeti}"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button id="ok_confirm" type="button" class="btn btn-primary">Ok</button>
+                </div>
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /.modal -->
+
+
+    <div class="modal left fade" tabindex="-1" role="dialog" id="userModali" th:fragment="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="functionForm" th:action="@{/listarMenues}" role="form" id="form" method="post">
+                    <div class="modal-header">
+                        <p class="h4 modal-title" id="myModalLabel">Perfil de Usuario </p>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <div class="login100-form-avatar">
+                                    <img th:src="@{/img/garuto.png}" />
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <label class="col-sm-3 col-form-label">Usuario: </label>
+                                    <label class="col-sm-9 col-form-label"
+                                        th:text="${session.sNombres}+' '+${session.sPaterno}+' '+${session.sMaterno} ">
+                                    </label>
+                                </div>
+                                <div class="row">
+                                    <label class="col-sm-3 col-form-label">Rol: </label>
+                                    <label class="col-sm-9 col-form-label"
+                                        sec:authorize="hasRole('ROLE_ADMIN')">Administrador</label>
+                                    <label class="col-sm-9 col-form-label"
+                                        sec:authorize="hasRole('ROLE_USER')">Usuarios</label>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Funciones de Sistema</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control form-control" name="idMnuTipoFuncion"
+                                            onchange="this.form.submit()">
+                                            <option value="">Seleccion Funcion </option>
+                                            <option th:each="ltf : ${session.lTiposFunciones}"
+                                                th:value="${ltf.idMnuTipoFuncion}" th:text="${ltf.tipoFuncion}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+ <div class="modal left fade" tabindex="-1" role="dialog" id="usuarioModal" th:fragment="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+         <form name="functionForm" th:action="@{/listarMenues}" role="form" id="form" method="post">
+              <div class="modal-header">
+                   <p class="h4 modal-title" id="myModalLabel">Perfil de Usuario </p>
+              </div>
+          		<div class="modal-body">
+             		<div class="form-group row">
+                                <div class="col-md-3">
+                                    <div class="login100-form-avatar border border-dark">
+                                        <img th:src="@{/img/garuto.png}"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <label class="col-sm-3 col-form-label">Usuario</label>
+                                        <label class="col-sm-9 col-form-label" th:text="${session.sNombres}+' '+${session.sPaterno}+ ' '+ ${session.sMaterno} ">   </label>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-3 col-form-label">Rol</label>
+                                        <label class="col-sm-9 col-form-label" sec:authorize="hasRole('ROLE_ADMIN')">Administrador</label>
+                                        <label class="col-sm-9 col-form-label" sec:authorize="hasRole('ROLE_USER')">Usuarios</label>
+                                        </div>
+                                       <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Funciones de Sistema</label>
+                                            <div class="col-md-9">
+                                                        <select class="form-control form-control" name="idMnuTipoFuncion" onchange="this.form.submit()">
+                                                            <option value="">Seleccion Funcion </option>
+                                                            <option th:each="ltf : ${session.lTiposFunciones}" th:value="${ltf.idMnuTipoFuncion}" th:text="${ltf.tipoFuncion}"></option>                                                         
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                 </div>                            
+           			</div>
+					<div class="modal-footer">
+				    	     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <a class="btn btn-danger" th:href="@{/logout}" id="show"><i class="fa fa-times" aria-hidden="true"></i> Cerrar Sesion </a>
+				    	</div>
+				    </form>
+				</div>
+		</div>
+  </div>
+  <!-- ======================================================================================================= -->
+ 
+
+</body>
+
+</html>

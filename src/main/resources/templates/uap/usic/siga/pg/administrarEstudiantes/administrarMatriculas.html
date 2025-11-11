@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+<body>
+
+<nav th:replace="fragments/header :: nav"></nav>
+<!--  ---------------- Primera Secci[on --------------  -->
+    <section id="hero" class="d-flex align-items-center">
+     <div class="container">
+        <div class="row">
+                     <div class="col-lg-10 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                        <h1 class="text-dark"><i class="fa fa-folder-open-o" aria-hidden="true"></i> Administrar Matricula de Estudiantes  </h1>
+                    </div>
+                    <div class="col-lg-2 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                        <div th:if="${busqueda} == find">
+                           <form th:action="@{/aMatriculas/scdNuevoMatriculas}" method="post">
+                                   <span class="icon-input-btn"><i class="fa fa-user-plus yvela" aria-hidden="true"></i>
+                                    <input type="submit" class="btn btn-success btn-lg" value="Nuevo"></span>
+                                  <div th:text="${idEtapa}"></div>
+                            </form>
+                        </div>
+                    </div>
+                  </div>
+               <div class="row">
+                    <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                       <hr/>
+                   </div>
+                 </div>                            	
+            </div>                   
+     </section>
+
+<!-- ======================== Seccion Tablas ============  -->         
+         
+<div th:if="${busqueda} == find">         
+   <section id="clients" class="clients section-bg">
+    	    <div class="container">
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">   		
+
+                   <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Resumen de Registro de Matriculados </h2><br>                   			                                                  
+                    
+                    
+                    
+                    
+                    
+                    <table  id="tContratos"  class="table" style="width:100%">
+                    <thead>
+                        <tr>
+                        	<th>Estudiante</th>
+                            <th>Matricula</th>
+                            <th>Password</th>
+                            <th>Tipo Descuento</th>
+                         
+                                                       
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                     <tbody th:each="lSpr,iterStat : ${lMatriculas}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">                                       
+                        <tr>
+                         		<td th:text="${lSpr.estudiantes.personas.nombres} +' '+ ${lSpr.estudiantes.personas.paterno} +' '+ ${lSpr.estudiantes.personas.materno}"></td>
+                                <td th:text="${lSpr.matricula}"></td>
+                                <td th:text="${lSpr.password}"></td>
+                                <td th:text="${lSpr.tiposDescuentos.tipoDescuento}"></td>
+                                                                                           
+                                <td>
+                                     <form th:action="@{/aMatriculas/inicioModificarMatriculas}" method="post">
+                                  		   <input type="hidden" th:value="${lSpr.idMatricula}" name="idMatricula" />
+                                  	 	   <span class="icon-input-btn"> <input type="submit" class="btn btn-primary btn-lg" value="Modificar"></span>                                  
+                            		</form>                                  
+                                </td>
+                                <td>
+                                    <form th:action="@{/aMatriculas/inicioEliminarMatriculas}" method="post">
+                                  		  <input type="hidden" th:value="${lSpr.idMatricula}" name="idMatricula" />
+                                  	 	   <span class="icon-input-btn"> <input type="submit" class="btn btn-danger btn-lg" value="Eliminar"></span>                                  
+                            		</form>
+                                </td>
+                            </tr>
+                 </tbody>
+                    <tfoot>
+                        <tr>
+                        	<th>Estudiante</th>
+                            <th>Matricula</th>
+                            <th>Password</th>
+                            <th>Tipo Descuento</th>                       
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </tfoot>
+                </table>                   
+                 </div>
+              </div>
+         </div>
+       
+	</section>
+</div>
+  <!-- ============= Fin Tabla lista de Proyectos  ==============  -->
+
+ <!-- ============= Inicio Formulario de Registro de  Proyectos  ==============  -->
+ <div th:if="${operation} == reg">
+     <section id="clients" class="clients section-bg">
+    	    <div class="container">
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                    		
+                   <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Registro de Matriculación </h2><br>                   			                               
+                           <form method="post" th:object="${matriculas}" th:action="@{/aMatriculas/registrarMatriculas}" enctype="multipart/form-data" class="text-dark" >
+                           			
+                           			
+                           			
+                   
+                   			  <div class="form-group row mb-4">
+				                        <label  class="col-2 col-form-label">Estudiante </label>
+				                        <label class="col-1 col-form-label text-right">  <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+				                        <div class="col-6">
+				                        	 <select class="form-control form-control-lg"  id="comp" th:field="*{estudiantes.idEstudiante}">
+										  	    <option th:each="lun : ${lEstudiantes}" th:value="${lun.idEstudiante}" th:text="${lun.personas.nombres}+' '+${lun.personas.paterno}+' '+${lun.personas.materno}"></option>
+										    </select>				                        					                         
+				                        </div>
+				              	     <div class="col-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Seleccione un Estudiante
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{estudiantes.idEstudiante}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			 
+                   			 
+                   			 <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">Matricula</label>
+				                        <label class="col-1 col-form-label text-right"></i></label>
+				                        <div class="col-6">
+				                        	<input id="uni" class="form-control form-control-lg"   th:field="*{matricula}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese la Matricula
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{matricula}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			 
+                   			<div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">Password</label>
+				                        <label class="col-1 col-form-label text-right"></i></label>
+				                        <div class="col-6">
+				                        	<input id="uni" class="form-control form-control-lg"   th:field="*{password}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese el Password
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{password}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			 
+                   			 <div class="form-group row mb-4">
+				                        <label  class="col-2 col-form-label">Tipo Descuento </label>
+				                        <label class="col-1 col-form-label text-right">  <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+				                        <div class="col-6">
+				                        	 <select class="form-control form-control-lg"  id="comp" th:field="*{tiposDescuentos.idTipoDescuento}">
+										  	    <option th:each="lun : ${lTipoDescuentos}" th:value="${lun.idTipoDescuento}" th:text="${lun.tipoDescuento}"></option>
+										    </select>				                        					                         
+				                        </div>
+				              	     <div class="col-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Seleccione un Tipo de Descuento
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{tiposDescuentos.idTipoDescuento}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>  
+                   			   
+                          
+                      <div class="form-group row mb-4 align-text-left" >
+                        <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                        <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle" aria-hidden="true"></i>  Los campos con * son obligatorios </span>;&nbsp  </label>
+                    </div>   
+
+                    <hr align="left" noshade="noshade" size="10" width="100%" />
+                    <div class="form-group row mt-12">
+                        <div class="col-sm-3" id="combo1">
+                        </div> 
+                        <div class="col-sm-3" id="combo1">
+                            <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input class="btn btn-success" type="submit" value="Guardar"></span>
+                        </div>
+                        <div class="col-sm-3" id="combo1"> 
+                        </div>
+                        <div class="col-sm-3" id="combo1">
+                             <a  th:href="@{/aMatriculas/inicioMatriculas}"  class="btn btn-yvela-green"> <i class="fa fa-undo" aria-hidden="true"></i> Cancelar </a>
+                        </div> 
+                    </div> 
+                </form>
+                <br>
+                <hr align="left" noshade="noshade" size="10" width="100%" />                                
+            </div>
+            </div>
+         </div>
+       
+ </section>
+    </div>
+ <!-- ============= Fin Formulario de Registro de Proyectos  ==============  -->
+ 
+ <!-- ============= Inicio Formulario de ModificaciÃ³n de Proyectos  ==============  -->
+   <div th:if="${operation} == modif">
+        <section id="clients" class="clients section-bg">
+    	    <div class="container">
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                    		
+                   <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Modificación de Matricula</h2><br>                   			                               
+                           <form method="post" th:object="${matriculas}" th:action="@{/aMatriculas/actualizarMatriculas}" enctype="multipart/form-data" class="text-dark">
+				                
+				                  <input type="hidden" name="idMatricula" th:value="${matriculas.idMatricula}" th:field="${matriculas.idMatricula}">
+				                  
+				              
+                   			    <div class="form-group row mb-4">
+				                        <label  class="col-2 col-form-label">Estudiante </label>
+				                        <label class="col-1 col-form-label text-right">  <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+				                        <div class="col-6">
+				                        	 <select class="form-control form-control-lg"  id="comp" th:field="*{estudiantes.idEstudiante}">
+										  	    <option th:each="lun : ${lEstudiantes}" th:value="${lun.idEstudiante}" th:text="${lun.personas.nombres}+' '+${lun.personas.paterno}+' '+${lun.personas.materno}"></option>
+										    </select>				                        					                         
+				                        </div>
+				              	     <div class="col-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Seleccione un Estudiante
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{estudiantes.idEstudiante}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			 
+                   			 
+                   			 <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">Matricula</label>
+				                        <label class="col-1 col-form-label text-right"></i></label>
+				                        <div class="col-6">
+				                        	<input id="uni" class="form-control form-control-lg"   th:field="*{matricula}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese la Matricula
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{matricula}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			 
+                   			<div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">Password</label>
+				                        <label class="col-1 col-form-label text-right"></i></label>
+				                        <div class="col-6">
+				                        	<input id="uni" class="form-control form-control-lg"   th:field="*{password}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese el Password
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{password}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			 
+                   			 <div class="form-group row mb-4">
+				                        <label  class="col-2 col-form-label">Tipo Descuento </label>
+				                        <label class="col-1 col-form-label text-right">  <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+				                        <div class="col-6">
+				                        	 <select class="form-control form-control-lg"  id="comp" th:field="*{tiposDescuentos.idTipoDescuento}">
+										  	    <option th:each="lun : ${lTipoDescuentos}" th:value="${lun.idTipoDescuento}" th:text="${lun.tipoDescuento}"></option>
+										    </select>				                        					                         
+				                        </div>
+				              	     <div class="col-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Seleccione un Tipo de Descuento
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{tiposDescuentos.idTipoDescuento}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			 
+                   			  
+                   			   
+                          
+                      <div class="form-group row mb-4 align-text-left" >
+                        <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                        <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle" aria-hidden="true"></i>  Los campos con * son obligatorios </span>;&nbsp  </label>
+                    </div>   
+
+                    <hr align="left" noshade="noshade" size="10" width="100%" />
+                    <div class="form-group row mt-12">
+                        <div class="col-sm-3" id="combo1">
+                        </div> 
+                        <div class="col-sm-3" id="combo1">
+                            <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input class="btn btn-success" type="submit" value="Guardar"></span>
+                        </div>
+                        <div class="col-sm-3" id="combo1"> 
+                        </div>
+                        <div class="col-sm-3" id="combo1">
+                             <a  th:href="@{aMatriculas/inicioMatriculas}"  class="btn btn-yvela-green"> <i class="fa fa-undo" aria-hidden="true"></i> Cancelar </a>
+				              
+				              
+				              
+                        </div> 
+                    </div> 
+                </form>
+                <br>
+                <hr align="left" noshade="noshade" size="10" width="100%" />                                
+            </div>
+            </div>
+         </div>
+       
+ </section>
+</div>
+
+  <!-- ============= Inicio Formulario de Eliminacion  de Proyectos  ==============  -->
+   <div th:if="${operation} == elim">
+     <section id="clients" class="clients section-bg">
+    	    <div class="container">
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                     <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Eliminación Matricula </h2><br>
+                     <div class="form-group row">
+                        <div class="col-sm-8" id="combo1"> 
+                 			  <form method="post" th:object="${matriculas}" th:action="@{/aMatriculas/eliminarMatriculas}" enctype="multipart/form-data" class="text-dark">
+                 			    <input type="hidden" name="idMatricula" th:value="${matriculas.idMatricula}" th:field="${matriculas.idMatricula}">
+				                    				                
+  					
+                    
+                     
+                     <div class="form-group row mb-4">
+                        <label for="ciExpedido" class="col-sm-4 col-form-label">Estudiante </label>
+                        <div class="col-sm-8">
+                         	<select class="form-control form-control-lg"  id="comp" th:field="*{estudiantes.idEstudiante}">
+							<option th:each="lun : ${lEstudiantes}" th:value="${lun.idEstudiante}" th:text="${lun.personas.nombres}+' '+${lun.personas.paterno}+' '+${lun.personas.materno}"></option>
+							</select>
+                        </div>
+                     </div>
+                     
+                     
+                     
+             
+                     <div class="form-group row mb-4">
+                        <label for="codigo" class="col-sm-4 col-form-label">Matricula </label>
+                        <div class="col-sm-8">
+                           <input id="uni" class="form-control form-control-lg"   th:field="*{matricula}"   />
+                        </div>
+                     </div>
+                     
+                  	<div class="form-group row mb-4">
+                        <label for="codigo" class="col-sm-4 col-form-label">Password </label>
+                        <div class="col-sm-8">
+                           <input id="uni" class="form-control form-control-lg"   th:field="*{password}"   />
+                        </div>
+                     </div>
+					
+					
+					 <div class="form-group row mb-4">
+                        <label for="ciExpedido" class="col-sm-4 col-form-label">Tipo Descuento</label>
+                        <div class="col-sm-8">
+                         	 <select class="form-control form-control-lg"  id="comp" th:field="*{tiposDescuentos.idTipoDescuento}">
+							<option th:each="lun : ${lTipoDescuentos}" th:value="${lun.idTipoDescuento}" th:text="${lun.tipoDescuento}"></option>
+							</select>
+                        </div>
+                     </div>
+                                        
+                     
+             <hr align="left" noshade="noshade" size="10" width="100%" />
+                <div class="form-group row">
+                       <div class="col-sm-2" id="combo1"> 
+                       </div>
+                       <div class="col-sm-2" id="combo1">
+                            <span class="icon-input-btn"><i class="fa fa-times yvela" aria-hidden="true"></i> 
+                               <input type="submit"  class="btn btn-danger" value="Confirmar"></span>
+                        </div>
+                        <div class="col-sm-2" id="combo1"> 
+                     </div>
+                     <div class="col-sm-2" id="combo1"> 
+                          <a  th:href="@{aMatriculas/inicioMatriculas}"  class="btn btn-yvela-green"> <i class="fa fa-undo" aria-hidden="true"></i> Cancelar </a>
+                      </div>
+                     </div>
+                    </form>
+                   </div>
+                     <div class="col-sm-4 text-dark" id="combo1" > 
+                            <fieldset class="col-md-12">    	
+                                <legend><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>  Precaución </legend>
+                                <p class="text-danger">Esta a Punto de eliminar los datos que refiere en el formulario</p>
+                               </fieldset>
+                        </div>
+  					</div>				
+  					  							 <br>
+                <hr align="left" noshade="noshade" size="10" width="100%" />                                
+            
+            </div>
+         </div>
+       </div>
+  </section>
+  </div>							
+                
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+
+<div th:replace="fragments/jsScripts :: scripts"></div>
+</body>
+
+</html>

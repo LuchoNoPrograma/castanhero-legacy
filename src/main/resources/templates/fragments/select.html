@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+<meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+</head>
+<body>
+<div th:fragment="select">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script> -->
+    <!-- Select2 -->
+    <script th:src="@{/js/utiles/select2.min.js}"></script>
+    <script>
+        $("#s1").select2({
+            placeholder: "Seleccione...",
+            type: "number;"
+        });
+        $("#s2").select2({
+            placeholder: "Seleccione...",
+        });
+        $("#s3").select2({
+            placeholder: "Seleccione...",
+        });
+        $("#s4").select2({
+            placeholder: "Seleccione...",
+        });
+        $("span.select2-container").addClass("form-control")
+        $(".select2-selection").css(
+            {"border-color": "#FFFFFF", 
+             "border-width":"1px", 
+             "border-style":"solid"}
+        )
+    </script>    
+</div>
+</body>
+</html>

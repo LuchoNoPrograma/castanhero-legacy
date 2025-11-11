@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+
+<body>
+<nav th:replace="fragments/header :: nav"></nav>
+    <div layout:fragment="content">
+        <div class="jumbotron">
+
+            <!--  --------------  Primera Secci[on --------------- -->
+            <section class="content-header">
+                <div class="row">
+                    <div class="col-md-10 mb-3">
+                        <p class="h1"> <i class="fa fa-money" aria-hidden="true"></i> Administrar Puntuaciones de las
+                            Olimpiadas </p>
+                    </div>
+                    <div class="col-sm-2 text-right" id="reporte">
+                        <div th:if="${busqueda} == find">
+                            <form th:action="@{/puntua/inicioPuntuacion}" method="post">
+                                <span class="icon-input-btn"><i class="fa fa-user-plus yvela" aria-hidden="true"></i>
+                                    <input type="submit" class="btn btn-success btn-lg" value="Nuevo d"></span>
+                                <input type="hidden" th:value="${idEtapa}" name="idEtapa" />
+                                <div th:text="${idEtapa}"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <hr align="left" noshade="noshade" size="10" width="100%" />
+            </section>
+            <!--  ---------------- Fin Primera Secci[on --------------  -->
+
+            <!--  ---------------- Inicio Segunda Secci[on --------------  -->
+            <section>
+                <!-- ============= Tabla lista de Etapas de las Olimpiadas    ==============  -->
+                <div th:if="${busqueda} == etapa">
+                    <center><br>
+                        <p class="h3"><i class="fa fa-list-alt" aria-hidden="true"></i> Resumen de Equipos Registrados
+                        </p>
+                        <br>
+                    </center>
+                    <table id="tComprobantes" class="table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>Etapas o Fases </th>
+                                <th>Descripcion</th>
+                                <th>Modificar </th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody th:each="etp,iterStat : ${lEtapas}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+                            <tr>
+                                <td th:text="${etp.idEtapa}"></td>
+                                <td th:text="${etp.etapa}"></td>
+                                <td th:text="${etp.descripcion}"></td>
+
+                                <td>
+                                    <a class="btn btn-primary btn-sm"
+                                        th:href="@{/puntuaO/listarEnfrenta/}+${etp.idEtapa}" th:text="'Siguiente'"></a>
+                                </td>
+                                <td>
+
+                                    <p></p>
+
+
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>id</th>
+                                <th>Etapas o Fases </th>
+                                <th>Descripcion</th>
+                                <th>Modificar </th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- ============= Fin Tabla lista de Etapas  de las Olimpiadas ==============  -->
+
+                <!-- ============= Inicio de las Enfrentamientos Olimpiadas    ==============  -->
+                <div th:if="${busqueda} == find">
+                    <center><br>
+                        <p class="h3"><i class="fa fa-list-alt" aria-hidden="true"></i> Resumen de Puntuaciones de
+                            Olimpiadas </p>
+                        <br>
+                    </center>
+                    <table id="tComprobantes" class="table" style="width:100%" th:with="totalPrice=0">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>Equipo </th>
+                                <th>vs</th>
+                                <th>Equipo Rival </th>
+                                <th>Fecha</th>
+                                <th>Modificar </th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody th:each="lef,iterator : ${lEnfrentamientos}">
+                            <tr>
+                                <td th:text="${lef.idEnfrentamientos}"></td>
+                                <td th:text="${lef.ooDetalleEnfrentamientos.get(0).ooEquiposParticipantes.nombre}"></td>
+                                <td>vs</td>
+                                <td th:text="${lef.ooDetalleEnfrentamientos.get(1).ooEquiposParticipantes.nombre}"></td>
+                                <td th:text="${lef.fecEncuentro}"></td>
+                                <td>
+                                    <form th:action="@{/puntuaO/nuevaPuntuacion}" method="get">
+                                        <input type="hidden" th:value="${lef.idEnfrentamientos}" name="idEnfrentamiento" />
+                                        
+                                        <input type="hidden" th:value="${idEtapa}" name="idEtapa" />
+                                        
+                                        <span class="icon-input-btn"><i class="fa fa-user-plus yvela" aria-hidden="true"></i>                                             
+                                            <input type="submit" class="btn btn-success btn-lg" value="Nuevo">
+                                        </span>
+
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>id</th>
+                                <th>Equipo </th>
+                                <th>vs</th>
+                                <th>Equipo Rival </th>
+                                <th>Fecha</th>
+                                <th>Modificar </th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- ============= Fin Tabla lista de Enfrenta  ==============  -->
+
+
+                <!-- ============= Inicio Formulario de Puntuacion   ==============  -->
+                <div th:if="${operation} == reg">
+                    <center> <br>
+                        <p class="h3"><i class="fa fa-th" aria-hidden="true"></i>Registro de Puntuaciones </p>
+                    </center>
+                    <br>
+                    <div th:text="${idEtapa}">Hola</div><br>
+                    <!--    <input type="hidden" th:value="${idEtapa}"  th:field="*{idEtapa}" /> -->
+                    <div class="form-group row">
+                        <div class="col-sm-5" id="combo1">
+                            <label for="sedes" class="col-form-label">Logo</label>
+
+                        </div>
+                        <div class="col-sm-2" id="combo1">
+                            <label for="sedes" class="col-form-label">VS</label>
+
+                        </div>
+                        <div class="col-sm-5" id="combo1">
+                            <label for="sedes" class="col-form-label">Logo Contr</label>
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-5" id="combo1">
+                            <label for="sedes" class="col-form-label" th:text="${equipo.ooUnidadesEducativas.nombre}">Equipo</label>
+                            
+                            <form method="post" th:action="@{/puntuaO/asigPunto}">
+                                
+                                <input type="hidden" name="idEnfrentamientos" th:value="${enfrentamientos.idEnfrentamientos}">
+                                <input type="hidden" name="idEquipoParticipante" th:value="${equipo.idEquipoParticipante}">
+
+                                <table id="tComprobantes" class="table" style="width:100%" th:with="totalPrice=0">
+                                    <thead>
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Equipo 1 </th>
+                                            </tr>
+                                        </thead>
+                                    <tbody>
+                                        <tr th:each="lep,iterator : ${lEquipos}">
+                                            <td>
+                                                <input type="radio" name="idParticipante" th:value="${lep.idParticipante}"></td>
+                                            <td
+                                                th:text="${lep.personas.nombres + ' ' + lep.personas.paterno + ' ' + lep.personas.materno}">
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <input class="btn btn-success" type="submit" value="Guardar">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                        <div class="col-sm-2" id="combo1">
+                            <label for="sedes" class="col-form-label">VS</label>
+
+                        </div>
+                        <div class="col-sm-5" id="combo1">
+                            <label for="sedes" class="col-form-label" th:text="${equipoR.ooUnidadesEducativas.nombre}">Equipo Rival</label>
+                            
+                            <form method="post" th:action="@{/puntuaO/asigPunto}">
+                                
+                                <input type="hidden" name="idEnfrentamientos" th:value="${enfrentamientos.idEnfrentamientos}">
+                                <input type="hidden" name="idEquipoParticipante" th:value="${equipoR.idEquipoParticipante}">
+
+                                <table id="tComprobantes" class="table" style="width:100%" th:with="totalPrice=0">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Equipo </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        
+                                        <tr th:each="lep,iterator : ${lEquiposR}">
+                                            <td>
+                                                <input type="radio" name="idParticipante" th:value="${lep.idParticipante}"></td>
+                                            <td
+                                                th:text="${lep.personas.nombres + ' ' + lep.personas.paterno + ' ' + lep.personas.materno}">
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <input class="btn btn-success" type="submit" value="Guardar">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-5" id="combo1">
+                            <label for="sedes" class="col-form-label">Punto </label><br>
+
+                            <span th:text="${#aggregates.sum(pEquipo.![puntaje])}"></span>
+
+                        </div>
+                        <div class="col-sm-2" id="combo1">
+                            <label for="sedes" class="col-form-label">VS</label>
+
+                        </div>
+                        <div class="col-sm-5" id="combo1">
+                            <label for="sedes" class="col-form-label">Punto </label><br>
+
+                            <span th:text="${#aggregates.sum(pEquipoR.![puntaje])}"></span>
+                        </div>
+                    </div>
+
+                    
+
+
+
+                    </form>
+
+                </div>
+                <!-- ============= Fin Formulario de Registro  ==============  -->
+
+                <!-- ============= Inicio Formulario de Modificacion  ==============  -->
+                <div th:if="${operation} == modf">
+                    <center> <br>
+                        <p class="h3"><i class="fa fa-th" aria-hidden="true"></i> Formulario de Modificacion] de Equipos
+                        </p>
+                    </center>
+                    <br>
+                    <form method="post" th:object="${equiposParticipantes}"
+                        th:action="@{/equiposp/modificarEquipoParticipantes}">
+
+                        <div class="form-group row">
+                            <label for="sedes" class="col-sm-2 col-form-label">Equipo</label>
+                            <label class="col-sm-1 col-form-label text-right"> <i class="fa fa-info-circle"
+                                    aria-hidden="true"></i></label>
+                            <div class="col-sm-6" id="combo1">
+                                <input id="uni" class="form-control form-control-lg" th:field="*{nombre}" />
+                            </div>
+                            <div class="col-sm-3" id="combo1">
+                                <small id="emailHelp" class="form-text text-muted">
+                                    Ingrese el Nombre del Equipo de Participantes
+                                </small>
+                                <small id="ci" class="form-text text-muted formFieldError">
+                                    <span class="help-inline" th:errors="*{nombre}"></span>
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="ciExpedido" class="col-sm-2 col-form-label">Competiciones </label>
+                            <label class="col-sm-1 col-form-label text-right"> <i class="fa fa-info-circle"
+                                    aria-hidden="true"></i></label>
+                            <div class="col-sm-6">
+                                <select class="form-control form-control-lg" id="comp"
+                                    th:field="*{competiciones.idCompeticiones}">
+                                    <option th:each="comp : ${lComp}" th:value="${comp.idCompeticiones}"
+                                        th:text="${comp.nombre}"></option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3" id="comd">
+                                <small class="form-text text-muted">
+                                    Seleccione una Competencia Vigente
+                                </small>
+                                <small id="ci" class="form-text text-muted formFieldError">
+                                    <span class="help-inline" th:errors="*{competiciones.idCompeticiones}"></span>
+                                </small>
+                            </div>
+                        </div>
+
+
+
+
+
+                        <div class="form-group row">
+                            <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                            <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i
+                                        class="fa fa-info-circle" aria-hidden="true"></i></span> Los Campos con * son
+                                obligatorios </label>
+                        </div>
+
+                        <hr align="left" noshade="noshade" size="10" width="100%" />
+                        <div class="form-group row mt-12">
+                            <div class="col-sm-3" id="combo1">
+                            </div>
+                            <div class="col-sm-3" id="combo1">
+                                <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela"
+                                        aria-hidden="true"></i> <input class="btn btn-success" type="submit"
+                                        value="Guardar"></span>
+                            </div>
+                            <div class="col-sm-3" id="combo1">
+                            </div>
+                            <div class="col-sm-3" id="combo1">
+                                <a href="<spring:url value=" /convenios/inicioConvenios" />" <class="btn
+                                    btn-yvela-green"><i class="fa fa-undo yvela" aria-hidden="true"></i>
+                                    <spring:message code="expenses.btn.cancel" /></a>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+                <!-- ============= Fin Formulario de Modificar   ==============  -->
+
+
+            </section>
+
+            <!--  ---------------- Fin Segunda Secci[on --------------  -->
+
+
+
+        </div>
+    </div>
+    
+    	<footer th:replace="fragments/footer :: footer"></footer>
+
+
+<div th:replace="fragments/jsScripts :: scripts"></div>
+</body>
+
+</html>

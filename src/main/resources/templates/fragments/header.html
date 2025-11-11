@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:replace="fragments/head :: head">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+</head>
+
+<body>
+    <nav th:fragment="nav" id="navbar-home" class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+
+
+        <header id="header" class="fixed-top navbar navbar-dark bg-dark">
+            <div class=" d-flex align-items-center  " style="width: 100%">
+
+                <h1 class="logo me-auto"><a href="index.html"><img th:src="@{/img/logs/logo_barra.png}">
+                        <font face="Lucida Calligraphy"> Sistema Castanhero </font>
+                    </a></h1>
+
+                <nav id="navbar" class="navbar navbar-dark bg-dark">
+
+                    <ul>
+                        <li><a class="nav-link getstarted2 scrollto" th:href="@{/index}">Inicio</a></li>
+
+                        <!--
+         		<li><a class="nav-link getstarted2 scrollto"  th:href="@{/mnuEnlaces/formMnuEnlaces}">Menues Enlaces</a></li>  
+         		<li><a class="nav-link getstarted2 scrollto"  th:href="@{/mnuFunciones/formMnuFunciones}">Menues Funciones</a></li>  
+         		<li><a class="nav-link getstarted2 scrollto"  th:href="@{/menues/formMnuMenues}">Menues</a></li> 
+         		-->
+                    </ul>
+
+
+
+                    <ul sec:authorize="isAuthenticated()">
+                        <th:block th:each="lte : ${session.lTiposEnlaces}">
+
+                            <ul>
+                                <th:block th:each="elc : ${session.lEnlaces}">
+                                    <div th:if="${elc.mnuTiposEnlaces.idMnuTipoEnlace == lte.idMnuTipoEnlace}">
+                                        <li><a class="nav-link getstarted2 scrollto" th:href="@{${elc.mnuRuta}}"><span
+                                                    class="${elc.mnuImagen}"></span> <span
+                                                    th:text="${elc.mnuEnlace}"></span></a></li>
+                                    </div>
+                                </th:block>
+                            </ul>
+
+                        </th:block>
+                    </ul>
+                    <ul>
+                        <li sec:authorize="isAuthenticated()"><span class="navbar-text"></span></li>
+                        <li sec:authorize="isAuthenticated()">
+                            <a class="nav-link getstarted2" href="#" data-toggle="modal" data-target="#usuarioModal"><i
+                                    class="fa fa-user-circle-o" aria-hidden="true"></i> <span
+                                    th:text="${session.sNombres}+' '+${session.sPaterno}+' '+${session.sMaterno}"></span>
+                            </a>
+                        </li>
+                        <li sec:authorize="!isAuthenticated()"><a class="getstarted scrollto" href="/login">Iniciar
+                                Sesion </a></li>
+                    </ul>
+                    <!-- 		
+          <ul>
+          <li sec:authorize="isAuthenticated()"></li>
+          <li sec:authorize="isAuthenticated()">
+                    <a class="getstarted scrollto" href="javascript: document.logoutForm.submit()" role="menuitem"> Cerrar Sesión</a>
+                    <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                        <input hidden type="submit" value="Sign Out"/>
+                    </form>
+                </li>
+              <li sec:authorize="!isAuthenticated()"><a class="getstarted scrollto" href="/login">Iniciar Sesion </a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+         -->
+                </nav><!-- .navbar -->
+
+            </div>
+        </header><!-- End Header -->
+
+    </nav>
+
+
+
+
+    <div class="modal left fade" id="userModald" data-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="functionForm" action="" role="form" id="form" method="post">
+                    <div class="modal-header">
+                        <p class="h4 modal-title" id="myModalLabel">Perfil de Usuario </p>
+                    </div>
+                    <div class="modal-body" align="center">
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <div class="login100-form-avatar">
+                                    <img src="<c:url value=" /resource/images/user.png" />"/>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <label class="col-sm-3 col-form-label">Usuario</label>
+                                    <label class="col-sm-9 col-form-label"> Paterno </label>
+                                </div>
+                                <div class="row">
+                                    <label class="col-sm-3 col-form-label">Rol </label>
+                                    <label class="col-sm-9 col-form-label"> Rol</lable>
+                                        <label class="col-sm-9 col-form-label"> Rol </lable>
+
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label"> Seleccione </label>
+                                    <div class="col-md-9">
+                                        <select class="form-control form-control" name="idMnuTipoFuncion"
+                                            onchange="this.form.submit()">
+                                            <option value="">Seleccion Funcion </option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div th:replace="fragments/jsScripts :: scripts"></div>
+
+</body>
+
+</html>

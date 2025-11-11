@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  lang="en"
+  layout:decorate="~{layout/main}">
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login</title>
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous">
+	
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="jumbotron">
+  
+  <!--  --------------  Primera Secci[on --------------- -->>
+  <section class="content-header">
+   <div class="row">
+            <div class="col-md-10 mb-3">
+                 <p class="h1"> <i class="fa fa-money" aria-hidden="true"></i>  Panel de Encuentros de las Olimpiadas del Saberes </p>
+            </div>
+            <div class="col-sm-2 text-right" id="reporte">
+                <div th:if="${busqueda} == find">
+                       <form th:action="@{/equiposp/inicioForm}" method="post" >
+                           <span class="icon-input-btn"><i class="fa fa-user-plus yvela" aria-hidden="true"></i> <input type="submit" class="btn btn-success btn-lg" value="Nuevo"></span>
+                        </form>
+                 </div> 
+            </div>
+        </div>
+       <hr align="left" noshade="noshade" size="10" width="100%" />
+    </section>
+    <!--  ---------------- Fin Primera Secci[on --------------  -->
+
+    <!--  ---------------- Inicio Segunda Secci[on --------------  -->
+    <section>      
+     <!-- ============= Tabla lista de Todos los Ingresos Registrados ==============  -->
+      <div th:if="${busqueda} == find">
+             <center><br>
+                <p class="h3"><i class="fa fa-list-alt" aria-hidden="true"></i> Resumen de Equipos Registrados </p> 
+               <br>
+             </center>
+         <table id="tComprobantes"  class="table" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>id_Equipo</th>
+                                <th>Nombre</th>
+                                  <th>Competición</th>
+                                <th>Modificar  </th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody th:each="eqp,iterStat : ${lEquipos}" th:class="${iterStat.odd}? 'odd'"  th:remove="tag">
+                                   <tr>
+                                   <td th:text="${eqp.idEquipoParticipante}"></td>
+                                   <td th:text="${eqp.nombre}"></td>
+                                   <td th:text="${eqp.competiciones.nombre}"></td>
+                                   
+                                    <td>
+                                			   <a class="btn btn-primary btn-sm" th:href="@{/equiposp/inicioModEquipo/}+${eqp.idEquipoParticipante}"  th:text="'editar'"></a>
+                                    </td>
+                                    <td>
+                                   
+                                    <p>aaaa</p>
+                              
+                                  
+                                    </td>
+                                </tr>                      </tbody>
+                        <tfoot>
+                            <tr>
+                              <th>id_Equipo</th>
+                                <th>Nombre</th>
+                                  <th>Competición</th>
+                                <th>Modificar  </th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </tfoot>
+                    </table> 
+          </div>
+          
+           <!-- ============= Fin Tabla lista de Todos los Ingresos Registrados ==============  -->
+           
+          <!-- ============= Inicio Formulario de Registro  ==============  -->
+          <div th:if="${operation} == reg">
+             <center> <br><p class="h3"><i class="fa fa-th" aria-hidden="true"></i>Formulario de Registro de Equipos</p> </center>
+            <br>
+              <form method="post" th:object="${equipos_participantes}" th:action="@{/equiposp/registroEquipoParticipantes}">
+                     
+                     
+                     <div class="form-group row">
+                    <label for="sedes" class="col-sm-2 col-form-label">Equipo</label>
+                    <label class="col-sm-1 col-form-label text-right">  <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                    <div class="col-sm-6" id="combo1"> 
+                        <input id="uni" class="form-control form-control-lg"   th:field="*{nombre}"   />
+                      </div>
+                    <div class="col-sm-3" id="combo1"> 
+                        <small id="emailHelp" class="form-text text-muted">
+                           Ingrese el Nombre del Equipo de Participantes
+                         </small>
+                          <small id="ci" class="form-text text-muted formFieldError">
+                                <span class="help-inline" th:errors="*{nombre}"></span>
+                            </small>
+                     </div>
+                </div>
+                                      
+                     <div class="form-group row">
+                        <label for="ciExpedido" class="col-sm-2 col-form-label">Competiciones </label>
+                        <label class="col-sm-1 col-form-label text-right">  <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <select class="form-control form-control-lg"  id="comp" th:field="*{competiciones.idCompeticiones}">
+						  	    <option th:each="comp : ${lComp}" th:value="${comp.idCompeticiones}" th:text="${comp.nombre}"></option>
+						    </select>
+                         </div>
+                        <div class="col-sm-3" id="comd">
+                            <small class="form-text text-muted">
+                                  Seleccione una Competencia Vigente
+                            </small>
+                            <small id="ci" class="form-text text-muted formFieldError">
+                               <span class="help-inline" th:errors="*{competiciones.idCompeticiones}"></span>
+                            </small>
+                        </div>
+                    </div>
+                                  
+                <div class="form-group row">
+                        <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                        <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle" aria-hidden="true"></i></span> Los Campos con * son obligatorios </label>
+                    </div>   
+
+                    <hr align="left" noshade="noshade" size="10" width="100%" />
+                    <div class="form-group row mt-12">
+                        <div class="col-sm-3" id="combo1">
+                        </div> 
+                        <div class="col-sm-3" id="combo1">
+                            <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input class="btn btn-success" type="submit" value="Guardar"></span>
+                        </div>
+                        <div class="col-sm-3" id="combo1"> 
+                        </div>
+                        <div class="col-sm-3" id="combo1">
+                            <a href="<spring:url value="/convenios/inicioConvenios"/>" <class="btn btn-yvela-green"><i class="fa fa-undo yvela" aria-hidden="true"></i>  <spring:message  code="expenses.btn.cancel"/></a>
+                        </div> 
+                    </div>
+                
+                
+                
+    		</form>
+    		
+      </div>
+            <!-- ============= Fin Formulario de Registro  ==============  -->
+            
+          <!-- ============= Inicio Formulario de Modificacion  ==============  -->
+          <div th:if="${operation} == modf">
+             <center> <br><p class="h3"><i class="fa fa-th" aria-hidden="true"></i>  Formulario de Modificacion] de Equipos</p> </center>
+            <br>
+              <form method="post" th:object="${equiposParticipantes}" th:action="@{/equiposp/modificarEquipoParticipantes}">
+                                          
+                 <div class="form-group row">
+                    <label for="sedes" class="col-sm-2 col-form-label">Equipo</label>
+                    <label class="col-sm-1 col-form-label text-right">  <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                    <div class="col-sm-6" id="combo1"> 
+                        <input id="uni" class="form-control form-control-lg"   th:field="*{nombre}"   />
+                      </div>
+                    <div class="col-sm-3" id="combo1"> 
+                        <small id="emailHelp" class="form-text text-muted">
+                           Ingrese el Nombre del Equipo de Participantes
+                         </small>
+                          <small id="ci" class="form-text text-muted formFieldError">
+                                <span class="help-inline" th:errors="*{nombre}"></span>
+                            </small>
+                     </div>
+                </div>
+                                      
+                     <div class="form-group row">
+                        <label for="ciExpedido" class="col-sm-2 col-form-label">Competiciones </label>
+                        <label class="col-sm-1 col-form-label text-right">  <i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <select class="form-control form-control-lg"  id="comp" th:field="*{competiciones.idCompeticiones}">
+						  	    <option th:each="comp : ${lComp}" th:value="${comp.idCompeticiones}" th:text="${comp.nombre}"></option>
+						    </select>
+                         </div>
+                        <div class="col-sm-3" id="comd">
+                            <small class="form-text text-muted">
+                                  Seleccione una Competencia Vigente
+                            </small>
+                            <small id="ci" class="form-text text-muted formFieldError">
+                               <span class="help-inline" th:errors="*{competiciones.idCompeticiones}"></span>
+                            </small>
+                        </div>
+                    </div>
+                    
+                
+                    
+                 
+               
+                <div class="form-group row">
+                        <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                        <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle" aria-hidden="true"></i></span> Los Campos con * son obligatorios </label>
+                    </div>   
+
+                    <hr align="left" noshade="noshade" size="10" width="100%" />
+                    <div class="form-group row mt-12">
+                        <div class="col-sm-3" id="combo1">
+                        </div> 
+                        <div class="col-sm-3" id="combo1">
+                            <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input class="btn btn-success" type="submit" value="Guardar"></span>
+                        </div>
+                        <div class="col-sm-3" id="combo1"> 
+                        </div>
+                        <div class="col-sm-3" id="combo1">
+                            <a href="<spring:url value="/convenios/inicioConvenios"/>" <class="btn btn-yvela-green"><i class="fa fa-undo yvela" aria-hidden="true"></i>  <spring:message  code="expenses.btn.cancel"/></a>
+                        </div> 
+                    </div>            
+                
+    		</form>
+    		
+      </div>
+  <!-- ============= Fin Formulario de Modificar   ==============  -->
+
+            
+    </section>
+    
+    <!--  ---------------- Fin Segunda Secci[on --------------  -->
+    
+      
+
+		</div>
+	</div>
+</body> 
+</html>

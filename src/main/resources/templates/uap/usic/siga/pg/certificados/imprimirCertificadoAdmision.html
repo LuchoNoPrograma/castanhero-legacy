@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+<body>
+  <center>
+    <table width="90%" border="0" cellspacing="0" cellpadding="0" class="text-dark">
+      <thead>
+        <tr>
+          <td>
+            <table width="100%" border="1" cellspacing="0" cellpadding="0">
+              <tr>
+                <tr><td align="center" width="20%" ><img border="0" th:src="@{/img/posgrado.png}" class="img-rounded img-responsive"  alt="UAP" width="180" height="80"></td>
+                <td width="60%" height="100%">
+                  <table border="1" width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td height="30" align="center">
+                        <font size="3" face="sans-serif"><b>CERTIFICADO DE POSTULANTE ADMITIDO</b></font>
+                        </font>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td height="50" align="center" valign="middle">
+                        <font size="5" face="sans-serif"><b>POSTULANTE ADMITIDO</b></font>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+                <td width="20%" align="center">
+                  <table border="1" width="100%" height="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td align="left">
+                        <font size="1" face="sans-serif">&nbsp;&nbsp;&nbsp;&nbsp;REP: 003-C </font>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <font size="1" face="sans-serif">&nbsp;&nbsp;&nbsp;&nbsp;Versión</font>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td align="left">
+                        <font size="1" face="sans-serif">&nbsp;&nbsp;&nbsp;&nbsp;<a
+                            href='javascript: window.print()'>Valido 00-00-00</a></font>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td align="center"><br>
+            <h1>
+              <font face="sans-serif">Certificado de Admisión</font>
+            </h1>
+          </td>
+        </tr>
+        <tr>
+          <td width="100%"><br><br>
+            <table width="100%" border="1" cellspacing="0" cellpadding="0">
+              <tr class="trIngreso">
+                <th class="ml-4" align="center">Postulante:</th>
+              </tr>
+              <tr id="thing">
+                <th align="center" name="idPostulante"
+                  th:text="${admitido.idPstPersona.nombres+' '+admitido.idPstPersona.paterno+' '+admitido.idPstPersona.materno}"></th>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td align="center"><br><br>
+            <table width="90%" border="1" cellspacing="0" cellpadding="0" class="table table-bordered border-dark">
+              <thead>
+                <tr>
+                  <th>Postulante</th>
+                  <th>CI</th>
+                  <th>Celular</th>
+                  <th>Programa</th>
+
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td th:text="${admitido.idPstPersona.nombres} +' '+ ${admitido.idPstPersona.paterno} +' '+ ${admitido.idPstPersona.materno}"></td>
+                  <td th:text="${admitido.idPstPersona.ci}"></td>
+                  <td th:text="${admitido.idPstPersona.celular}"></td>
+                  <td th:text="${admitido.idPrograma.programa}"></td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+
+        <tr>
+          <td><br><br>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="center"><br><br>______________________</td>
+                <td align="center"><br><br>______________________</td>
+              </tr>
+              <tr>
+                <td align="center">
+                  <spring:message code="report.noteOrder.signatureApplicant" />
+                </td>
+                <td align="center">
+                  <spring:message code="report.noteOrder.signatureBoss" />
+                </td>
+              </tr>
+
+            </table>
+          </td>
+        </tr>
+      </tfoot>
+
+
+
+
+      <div th:replace="fragments/jsScripts :: scripts"></div>
+</body>
+
+</html>

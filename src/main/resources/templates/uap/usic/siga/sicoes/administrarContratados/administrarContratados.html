@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+<body>
+
+<nav th:replace="fragments/header :: nav"></nav>
+<!--  ---------------- Primera Secci[on --------------  -->
+    <section id="hero" class="d-flex align-items-center">
+     <div class="container">
+        <div class="row">
+                     <div class="col-lg-10 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                        <h1  class="text-dark"><i class="fa fa-folder-open-o" aria-hidden="true"></i> Administrar Contratados  </h1>
+                    </div>
+                    <div class="col-lg-2 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                        <div th:if="${busqueda} == find">
+                           <form th:action="@{/aContratados/foraNuevaContratado}" method="post">
+                                   <span class="icon-input-btn"><i class="fa fa-user-plus yvela" aria-hidden="true"></i>
+                                    <input type="submit" class="btn btn-success btn-lg" value="Nuevo"></span>
+                                  <div th:text="${idEtapa}"></div>
+                            </form>
+                        </div>
+                    </div>
+                  </div>
+               <div class="row">
+                    <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                       <hr/>
+                   </div>
+                 </div>                            	
+            </div>                   
+     </section>
+     
+     <!--  ============== seccion de la tabla ================= -->
+     <div th:if="${busqueda} == find">
+      <section id="clients" class="clients section-bg">
+    	    <div class="container">
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+   					
+                  	<h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Resumen de Registro de Contratados  </h2><br>                   			                               
+                   <table  id="tContratos"  class="table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Funcionario</th>
+                            <th>NIT</th>
+                            <th>NUA --CUA</th>
+                            <th>Usuario</th>
+                            <th>Contraseña</th>
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody th:each="lSpr,iterStat : ${lScsPrsContratados}" th:class="${iterStat.odd}? 'odd'" th:remove="tag">
+                        <tr>
+                         		<td th:text="${lSpr.personas.nombres}+ ' ' +${lSpr.personas.paterno}+ ' ' +${lSpr.personas.materno}"></td>
+                                <td th:text="${lSpr.scsNit}"></td>
+                                <td th:text="${lSpr.scsNuaCua}"></td>
+                                <td th:text="${lSpr.scsUsuarioRupe}"></td>
+                                <td th:text="${lSpr.scsClaveRupe}"></td>                                                             
+                                <td>
+                                     <form th:action="@{/aContratados/inicioModificarContratados}" method="post">
+                                  		   <input type="hidden" th:value="${lSpr.idScsPrsContratado}" name="idScsPrsContratado" />
+                                  	 	   <span class="icon-input-btn"> <input type="submit" class="btn btn-primary btn-lg" value="Modificar"></span>                                  
+                            		</form>                                  
+                                </td>
+                                <td>
+                                    <form th:action="@{/aContratados/inicioEliminarContratadosSicoes}" method="post">
+                                  		   <input type="hidden" th:value="${lSpr.idScsPrsContratado}" name="idScsPrsContratado" />
+                                  	 	   <span class="icon-input-btn"> <input type="submit" class="btn btn-danger btn-lg" value="Eliminar"></span>                                  
+                            		</form>
+                                </td>
+                            </tr>
+                 </tbody>
+                    <tfoot>
+                        <tr>
+                           <th>Funcionario</th>
+                            <th>NIT</th>
+                            <th>NUA --CUA</th>
+                            <th>Usuario</th>
+                            <th>Contraseña</th>
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </tfoot>
+                </table>     
+                              
+                 </div>
+              </div>
+         </div>       
+  </section>
+  </div>
+
+  <!-- ============= Fin Tabla lista de Etapas  de las Olimpiadas ==============  -->
+
+ <!-- ============= Inicio Formulario de Contratados  ==============  -->
+ <div th:if="${operation} == reg">
+     <section id="clients" class="clients section-bg">
+     	   <div class="container">
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+                  
+                   <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Registro de Contratados </h2><br>                   			                               
+                      <form method="post" th:object="${scsPrsContratados}" th:action="@{/aContratados/registrarPrsContratados}" enctype="multipart/form-data" class="text-dark">
+				                   <div class="form-group row mb-4">
+				                        <label  class="col-2 col-form-label align-text-left">Funcionario</label>
+				                        <label class="col-1 col-form-label text-right">  </label>
+				                        <div class="col-6">
+				                        	 <select class="form-control form-control-lg"  id="comp" th:field="*{personas.idPersona}">
+										  	    <option th:each="comp : ${lPersonas}" th:value="${comp.idPersona}" th:text="${comp.nombres}+' '+${comp.paterno}+' '+${comp.materno} "></option>
+										    </select>				                        					                         
+				                        </div>
+				              	     <div class="col-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Seleccione un Funcionario 
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{personas.idPersona}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			     <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label align-text-left">NIT</label>
+				                        <label class="col-1 col-form-label text-right"></i></label>
+				                        <div class="col-6">
+				                        	<input id="uni" class="form-control form-control-lg"   th:field="*{scsNit}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese NIT del Funcionario  
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{scsNit}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			   <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">NUA o CUA </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	<input id="uni" class="form-control form-control-lg"   th:field="*{scsNuaCua}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese NIUA o CUA del Funcionario  
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{scsNuaCua}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                    		   <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">Usuario o RUPE </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	    	<input id="uni" class="form-control form-control-lg"   th:field="*{scsUsuarioRupe}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese Usuario o RUPE del Funcionario  
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{scsUsuarioRupe}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                       <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">Contraseña </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	    	<input id="uni" class="form-control form-control-lg"   th:field="*{scsClaveRupe}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese la Contraseña del Funcionario  
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{scsClaveRupe}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                            <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">Adjunto </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	 <input id="uni" class="form-control form-control-lg"   th:field="*{file}"  type="file"  />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                 Ingrese el Archivo Adjunto  
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{file}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                    		 <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">Nombre Archivo </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	  <input id="uni" class="form-control form-control-lg"   th:field="*{nombreArchivo}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese Nombre del Archivo   
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{nombreArchivo}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                            <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">Gestion</label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	  <input id="uni" class="form-control form-control-lg"   th:field="*{gestion}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese la Gestión 
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{gestion}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                      <div class="form-group row mb-4">
+                        <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                        <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle" aria-hidden="true"></i></span> &nbsp;&nbsp;&nbsp;<spring:message  code="people.warning"/> </label>
+                    </div>   
+
+                    <hr align="left" noshade="noshade" size="10" width="100%" />
+                    <div class="form-group row mt-12">
+                        <div class="col-sm-3" id="combo1">
+                        </div> 
+                        <div class="col-sm-3" id="combo1">
+                            <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input class="btn btn-success" type="submit" value="Guardar"></span>
+                        </div>
+                        <div class="col-sm-3" id="combo1"> 
+                        </div>
+                        <div class="col-sm-3" id="combo1">
+                            <a  th:href="@{/aContratados/inicioContratados}"  class="btn btn-yvela-green"> <i class="fa fa-undo" aria-hidden="true"></i> Cancelar </a>
+                        </div> 
+                    </div> 
+                </form>
+                <br><br>
+                <hr align="left" noshade="noshade" size="10" width="100%" />                                
+            </div>
+            </div>
+         </div>       		
+ 	</section>
+ </div>
+
+
+ <!-- ============= Fin Formulario de Contratados  ==============  -->
+ 
+ <!-- ============= Inicio Formulario de ModificaciÃ³n de Contratados  ==============  -->
+   <div th:if="${operation} == modif">
+       <section id="clients" class="clients section-bg">
+     	    <div class="container">
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">    
+                         <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Modificación de Contratados </h2><br>                                           			                               
+                           <form method="post" th:object="${scsPrsContratados}" th:action="@{/aContratados/actualizarContratadosSicoes}" enctype="multipart/form-data" class="text-dark">
+				                    
+				                    <input type="hidden" name="idScsPrsContratado" th:value="${scsPrsContratados.idScsPrsContratado}" th:field="${scsPrsContratados.idScsPrsContratado}">
+				                     <input type="hidden" name="idScsArchivoAdjunto" th:value="${scsPrsContratados.scsArchivosAdjuntos.idScsArchivoAdjunto}" th:field="*{scsArchivosAdjuntos.idScsArchivoAdjunto}">
+				                   				               	
+				               	  <div class="form-group row mb-4">
+				                        <label  class="col-2 col-form-label">Funcionario</label>
+				                        <label class="col-1 col-form-label text-right">  </label>
+				                        <div class="col-6">
+				                        	 <select class="form-control form-control-lg"  id="comp" th:field="*{personas.idPersona}">
+										  	    <option th:each="comp : ${lPersonas}" th:value="${comp.idPersona}"  th:text="${comp.nombres}+' '+${comp.paterno}+' '+${comp.materno} "></option>
+										    </select>				                        					                         
+				                        </div>
+				              	     <div class="col-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Seleccione un Funcionario 
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{personas.idPersona}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			     <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">NIT</label>
+				                        <label class="col-1 col-form-label text-right"></i></label>
+				                        <div class="col-6">
+				                        	<input id="uni" class="form-control form-control-lg"   th:field="*{scsNit}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese NIT del Funcionario  
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{scsNit}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                   			   <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">NUA o CUA </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	<input id="uni" class="form-control form-control-lg"   th:field="*{scsNuaCua}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese NIUA o CUA del Funcionario  
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{scsNuaCua}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                    		   <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">Usuario o RUPE </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	    	<input id="uni" class="form-control form-control-lg"   th:field="*{scsUsuarioRupe}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese Usuario o RUPE del Funcionario  
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{scsUsuarioRupe}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                       <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">Contraseña </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	    	<input id="uni" class="form-control form-control-lg"   th:field="*{scsClaveRupe}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese la Contraseña del Funcionario  
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{scsClaveRupe}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                            <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">Adjunto </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	 <input id="uni" class="form-control form-control-lg"   th:field="*{file}"  type="file"  />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                 Ingrese el Archivo Adjunto  
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{file}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                    		 <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">Nombre Archivo </label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	  <input id="uni" class="form-control form-control-lg"   th:field="*{nombreArchivo}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese Nombre del Archivo   
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{nombreArchivo}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                            <div class="form-group row mb-4">
+				                        <label for="ciExpedido" class="col-sm-2 col-form-label">Gestion</label>
+				                        <label class="col-sm-1 col-form-label text-right"></i></label>
+				                        <div class="col-sm-6">				                        	 
+				                        	  <input id="uni" class="form-control form-control-lg"   th:field="*{gestion}"   />				                        					                          
+				                        </div>
+				              	     <div class="col-sm-3" id="comd">
+			                            <small class="form-text text-muted">
+			                                  Ingrese la Gestión  
+			                            </small>
+			                            <small id="ci" class="form-text text-muted formFieldError">
+			                               <span class="help-inline" th:errors="*{gestion}"></span>
+			                            </small>
+			                        </div>
+                   			 </div>
+                      <div class="form-group row mb-4">
+                        <label for="msg" class="col-sm-2 col-form-label text-right"></label>
+                        <label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i class="fa fa-info-circle" aria-hidden="true"></i></span> &nbsp;&nbsp;&nbsp;<spring:message  code="people.warning"/> </label>
+                    </div>   
+
+                    <hr align="left" noshade="noshade" size="10" width="100%" />
+                    <div class="form-group row mt-12">
+                        <div class="col-sm-3" id="combo1">
+                        </div> 
+                        <div class="col-sm-3" id="combo1">
+                            <span class="icon-input-btn"><i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i> <input class="btn btn-success" type="submit" value="Guardar"></span>
+                        </div>
+                        <div class="col-sm-3" id="combo1"> 
+                        </div>
+                        <div class="col-sm-3" id="combo1">
+                             <a  th:href="@{/aContratados/inicioContratados}"  class="btn btn-yvela-green"> <i class="fa fa-undo" aria-hidden="true"></i> Cancelar </a>
+                        </div> 
+                    </div> 
+                </form>
+                <br><br>
+                <hr align="left" noshade="noshade" size="10" width="100%" />                                
+            </div>
+            
+         </div>
+       </div>
+</section>
+</div>
+
+  <!-- ============= Inicio Formulario de ModificaciÃ³n de Contratados  ==============  -->
+   <div th:if="${operation} == delet">
+          <section id="clients" class="clients section-bg">
+     	    <div class="container">
+               <div class="row">
+                 <div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">    
+          
+                  <h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Eliminación de Contratados </h2><br>
+                     <div id="" class="col-lg-12" >
+   					  <div class="form-group row">
+                        <div class="col-sm-8" id="combo1"> 
+                 			  <form method="post" th:object="${scsPrsContratados}" th:action="@{/aContratados/eliminarContratadosSicoes}" enctype="multipart/form-data" class="text-dark">
+				                    
+				                    <input type="hidden" name="idScsPrsContratado" th:value="${scsPrsContratados.idScsPrsContratado}" th:field="${scsPrsContratados.idScsPrsContratado}">
+				                     <input type="hidden" name="idScsArchivoAdjunto" th:value="${scsPrsContratados.scsArchivosAdjuntos.idScsArchivoAdjunto}" th:field="*{scsArchivosAdjuntos.idScsArchivoAdjunto}">
+  					 <div class="form-group row mb-4">
+                        <label for="ciExpedido" class="col-sm-4 col-form-label">Funcionario </label>
+                        <div class="col-sm-8">
+                         	 <select class="form-control form-control-lg"  id="comp" th:field="*{personas.idPersona}">
+							  	    <option th:each="comp : ${lPersonas}" th:value="${comp.idPersona}" th:text="${comp.nombres}+' '+${comp.paterno}+' '+${comp.materno} "></option>
+							   </select>
+                        </div>
+                     </div>
+                                        
+                    <div class="form-group row mb-4">
+                        <label for="codigo" class="col-sm-4 col-form-label">NIT </label>
+                        <div class="col-sm-8">
+                           <input id="uni" class="form-control form-control-lg"   th:field="*{scsNit}"   /> 
+                        </div>
+                     </div>
+
+                     <div class="form-group row mb-4">
+                        <label for="codigo" class="col-sm-4 col-form-label">NOA o  CUA </label>
+                        <div class="col-sm-8">
+                         	<input id="uni" class="form-control form-control-lg"   th:field="*{scsNuaCua}"   /> 
+                        </div>
+                    </div>
+                     
+                    <div class="form-group row mb-4">
+                        <label for="codigo" class="col-sm-4 col-form-label"> Usuario  </label>
+                        <div class="col-sm-8">
+                          <input id="uni" class="form-control form-control-lg"   th:field="*{scsUsuarioRupe}"   /> 
+                        </div>
+                     </div>
+                    <div class="form-group row mb-4">
+                        <label for="codigo" class="col-sm-4 col-form-label">Contraseña </label>
+                        <div class="col-sm-8">
+                            <input id="uni" class="form-control form-control-lg"   th:field="*{scsClaveRupe}"   /> 
+                        </div>
+                   </div>
+                   
+                  <div class="form-group row mb-4">
+                        <label for="sedes" class="col-sm-4 col-form-label">Archivo </label>
+                         <div class="col-sm-8" id="combo1"> 
+                            <input id="uni" class="form-control form-control-lg"   th:field="*{file}"  type="file"  />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
+                         <label for="sedes" class="col-sm-4 col-form-label"> Nombre Archivo </label>
+                        <div class="col-sm-8" id="combo1"> 
+                           	<input id="uni" class="form-control form-control-lg"   th:field="*{nombreArchivo}"   />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row mb-4">
+                        <label for="sedes" class="col-sm-4 col-form-label">Gestión </label>
+                        <div class="col-sm-8" id="combo1"> 
+                            <input id="uni" class="form-control form-control-lg"   th:field="*{gestion}"   />
+                        </div>
+                    </div>                          
+                     
+                <hr align="left" noshade="noshade" size="10" width="100%" />
+                     <div class="form-group row">
+                       <div class="col-sm-2" id="combo1"> 
+                       </div>
+                       <div class="col-sm-2" id="combo1">
+                            <span class="icon-input-btn"><i class="fa fa-times yvela" aria-hidden="true"></i> 
+                               <input type="submit"  class="btn btn-danger" value="Confirmar"></span>
+                        </div>
+                        <div class="col-sm-2" id="combo1"> 
+                     </div>
+                     <div class="col-sm-2" id="combo1"> 
+                          <a  th:href="@{/aContratados/inicioContratados}"  class="btn btn-yvela-green"> <i class="fa fa-undo" aria-hidden="true"></i> Cancelar </a>
+                      </div>
+                     </div>
+                    </form>
+                   </div>
+                     <div class="col-sm-4" id="combo1"> 
+                            <fieldset class="col-md-12">    	
+                                <legend><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>  Precaución </legend>
+                                <p>Esta a Punto de eliminar los datos que refiere en el formulario</p>
+                               </fieldset>
+                        </div>
+  					</div>				
+  					</div>
+  							 <br><br>
+                <hr align="left" noshade="noshade" size="10" width="100%" />                                
+            
+            </div>
+         </div>
+       </div>
+  </section>
+  </div>							
+           
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+
+<div th:replace="fragments/jsScripts :: scripts"></div>
+</body>
+
+</html>

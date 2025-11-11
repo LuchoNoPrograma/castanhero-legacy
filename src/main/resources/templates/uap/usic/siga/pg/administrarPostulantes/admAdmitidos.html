@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<script src="https://use.fontawesome.com/c0c323679c.js"></script>
+
+<body>
+
+	<nav th:replace="fragments/header :: nav"></nav>
+	<!--  ---------------- Primera Secci[on --------------  -->
+	<section>
+		
+	</section>
+
+	
+	<!-- =============ADMITIDOS POR PROGRAMA ============  -->
+	<div th:if="${busqueda} == find">
+		<section id="clients" class="clients section-bg">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+						data-aos="fade-up" data-aos-delay="200">
+						<h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Resumen de Postulantes
+							Admitidos </h2>
+						<h1 th:text=${programas.programa}></h1>
+						<br>
+						<div class="table-responsive">
+							<table id="example" class="table" style="width:100%">
+								<thead>
+									<tr>
+										<th>Nombres</th>
+										<th>CI</th>
+										<th>Celular</th>
+										<th>Email</th>
+										<th>Fecha de admision</th>
+										<th>Matricular</th>
+									</tr>
+								</thead>
+								<tbody th:each="pos,iterStat : ${lAdmitidos}" th:class="${iterStat.odd}? 'odd'"
+									th:remove="tag">
+									<tr>
+										<td th:text="${pos.postulantes.nombres} +' '+ ${pos.postulantes.paterno} +' '+ ${pos.postulantes.materno}"></td>
+										<td th:text="${pos.postulantes.ci}"></td>
+										<td th:text="${pos.postulantes.celular}"></td>
+										<td th:text="${pos.postulantes.email}"></td>
+										<td th:text="${#dates.format(pos.fecRegistro, 'dd/MM/yyyy')}"></td>
+										<td>
+											<a class="btn btn-primary" th:href="@{/aMatriculas/formMatricula={idPstProgramas}(idPstProgramas = ${pos.idPstProgramas})}">
+												<i class="fa-solid fa-users"></i>
+											</a>
+										</td>										
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<th>Nombres</th>
+										<th>CI</th>
+										<th>Celular</th>
+										<th>Email</th>
+										<th>Fecha de admision</th>
+										<th>Matricular</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<!-- ============= ADMITIDOS GENERAL =========  -->
+
+	<!-- ============= Inicio Formulario de Registro de Postulantes  ==============  -->
+	<div th:if="${operation} == reg">
+		<section id="clients" class="section-bg">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up"
+						data-aos-delay="200">
+
+						<h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Registro
+							de Postulantes </h2><br>
+						<form method="post" th:object="${postulante}" th:action="@{/aPostulantes/registrarPostulantes}"
+							enctype="multipart/form-data" class="text-dark">
+
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Nombres</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{nombres}" />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese los Nombres de la Persona
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{nombres}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Apellido Paterno</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{paterno}" />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese el Apellido Paterno
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{paterno}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Apellido Materno</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{materno}" />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese el Apellido Materno
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{materno}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Ci</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{ci}" />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese el Ci
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{ci}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label class="col-2 col-form-label">Sexo </label>
+								<label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+										aria-hidden="true"></i></label>
+								<div class="col-6">
+									<select class="form-control form-control-lg" id="comp"
+										th:field="*{prsTiposSexos.idPrsTipoSexo}">
+										<option th:each="lun : ${lTiposSexos}" th:value="${lun.idPrsTipoSexo}"
+											th:text="${lun.prsTipoSexo}">
+										</option>
+									</select>
+								</div>
+								<div class="col-3" id="comd">
+									<small class="form-text text-muted">
+										Seleccione un Tipo de Sexo
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{prsTiposSexos.idPrsTipoSexo}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label class="col-2 col-form-label">País </label>
+								<label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+										aria-hidden="true"></i></label>
+								<div class="col-6">
+									<select class="form-control form-control-lg" id="comp"
+										th:field="*{prsPaises.idPais}">
+										<option th:each="lun : ${lPais}" th:value="${lun.idPais}" th:text="${lun.pais}">
+										</option>
+									</select>
+								</div>
+								<div class="col-3" id="comd">
+									<small class="form-text text-muted">
+										Seleccione un País
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{prsPaises.idPais}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label class="col-2 col-form-label">Ci Expedido </label>
+								<label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+										aria-hidden="true"></i></label>
+								<div class="col-6">
+									<select class="form-control form-control-lg" id="comp"
+										th:field="*{prsCiExpedidos.idPrsCiExpedido}">
+										<option th:each="lun : ${lCiExpedido}" th:value="${lun.idPrsCiExpedido}"
+											th:text="${lun.prsCiExpedido}"></option>
+									</select>
+								</div>
+								<div class="col-3" id="comd">
+									<small class="form-text text-muted">
+										Seleccione un Ci Expedido
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{prsCiExpedidos.idPrsCiExpedido}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Nro. de Celular</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{celular}" />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese Nro. de Celular
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{celular}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Email</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{email}" />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese el Email
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{email}"></span>
+									</small>
+								</div>
+							</div>
+
+							<!--=====================SUBFORMULARIO DE DOCUMENTOS=======================-->
+							<!-- <h3 class="text-dark"><i class="fa fa-id-badge"></i>
+							Documentos del Postulante</h2><br>
+							<div class="form-group row mb-4">
+								<div class="col-4">
+									<label class="checkbox-wrap checkbox-danger">Fotocopia de CI
+										<input type="checkbox">
+										<span class="checkmark"></span>
+									</label>
+								</div>
+								<div class="col-8">
+									<input id="uni" class="form-control col-8 form-control-lg"
+									placeholder="Observaciones"/>
+								</div>
+							</div>	
+							
+							<div class="form-group row mb-4">
+								<div class="col-4">
+									<label class="checkbox-wrap checkbox-danger">Certificado de Nacimiento Original
+										<input type="checkbox">
+										<span class="checkmark"></span>
+									</label>
+								</div>
+								<div class="col-8">
+									<input id="uni" class="form-control col-8 form-control-lg"
+									placeholder="Observaciones"/>
+								</div>
+							</div>		
+
+							<div class="form-group row mb-4">
+								<div class="col-4">
+									<label class="checkbox-wrap checkbox-danger">Fotocopia legalizada del Titulo de bachiller
+										<input type="checkbox">
+										<span class="checkmark"></span>
+									</label>
+								</div>
+								<div class="col-8">
+									<input id="uni" class="form-control col-8 form-control-lg"
+									placeholder="Observaciones"/>
+								</div>
+							</div>		
+
+							<div class="form-group row mb-4">
+								<div class="col-4">
+									<label class="checkbox-wrap checkbox-danger">Fotografia 4x4 fondo rojo
+										<input type="checkbox">
+										<span class="checkmark"></span>
+									</label>
+								</div>
+								<div class="col-8">
+									<input id="uni" class="form-control col-8 form-control-lg"
+									placeholder="Observaciones"/>
+								</div>
+							</div> -->
+							<!--=====================SUBFORMULARIO DE DOCUMENTOS=======================-->
+
+							<!--======================SUBFORMULARIO DE PROGRAMAS=======================-->
+							<h3 class="text-dark"><i class="fa-solid fa-book-bookmark"></i>
+								Registro de Programa</h2><br>
+								<div class="form-group row mb-4">
+									<label class="col-2 col-form-label">Seleccionar programas:</label>
+									<label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+											aria-hidden="true"></i></label>
+									<div class="col-6">
+										<select class="form-control form-control-lg" id="comp"
+											th:field="*{programa.idPrograma}">
+											<option th:each="prg : ${lProgramas}" th:value="${prg.idPrograma}"
+												th:text="${prg.programa}">
+											</option>
+										</select>
+									</div>
+								</div>
+								<!--======================SUBFORMULARIO DE PROGRAMAS=======================-->
+
+								<div class="form-group row mb-4 align-text-left">
+									<label for="msg" class="col-sm-2 col-form-label text-right"></label>
+									<label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i
+												class="fa fa-info-circle" aria-hidden="true"></i> Los campos con * son
+											obligatorios </span>;&nbsp </label>
+								</div>
+								<hr align="left" noshade="noshade" size="10" width="100%" />
+								<div class="form-group row mt-12">
+									<div class="col-sm-3" id="combo1">
+									</div>
+									<div class="col-sm-3" id="combo1">
+										<button type="submit" class="btn btn-success btn-lg" value="Guardar">
+											<i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i>
+											Guardar
+										</button>
+									</div>
+									<div class="col-sm-3" id="combo1">
+										<a th:href="@{/aPostulantes/cancelarFormulario}"
+											class="btn btn-yvela-green btn-lg"> <i class="fa fa-undo"
+												aria-hidden="true"></i> Cancelar </a>
+									</div>
+								</div>
+						</form>
+						<hr align="left" noshade="noshade" size="10" width="100%" />
+					</div>
+				</div>
+			</div>
+
+		</section>
+	</div>
+
+
+
+	<div th:if="${operation} == admitir">
+		<section id="clients" class="section-bg">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up"
+						data-aos-delay="200">
+
+						<h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de Registro
+							de Postulantes </h2><br>
+						<form method="post" th:object="${postulante}" th:action="@{/aPostulantes/registrarPstPersonas}"
+							enctype="multipart/form-data" class="text-dark">
+
+							<input type="hidden" name="idPostulante" th:value="${postulante.idPostulante}"
+								th:field="${postulante.idPostulante}">
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Nombres</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{nombres}"
+										th:value="${postulante.nombres}" readonly />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese los Nombres de la Persona
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Apellido Paterno</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{paterno}"
+										readonly />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese el Apellido Paterno
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Apellido Materno</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{materno}"
+										readonly />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese el Apellido Materno
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Ci</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{ci}" readonly />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese el Ci
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label class="col-2 col-form-label">Sexo </label>
+								<label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+										aria-hidden="true"></i></label>
+								<div class="col-6">
+									<select class="form-control form-control-lg"
+										th:field="*{prsTiposSexos.idPrsTipoSexo}">
+										<option th:value="*{prsTiposSexos.idPrsTipoSexo}"
+											th:text="*{prsTiposSexos.prsTipoSexo}" selected>
+										</option>
+									</select>
+								</div>
+								<div class="col-3" id="comd">
+									<small class="form-text text-muted">
+										Seleccione un Tipo de Sexo
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label class="col-2 col-form-label">País </label>
+								<label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+										aria-hidden="true"></i></label>
+								<div class="col-6">
+									<select class="form-control form-control-lg" id="comp"
+										th:field="*{prsPaises.idPais}">
+										<option th:value="*{prsPaises.idPais}" th:text="*{prsPaises.pais}">
+										</option>
+									</select>
+								</div>
+								<div class="col-3" id="comd">
+									<small class="form-text text-muted">
+										Seleccione un País
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label class="col-2 col-form-label">Ci Expedido </label>
+								<label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+										aria-hidden="true"></i></label>
+								<div class="col-6">
+									<select class="form-control form-control-lg" id="comp"
+										th:field="*{prsCiExpedidos.idPrsCiExpedido}">
+										<option th:value="*{prsCiExpedidos.idPrsCiExpedido}"
+											th:text="*{prsCiExpedidos.prsCiExpedido}"></option>
+									</select>
+								</div>
+								<div class="col-3" id="comd">
+									<small class="form-text text-muted">
+										Seleccione un Ci Expedido
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Celular</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{celular}"
+										readonly />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese Nro. de celular
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Email</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{email}" readonly />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese el Email
+									</small>
+								</div>
+							</div>
+
+							<!--======================SUBFORMULARIO DE PROGRAMAS=======================-->
+							<div class="form-group row mb-4">
+								<label class="col-2 col-form-label">Programa:</label>
+								<label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+										aria-hidden="true"></i></label>
+								<div class="col-6">
+									<select class="form-control form-control-lg" id="comp"
+										th:field="*{programa.idPrograma}">
+										<option th:value="*{programa.idPrograma}" th:text="*{programa.programa}">
+										</option>
+									</select>
+								</div>
+								<div class="col-3" id="comd">
+									<small class="form-text text-muted">
+										Seleccione un programa
+									</small>
+								</div>
+							</div>
+							<!--======================SUBFORMULARIO DE PROGRAMAS=======================-->
+
+							<!--=====================SUBFORMULARIO DE DOCUMENTOS=======================-->
+							<hr>
+							<h2><i class="fa-solid fa-id-card"></i> Documentos del Postulante</h2>
+							<div class="form-group row my-4">
+								<label class="col-2 col-form-label">Seleccione las casillas: </label>
+								<label class="col-1 col-form-label text-right">
+									<i class="fa fa-info-circle" aria-hidden="true"></i>
+								</label>
+								<!-- <div class="col-6">
+									<div class="d-flex flex-row gap-4 mb-4">
+										<input class="form-check-input fs-5" type="checkbox" name="tipoDocumento"
+										value="Fotocopia legalizada del Titulo en Provision Nacional">
+										<input class="form-control form-control-lg" readonly/>
+									</div>
+									<div class="d-flex flex-row gap-4 mb-4">
+										<input class="form-check-input fs-5" type="checkbox" name="tipoDocumento"
+										value="Fotocopia legalizada del Diploma Academico">
+										<input class="form-control form-control-lg" readonly/>
+									</div>
+									<div class="d-flex flex-row gap-4 mb-4">
+										<input class="form-check-input fs-5" type="checkbox" name="tipoDocumento"
+										value="Copia de la Hoja de Vida">
+										<input class="form-control form-control-lg" readonly/>
+									</div>
+									<div class="d-flex flex-row gap-4 mb-4">
+										<input class="form-check-input fs-5" type="checkbox" name="tipoDocumento"
+										value="Fotografia 4x4 fondo rojo">
+										<input class="form-control form-control-lg" readonly/>
+									</div>
+								</div> -->
+								<ul class="col-7">
+									<li class="d-flex flex-row justify-content-center align-items-center gap-4 mb-4"
+										th:each="docs : ${lDocumentos}">
+										<input class="form-control form-control-lg" th:value="${docs.tipoDocumento}"
+											name="documentos" id="documentos" readonly />
+										<input class="form-check-input fs-4" type="checkbox" name="estados" id="estados"
+											value="A" th:checked="${docs.estado} == 'A'">
+									</li>
+								</ul>
+							</div>
+							<!--=====================SUBFORMULARIO DE DOCUMENTOS=======================-->
+
+							<div class="form-group row mb-4 align-text-left">
+								<label for="msg" class="col-sm-2 col-form-label text-right"></label>
+								<label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i
+											class="fa fa-info-circle" aria-hidden="true"></i> Los campos con * son
+										obligatorios </span>;&nbsp </label>
+							</div>
+
+							<hr align="left" noshade="noshade" size="10" width="100%" />
+							<div class="form-group row mt-12">
+								<div class="col-sm-3" id="combo1">
+								</div>
+								<div class="col-sm-3" id="combo1">
+									<button type="submit" class="btn btn-success btn-lg" value="Guardar">
+										Guardar
+										<i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i>
+									</button>
+								</div>
+								<div class="col-sm-3" id="combo1">
+									<a th:href="@{/aPostulantes/cancelarFormulario}" class="btn btn-yvela-green btn-lg">
+										Cancelar
+										<i class="fa fa-undo" aria-hidden="true"></i>
+									</a>
+								</div>
+							</div>
+
+						</form>
+						<hr align="left" noshade="noshade" size="10" width="100%" />
+					</div>
+				</div>
+			</div>
+
+		</section>
+	</div>
+	<!-- ============= Fin Formulario de Registro de Proyectos  ==============  -->
+
+
+	<!-- ============= Inicio Formulario de ModificaciÃ³n de Proyectos  ==============  -->
+	<div th:if="${operation} == modif">
+		<section id="clients" class="clients section-bg">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up"
+						data-aos-delay="200">
+
+						<h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Formulario de
+							Modificación de Personas</h2><br>
+						<form method="post" th:object="${postulante}" th:action="@{/aPostulantes/actualizarPostulantes}"
+							enctype="multipart/form-data" class="text-dark">
+
+							<input type="hidden" name="idPostulante" th:value="${postulante.idPostulante}"
+								th:field="${postulante.idPostulante}">
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Nombres</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{nombres}"
+										th:value="${postulante.nombres}" />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese los Nombres de la Persona
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{nombres}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Apellido Paterno</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{paterno}" />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese el Apellido Paterno
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{paterno}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Apellido Materno</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{materno}" />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese el Apellido Materno
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{materno}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Ci</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{ci}" />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese el Ci
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{ci}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label class="col-2 col-form-label">Sexo </label>
+								<label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+										aria-hidden="true"></i></label>
+								<div class="col-6">
+									<select class="form-control form-control-lg" id="comp"
+										th:field="*{prsTiposSexos.idPrsTipoSexo}">
+										<option th:each="lun : ${lTiposSexos}" th:value="${lun.idPrsTipoSexo}"
+											th:text="${lun.prsTipoSexo}">
+										</option>
+									</select>
+								</div>
+								<div class="col-3" id="comd">
+									<small class="form-text text-muted">
+										Seleccione un Tipo de Sexo
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{prsTiposSexos.idPrsTipoSexo}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label class="col-2 col-form-label">País </label>
+								<label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+										aria-hidden="true"></i></label>
+								<div class="col-6">
+									<select class="form-control form-control-lg" id="comp"
+										th:field="*{prsPaises.idPais}">
+										<option th:each="lun : ${lPais}" th:value="${lun.idPais}" th:text="${lun.pais}">
+										</option>
+									</select>
+								</div>
+								<div class="col-3" id="comd">
+									<small class="form-text text-muted">
+										Seleccione un País
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{prsPaises.idPais}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label class="col-2 col-form-label">Ci Expedido </label>
+								<label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+										aria-hidden="true"></i></label>
+								<div class="col-6">
+									<select class="form-control form-control-lg" id="comp"
+										th:field="*{prsCiExpedidos.idPrsCiExpedido}">
+										<option th:each="lun : ${lCiExpedido}" th:value="${lun.idPrsCiExpedido}"
+											th:text="${lun.prsCiExpedido}"></option>
+									</select>
+								</div>
+								<div class="col-3" id="comd">
+									<small class="form-text text-muted">
+										Seleccione un Ci Expedido
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{prsCiExpedidos.idPrsCiExpedido}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Celular</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{celular}" />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese Nro. de celular
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{celular}"></span>
+									</small>
+								</div>
+							</div>
+
+							<div class="form-group row mb-4">
+								<label for="ciExpedido" class="col-sm-2 col-form-label">Email</label>
+								<label class="col-1 col-form-label text-right"></i></label>
+								<div class="col-6">
+									<input id="uni" class="form-control form-control-lg" th:field="*{email}" />
+								</div>
+								<div class="col-sm-3" id="comd">
+									<small class="form-text text-muted">
+										Ingrese el Email
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{email}"></span>
+									</small>
+								</div>
+							</div>
+
+							<!--======================SUBFORMULARIO DE PROGRAMAS=======================-->
+							<div class="form-group row mb-4">
+								<label class="col-2 col-form-label">Modificar programa:</label>
+								<label class="col-1 col-form-label text-right"> <i class="fa fa-info-circle"
+										aria-hidden="true"></i></label>
+								<div class="col-6">
+									<select class="form-control form-control-lg" id="comp"
+										th:field="*{programa.idPrograma}">
+										<option th:each="prg : ${lProgramas}" th:value="${prg.idPrograma}"
+											th:text="${prg.programa}">
+										</option>
+									</select>
+								</div>
+								<div class="col-3" id="comd">
+									<small class="form-text text-muted">
+										Seleccione un programa
+									</small>
+									<small id="ci" class="form-text text-muted formFieldError">
+										<span class="help-inline" th:errors="*{prsCiExpedidos.idPrsCiExpedido}"></span>
+									</small>
+								</div>
+							</div>
+							<!--======================SUBFORMULARIO DE PROGRAMAS=======================-->
+
+							<div class="form-group row mb-4 align-text-left">
+								<label for="msg" class="col-sm-2 col-form-label text-right"></label>
+								<label for="msg" class="col-sm-10 col-form-label"><span class="parpadea text"><i
+											class="fa fa-info-circle" aria-hidden="true"></i> Los campos con * son
+										obligatorios </span>;&nbsp </label>
+							</div>
+
+							<hr align="left" noshade="noshade" size="10" width="100%" />
+							<div class="form-group row mt-12">
+								<div class="col-sm-3" id="combo1">
+								</div>
+								<div class="col-sm-3" id="combo1">
+									<button type="submit" class="btn btn-success btn-lg" value="Guardar">
+										Guardar
+										<i class="fa fa-pencil-square-o yvela" aria-hidden="true"></i>
+									</button>
+								</div>
+								<div class="col-sm-3" id="combo1">
+									<a th:href="@{/aPostulantes/cancelarFormulario}" class="btn btn-yvela-green btn-lg">
+										Cancelar
+										<i class="fa fa-undo" aria-hidden="true"></i>
+									</a>
+								</div>
+							</div>
+						</form>
+						<br>
+						<hr align="left" noshade="noshade" size="10" width="100%" />
+					</div>
+				</div>
+			</div>
+
+		</section>
+	</div>
+
+
+	<!-- ============= Inicio Formulario de Eliminacion  de Proyectos  ==============  -->
+	<div th:if="${operation} == elim">
+		<section id="clients" class="clients section-bg">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 d-flex flex-column  pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up"
+						data-aos-delay="200">
+						<h2 class="text-dark"><i class="fa fa-folder-o" aria-hidden="true"></i> Anular
+							Postulante Admitido </h2><br>
+						<div class="form-group row">
+							<div class="col-sm-8" id="combo1">
+								<form method="post" th:object="${postulante}"
+									th:action="@{/aPostulantesAdmitidos/anularAdmitido}" enctype="multipart/form-data"
+									class="text-dark">
+									<input type="hidden" name="idPostulante" th:value="${postulante.idPostulante}"
+										th:field="${postulante.idPostulante}">
+
+
+
+									<div class="form-group row mb-4">
+										<label for="codigo" class="col-sm-4 col-form-label">Nombres </label>
+										<div class="col-sm-8">
+											<input id="uni" class="form-control form-control-lg" th:field="*{nombres}"
+												readonly />
+										</div>
+									</div>
+
+									<div class="form-group row mb-4">
+										<label for="codigo" class="col-sm-4 col-form-label">Apellido Paterno </label>
+										<div class="col-sm-8">
+											<input id="uni" class="form-control form-control-lg" th:field="*{paterno}"
+												readonly />
+										</div>
+									</div>
+
+									<div class="form-group row mb-4">
+										<label for="codigo" class="col-sm-4 col-form-label">Apellido Materno </label>
+										<div class="col-sm-8">
+											<input id="uni" class="form-control form-control-lg" th:field="*{materno}"
+												readonly />
+										</div>
+									</div>
+
+									<div class="form-group row mb-4">
+										<label for="codigo" class="col-sm-4 col-form-label">Ci </label>
+										<div class="col-sm-8">
+											<input id="uni" class="form-control form-control-lg" th:field="*{ci}"
+												readonly />
+										</div>
+									</div>
+
+									<div class="form-group row mb-4">
+										<label for="ciExpedido" class="col-sm-4 col-form-label">Tipo Sexo </label>
+										<div class="col-sm-8">
+											<select class="form-control form-control-lg select-readonly" id="readonly"
+												th:field="*{prsTiposSexos.idPrsTipoSexo}">
+												<option th:each="lun : ${lTiposSexos}" th:value="${lun.idPrsTipoSexo}"
+													th:text="${lun.prsTipoSexo}" readonly></option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group row mb-4">
+										<label for="ciExpedido" class="col-sm-4 col-form-label">País </label>
+										<div class="col-sm-8">
+											<select class="form-control form-control-lg select-readonly" id="readonly"
+												th:field="*{prsPaises.idPais}" readonly>
+												<option th:each="lun : ${lPais}" th:value="${lun.idPais}"
+													th:text="${lun.pais}"></option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group row mb-4">
+										<label for="ciExpedido" class="col-sm-4 col-form-label">Ci Expedido </label>
+										<div class="col-sm-8">
+											<select class="form-control form-control-lg select-readonly" id="comp"
+												th:field="*{prsCiExpedidos.idPrsCiExpedido}" readonly>
+												<option th:each="lun : ${lCiExpedido}" th:value="${lun.idPrsCiExpedido}"
+													th:text="${lun.prsCiExpedido}"></option>
+											</select>
+										</div>
+									</div>
+
+									<div class="form-group row mb-4">
+										<label for="codigo" class="col-sm-4 col-form-label">Celular </label>
+										<div class="col-sm-8">
+											<input id="uni" class="form-control form-control-lg" th:field="*{celular}"
+												readonly />
+										</div>
+									</div>
+
+									<div class="form-group row mb-4">
+										<label for="codigo" class="col-sm-4 col-form-label">Email </label>
+										<div class="col-sm-8">
+											<input id="uni" class="form-control form-control-lg" th:field="*{email}"
+												readonly />
+										</div>
+									</div>
+
+									<div class="form-group row mb-4">
+										<label for="codigo" class="col-sm-4 col-form-label">Programa </label>
+										<div class="col-sm-8">
+											<select class="form-control form-control-lg" id="comp"
+												th:field="*{programa.idPrograma}">
+												<option th:each="prg : ${lProgramas}" th:value="${prg.idPrograma}"
+													th:text="${prg.programa}">
+												</option>
+											</select>
+										</div>
+									</div>
+
+
+
+									<hr align="left" noshade="noshade" size="10" width="100%" />
+									<div class="form-group row">
+										<div class="col-sm-4" id="combo1">
+										</div>
+										<div class="col-sm-2" id="combo1">
+											<button type="submit" class="btn btn-danger">
+												<span class="icon-input-btn"><i class="fa fa-times yvela"
+														aria-hidden="true"></i>
+													Confirmar
+											</button>
+										</div>
+										<div class="col-sm-2" id="combo1">
+											<a th:href="@{/aPostulantes/cancelarFormulario}"
+												class="btn btn-yvela-green btn">
+												Cancelar
+												<i class="fa fa-undo" aria-hidden="true"></i>
+											</a>
+										</div>
+									</div>
+									<hr align="left" noshade="noshade" size="10" width="100%" />
+								</form>
+							</div>
+							<div class="col-sm-4 text-dark" id="combo1">
+								<fieldset class="col-md-12">
+									<legend><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+										<p class="text-danger">Precaución</p>
+									</legend>
+									<p class="text-danger">Esta a punto de Anular la Admisión del Postulante </p>
+								</fieldset>
+							</div>
+						</div>
+						<br>
+
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+
+	<footer th:replace="fragments/footer :: footer"></footer>
+	<div th:replace="fragments/jsScripts :: scripts"></div>
+	<script th:src="@{/js/utiles/jquery.dataTables.min.js}"></script>
+
+	<!-- ============= Inicio busqueda con filtro listado  ==============  -->
+	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script th:src="@{/js/utiles/jquery.dataTables.min.js}"></script>
+	<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+	<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+	<script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			var table = $('#example').DataTable({
+				lengthChange: false,
+				buttons: ['excel', 'pdf', 'print']
+			});
+
+			table.buttons().container()
+				.appendTo('#example_wrapper .col-md-6:eq(0)');
+			// $("form input").keyup(function(){
+			// 	$(this).val($(this).val().toUpperCase());
+			// })
+			
+		})
+	</script>
+</body>
+
+</html>
