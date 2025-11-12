@@ -1,5 +1,7 @@
 package uap.usic.siga.servicios;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import uap.usic.siga.dto.UserDto;
 
 import uap.usic.siga.entidades.Usuarios;
@@ -20,15 +22,12 @@ import static java.util.stream.Collectors.toList;
  * Created by Keno&Kemo on 04.12.2017..
  */
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class UserDtoService {
 
     private final UserService userService;
     private final ModelMapper modelMapper;
-
-    public UserDtoService(UserService userService, ModelMapper modelMapper) {
-        this.userService = userService;
-        this.modelMapper = modelMapper;
-    }
 
     public List<UserDto> findAll(){
         List<Usuarios> users = userService.findAll();

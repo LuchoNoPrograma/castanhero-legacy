@@ -1,6 +1,7 @@
 package uap.usic.siga.web.compartido;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +21,11 @@ import uap.usic.siga.servicios.InstitucionesServicios;
  */
 @Controller
 @RequestMapping("/instituciones")
+@Slf4j
+@RequiredArgsConstructor
 public class InstitucionesController {
 
-    @Autowired
-    private InstitucionesServicios institucionesServicios;
+    private final InstitucionesServicios institucionesServicios;
 
     /**
      * Lista todas las instituciones

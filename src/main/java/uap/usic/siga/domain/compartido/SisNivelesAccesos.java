@@ -2,7 +2,7 @@ package uap.usic.siga.domain.compartido;
 
 import uap.usic.siga.domain.compartido.base.EntidadAuditable;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Entidad que representa niveles de acceso del sistema.

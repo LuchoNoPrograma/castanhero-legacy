@@ -5,7 +5,7 @@ import uap.usic.siga.anotacionesCliente.ValidEmail;
 import uap.usic.siga.entidades.Personas;
 import uap.usic.siga.entidades.Roles;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import java.util.Set;
 
 /**

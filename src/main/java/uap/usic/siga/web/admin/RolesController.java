@@ -1,11 +1,12 @@
 package uap.usic.siga.web.admin;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,6 +31,8 @@ import uap.usic.siga.servicios.RoleService;
  */
 @Controller
 @RequestMapping("/adminPage")
+@Slf4j
+@RequiredArgsConstructor
 public class RolesController {
 
     private static final String REDIRECT_ROLES = "redirect:/adminPage/roles";
@@ -37,8 +40,7 @@ public class RolesController {
     private static final String VIEW_NEW_ROLE = "adminPage/role/newRole";
     private static final String VIEW_ROLES = "adminPage/role/roles";
 
-    @Autowired
-    private RoleService roleService;
+    private final RoleService roleService;
 
     /**
      * Lista todos los roles del sistema

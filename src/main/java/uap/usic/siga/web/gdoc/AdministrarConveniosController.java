@@ -3,9 +3,9 @@ package uap.usic.siga.web.gdoc;
 import java.io.File;
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;

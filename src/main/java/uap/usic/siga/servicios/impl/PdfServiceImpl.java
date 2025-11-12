@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 import org.xhtmlrenderer.pdf.ITextRenderer;
@@ -15,6 +15,7 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 import uap.usic.siga.servicios.PdfService;
 
 @Service
+@Slf4j
 public class PdfServiceImpl implements PdfService {
 
 	@Override

@@ -5,8 +5,8 @@ import uap.usic.siga.entidades.InsUnidadesFuncionales;
 import uap.usic.siga.entidades.SigaUsicGestiones;
 import uap.usic.siga.entidades.Usuarios;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "scs_proyectos")

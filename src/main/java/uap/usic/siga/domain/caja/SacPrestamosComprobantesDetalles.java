@@ -11,8 +11,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import uap.usic.siga.entidades.SigaUsicRevisiones;
 import uap.usic.siga.entidades.Usuarios;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Entidad de dominio para detalles de préstamos de comprobantes

@@ -2,8 +2,8 @@ package uap.usic.siga.domain.compartido;
 
 import uap.usic.siga.domain.compartido.base.EntidadGestionable;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Entidad que representa el sistema administrador.

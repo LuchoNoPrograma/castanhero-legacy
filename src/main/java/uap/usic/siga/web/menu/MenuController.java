@@ -1,8 +1,9 @@
 package uap.usic.siga.web.menu;
 
-import javax.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +23,11 @@ import uap.usic.siga.servicios.MenuesServicios;
  */
 @Controller
 @RequestMapping("/menu")
+@Slf4j
+@RequiredArgsConstructor
 public class MenuController {
 
-    @Autowired
-    private MenuesServicios menuesServicios;
+    private final MenuesServicios menuesServicios;
 
     /**
      * Lista todos los menús del sistema

@@ -1,6 +1,7 @@
 package uap.usic.siga.web.sicoes;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +12,13 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/sicoes/reportes/contratados")
+@Slf4j
+@RequiredArgsConstructor
 public class ReporteContratadosController {
 
-    @Autowired
-    private SicoesService sicoesService;
+    private final SicoesService sicoesService;
 
-    @Autowired
-    private PersonasServicios personasServicios;
+    private final PersonasServicios personasServicios;
 
     @GetMapping
     public String inicio(Model model) {

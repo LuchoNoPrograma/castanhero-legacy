@@ -2,8 +2,8 @@ package uap.usic.siga.domain.postgrado;
 
 import uap.usic.siga.domain.compartido.base.EntidadAuditable;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "materias")

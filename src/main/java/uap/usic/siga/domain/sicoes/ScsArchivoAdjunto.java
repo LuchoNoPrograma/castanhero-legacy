@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import uap.usic.siga.entidades.Personas;
 import uap.usic.siga.entidades.SigaUsicRevisiones;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "scs_archivos_adjuntos")

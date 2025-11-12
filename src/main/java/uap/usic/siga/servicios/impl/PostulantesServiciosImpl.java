@@ -1,11 +1,12 @@
 package uap.usic.siga.servicios.impl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import uap.usic.siga.entidades.PrsCiExpedidos;
@@ -24,9 +25,10 @@ import uap.usic.siga.servicios.PostulantesServicios;
 
 @Service
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class PostulantesServiciosImpl implements PostulantesServicios{
-    @Autowired
-    private PostulantesDao dao;
+    private final PostulantesDao dao;
 
     @Override
     public Postulantes buscarPostulantesPorCedulaIdentidadGET(String ci) {

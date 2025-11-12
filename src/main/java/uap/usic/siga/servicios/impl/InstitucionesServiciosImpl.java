@@ -5,8 +5,9 @@
  */
 package uap.usic.siga.servicios.impl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +29,11 @@ import uap.usic.siga.servicios.InstitucionesServicios;
  */
 @Service("institucionesServicios")
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class InstitucionesServiciosImpl implements InstitucionesServicios {
 
-    @Autowired
-    private InstitucionesDao dao;
+    private final InstitucionesDao dao;
 
     @Override
     public List<InsSedes> listarInsSedes() {

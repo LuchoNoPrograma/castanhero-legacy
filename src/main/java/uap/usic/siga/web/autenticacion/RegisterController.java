@@ -1,9 +1,10 @@
 package uap.usic.siga.web.autenticacion;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,13 +28,13 @@ import uap.usic.siga.servicios.UserService;
  */
 @Controller
 @RequestMapping("")
+@Slf4j
+@RequiredArgsConstructor
 public class RegisterController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
     /**
      * Muestra el formulario de registro

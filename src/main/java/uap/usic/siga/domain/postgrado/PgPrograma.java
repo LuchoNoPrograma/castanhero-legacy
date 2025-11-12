@@ -3,8 +3,8 @@ package uap.usic.siga.domain.postgrado;
 import uap.usic.siga.domain.compartido.base.EntidadAuditable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Entity

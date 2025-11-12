@@ -1,8 +1,9 @@
 package uap.usic.siga.web.gdoc;
 
-import javax.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,13 +24,13 @@ import uap.usic.siga.service.gdoc.GdocTitulosService;
  */
 @Controller
 @RequestMapping("/gdoc/titulados")
+@Slf4j
+@RequiredArgsConstructor
 public class TituladosController {
 
-    @Autowired
-    private GdocTituladosService tituladosService;
+    private final GdocTituladosService tituladosService;
 
-    @Autowired
-    private GdocTitulosService titulosService;
+    private final GdocTitulosService titulosService;
 
     /**
      * Lista todos los titulados

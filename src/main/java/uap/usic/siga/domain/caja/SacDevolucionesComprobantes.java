@@ -13,8 +13,8 @@ import uap.usic.siga.entidades.Personas;
 import uap.usic.siga.entidades.SigaUsicRevisiones;
 import uap.usic.siga.entidades.Usuarios;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalTime;
 import java.util.Date;
 

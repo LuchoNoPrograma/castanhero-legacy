@@ -3,7 +3,7 @@ package uap.usic.siga.domain.postgrado;
 import uap.usic.siga.domain.compartido.base.EntidadAuditable;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity

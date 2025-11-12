@@ -1,10 +1,11 @@
 package uap.usic.siga.servicios.impl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import uap.usic.siga.entidadesPg.Docentes;
@@ -13,9 +14,10 @@ import uap.usic.siga.servicios.DocentesServicios;
 
 @Service
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class DocentesServiciosImpl implements DocentesServicios{
-    @Autowired
-    private DocentesDao dao;
+    private final DocentesDao dao;
 
     @Override
     public Docentes buscarDocentePorId(Long idDocente) {

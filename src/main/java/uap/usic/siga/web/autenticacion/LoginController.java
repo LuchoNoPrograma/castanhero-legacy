@@ -1,10 +1,11 @@
 package uap.usic.siga.web.autenticacion;
 
-import javax.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,27 +44,23 @@ import uap.usic.siga.servicios.UserDtoService;
 })
 @Controller
 @RequestMapping("")
+@Slf4j
+@RequiredArgsConstructor
 public class LoginController {
 
     private static final Logger log = LogManager.getLogger(LoginController.class);
 
-    @Autowired
-    private PersonasServicios personasServicios;
+    private final PersonasServicios personasServicios;
 
-    @Autowired
-    private AdministrativosServicios administrativosServicios;
+    private final AdministrativosServicios administrativosServicios;
 
-    @Autowired
-    private MenuesServicios menuesServicios;
+    private final MenuesServicios menuesServicios;
 
-    @Autowired
-    private AdministradorServicios administradorServicios;
+    private final AdministradorServicios administradorServicios;
 
-    @Autowired
-    private IAuthenticationFacade authenticationFacade;
+    private final IAuthenticationFacade authenticationFacade;
 
-    @Autowired
-    private UserDtoService userDtoService;
+    private final UserDtoService userDtoService;
 
     /**
      * Muestra la página de inicio de sesión

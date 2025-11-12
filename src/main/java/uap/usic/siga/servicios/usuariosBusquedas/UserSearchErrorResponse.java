@@ -1,5 +1,7 @@
 package uap.usic.siga.servicios.usuariosBusquedas;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import uap.usic.siga.paginaciones.InitialPagingSizes;
 import uap.usic.siga.paginaciones.Pager;
 import uap.usic.siga.servicios.UserDtoService;
@@ -9,13 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class UserSearchErrorResponse {
 
     private final UserDtoService userDtoService;
-
-    public UserSearchErrorResponse(UserDtoService userDtoService) {
-        this.userDtoService = userDtoService;
-    }
 /*
     public ModelAndView respondToNumberFormatException(UserSearchResult userSearchResult, ModelAndView modelAndView) {
         Pager pager = new Pager(userSearchResult.getUserPage().getTotalPages(), userSearchResult.getUserPage().getNumber(),

@@ -5,7 +5,6 @@ import uap.usic.siga.exception.RecursoNoEncontradoException;
 import uap.usic.siga.exception.ValidacionException;
 import uap.usic.siga.repository.postgrado.PgPostulanteRepository;
 import uap.usic.siga.service.postgrado.PostulanteService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
