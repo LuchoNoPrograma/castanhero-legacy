@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{uap/usic/siga/gdoc/fragments/common :: head('Administrar Titulados')}"></head>
+<body>
+    <div class="container">
+        <section class="content-header">
+            <div class="row">
+                <div class="col-md-10 mb-3">
+                    <h1><i class="fa fa-database" aria-hidden="true"></i> <span th:text="#{gdoc.titulado.titulo.modulo}">Titulados</span></h1>
+                </div>
+                <div class="col-sm-2 text-end" id="reporte">
+                    <div th:if="${busqueda == 'find'}">
+                        <form method="POST" th:action="${urlNuevo}">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                <span th:text="#{income.btn.new}">Nuevo</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        </section>
+
+        <section>
+            <!-- Alerts -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="#{AbstractUserDetailsAuthenticationProvider.badCredentials}">Error</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Tabla de Titulados -->
+            <div th:if="${busqueda == 'find'}">
+                <div class="text-center mb-3">
+                    <h3><i class="fa fa-list-alt" aria-hidden="true"></i> <span th:text="#{gdoc.titulado.titulo.tabla}">Lista de Titulados</span></h3>
+                </div>
+
+                <table id="tComprobantes" class="table table-striped data-table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th th:text="#{gdoc.titulado.form.nombre.titulado}">Nombre Titulado</th>
+                            <th th:text="#{gdoc.titulado.form.nro.titulo}">Nro Titulo</th>
+                            <th th:text="#{gdoc.titulado.form.valordep.titulado}">Valor Deposito</th>
+                            <th th:text="#{voucher.viem.pdf}">Ver PDF</th>
+                            <th th:text="#{expenses.modify}">Modificar</th>
+                            <th th:text="#{expenses.remove}">Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="ltit : ${lTitulados}">
+                            <td th:text="${ltit.personas.nombres + ' ' + ltit.personas.paterno + ' ' + ltit.personas.materno}">Nombre</td>
+                            <td th:text="${ltit.gdocTitulos.nroTitulo}">Nro Titulo</td>
+                            <td th:text="${ltit.valorDeposito}">Valor</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" th:href="@{/titulados/openFile/{id}(id=${ltit.idGdocTitulado})}" target="_blank">
+                                    <i class="fa fa-file-pdf" aria-hidden="true"></i>
+                                    <span th:text="#{voucher.viem.pdf}">Ver PDF</span>
+                                </a>
+                            </td>
+                            <td>
+                                <form method="post" th:action="${urlMod}">
+                                    <input type="hidden" name="idGdocTitulado" th:value="${ltit.idGdocTitulado}">
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        <span th:text="#{expenses.modify}">Modificar</span>
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form method="post" th:action="${urlEli}">
+                                    <input type="hidden" name="idGdocTitulado" th:value="${ltit.idGdocTitulado}">
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                        <span th:text="#{expenses.remove}">Eliminar</span>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th th:text="#{gdoc.titulado.form.nombre.titulado}">Nombre Titulado</th>
+                            <th th:text="#{gdoc.titulado.form.nro.titulo}">Nro Titulo</th>
+                            <th th:text="#{gdoc.titulado.form.valordep.titulado}">Valor Deposito</th>
+                            <th th:text="#{voucher.viem.pdf}">Ver PDF</th>
+                            <th th:text="#{expenses.modify}">Modificar</th>
+                            <th th:text="#{expenses.remove}">Eliminar</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Formulario de Registro -->
+            <div th:if="${operation == 'reg'}">
+                <div class="text-center mb-3">
+                    <h3><i class="fa fa-th" aria-hidden="true"></i> <span th:text="#{gdoc.titulado.titulo.form.registro}">Registrar Titulado</span></h3>
+                </div>
+
+                <form th:action="${regTitulado}" th:object="${gdocTitulados}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" th:field="*{gdocConsejos.idGdocConsejo}" th:value="${bGdocConsejos.idGdocConsejo}">
+                    <input type="hidden" th:field="*{gdocArchivosAdjuntos.idGeodcArchivoAdjunto}" value="1">
+
+                    <!-- Nombre Titulado -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{gdoc.titulado.form.nombre.titulado}">Nombre Titulado</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <select class="form-control form-select" th:field="*{personas.idPersona}">
+                                <option th:each="lp : ${lPersonas}"
+                                        th:value="${lp.idPersona}"
+                                        th:text="${lp.nombres + ' ' + lp.paterno + ' ' + lp.materno}">Persona</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{gdoc.titulado.form.msg.nombre.titulado}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('personas.idPersona')}"
+                                   th:errors="*{personas.idPersona}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Nro Titulo -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{gdoc.titulado.form.nro.titulo}">Nro Titulo</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <select class="form-control form-select" th:field="*{gdocTitulos.idGdocTitulo}">
+                                <option th:each="lti : ${lTitulos}"
+                                        th:value="${lti.idGdocTitulo}"
+                                        th:text="${lti.nroTitulo}">Titulo</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted">
+                                <a class="btn btn-link btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#formCiExpedido">
+                                    <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                                    <span th:text="#{people.add}">Agregar</span>
+                                </a>
+                            </small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('gdocTitulos.idGdocTitulo')}"
+                                   th:errors="*{gdocTitulos.idGdocTitulo}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Valor Deposito -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{gdoc.titulado.form.valordep.titulado}">Valor Deposito</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" th:field="*{valorDeposito}"
+                                   th:placeholder="#{gdoc.titulado.form.msg.valordep.titulado}">
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{gdoc.titulado.form.msg.valordep.titulado}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('valorDeposito')}"
+                                   th:errors="*{valorDeposito}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Fecha Expedido -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{report.account.dateStart}">Fecha Expedido</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <input type="date" class="form-control" th:field="*{fecExpedido}">
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{report.account.dateStart}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('fecExpedido')}"
+                                   th:errors="*{fecExpedido}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Archivo Adjunto -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{contracts.form.attached.file}">Archivo</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <input type="file" class="form-control" th:field="*{file}">
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{contracts.form.attached.file.msg}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('file')}"
+                                   th:errors="*{file}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Nombre Archivo -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{voucher.file.name}">Nombre Archivo</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" th:field="*{nombreArchivo}"
+                                   th:placeholder="#{voucher.file.name.msg}">
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{voucher.file.name.msg}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('nombreArchivo')}"
+                                   th:errors="*{nombreArchivo}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Warning -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label text-end"></label>
+                        <label class="col-sm-10 col-form-label">
+                            <span class="text-warning"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
+                            <span th:text="#{people.warning}">Advertencia</span>
+                        </label>
+                    </div>
+
+                    <hr />
+
+                    <!-- Botones -->
+                    <div class="form-group row mt-4">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-3">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                <span th:text="#{institution.register}">Registrar</span>
+                            </button>
+                        </div>
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-3">
+                            <a th:href="@{/titulados/inicioTitulados}" class="btn btn-secondary">
+                                <i class="fa fa-undo" aria-hidden="true"></i>
+                                <span th:text="#{expenses.btn.cancel}">Cancelar</span>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Formulario de Modificación -->
+            <div th:if="${operation == 'mod'}">
+                <div class="text-center mb-3">
+                    <h3><i class="fa fa-th" aria-hidden="true"></i> <span th:text="#{gdoc.titulado.titulo.form.modificar}">Modificar Titulado</span></h3>
+                </div>
+
+                <form th:action="${urlUp}" th:object="${gdocTitulados}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" th:field="*{gdocConsejos.idGdocConsejo}" th:value="${bGdocConsejos.idGdocConsejo}">
+                    <input type="hidden" th:field="*{idGdocTitulado}" th:value="${gdocTitulados.idGdocTitulado}">
+                    <input type="hidden" th:field="*{gdocArchivosAdjuntos.idGeodcArchivoAdjunto}"
+                           th:value="${gdocTitulados.gdocArchivosAdjuntos.idGeodcArchivoAdjunto}">
+                    <input type="hidden" name="sigla" th:value="${bGdocConsejos.sigla}">
+
+                    <!-- Nombre Titulado -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{gdoc.titulado.form.nombre.titulado}">Nombre Titulado</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <select class="form-control form-select" th:field="*{personas.idPersona}">
+                                <option th:each="lp : ${lPersonas}"
+                                        th:value="${lp.idPersona}"
+                                        th:text="${lp.nombres + ' ' + lp.paterno + ' ' + lp.materno}">Persona</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{gdoc.titulado.form.msg.nombre.titulado}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('personas.idPersona')}"
+                                   th:errors="*{personas.idPersona}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Nro Titulo -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{gdoc.titulado.form.nro.titulo}">Nro Titulo</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <select class="form-control form-select" th:field="*{gdocTitulos.idGdocTitulo}">
+                                <option th:each="lti : ${lTitulos}"
+                                        th:value="${lti.idGdocTitulo}"
+                                        th:text="${lti.nroTitulo}">Titulo</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted">
+                                <a class="btn btn-link btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#formCiExpedido">
+                                    <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                                    <span th:text="#{people.add}">Agregar</span>
+                                </a>
+                            </small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('gdocTitulos.idGdocTitulo')}"
+                                   th:errors="*{gdocTitulos.idGdocTitulo}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Valor Deposito -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{gdoc.titulado.form.valordep.titulado}">Valor Deposito</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" th:field="*{valorDeposito}"
+                                   th:placeholder="#{gdoc.titulado.form.msg.valordep.titulado}">
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{gdoc.titulado.form.msg.valordep.titulado}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('valorDeposito')}"
+                                   th:errors="*{valorDeposito}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Fecha Expedido -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{report.account.dateStart}">Fecha Expedido</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <input type="date" class="form-control" th:field="*{fecExpedido}">
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{report.account.dateStart}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('fecExpedido')}"
+                                   th:errors="*{fecExpedido}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Archivo Adjunto -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{contracts.form.attached.file}">Archivo</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <input type="file" class="form-control" th:field="*{file}">
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{contracts.form.attached.file.msg}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('file')}"
+                                   th:errors="*{file}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Nombre Archivo -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" th:text="#{voucher.file.name}">Nombre Archivo</label>
+                        <label class="col-sm-1 col-form-label text-end"><i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" th:field="*{nombreArchivo}"
+                                   th:placeholder="#{voucher.file.name.msg}">
+                        </div>
+                        <div class="col-sm-3">
+                            <small class="form-text text-muted" th:text="#{voucher.file.name.msg}">Ayuda</small>
+                            <small class="form-text text-danger" th:if="${#fields.hasErrors('nombreArchivo')}"
+                                   th:errors="*{nombreArchivo}">Error</small>
+                        </div>
+                    </div>
+
+                    <!-- Warning -->
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label text-end"></label>
+                        <label class="col-sm-10 col-form-label">
+                            <span class="text-warning"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
+                            <span th:text="#{people.warning}">Advertencia</span>
+                        </label>
+                    </div>
+
+                    <hr />
+
+                    <!-- Botones -->
+                    <div class="form-group row mt-4">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-3">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                <span th:text="#{institution.register}">Actualizar</span>
+                            </button>
+                        </div>
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-3">
+                            <a th:href="@{/titulados/inicioTitulados}" class="btn btn-secondary">
+                                <i class="fa fa-undo" aria-hidden="true"></i>
+                                <span th:text="#{expenses.btn.cancel}">Cancelar</span>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Formulario de Eliminación -->
+            <div th:if="${operation == 'del'}">
+                <div class="text-center mb-3">
+                    <h5><i class="fa fa-trash-o" aria-hidden="true"></i> <span th:text="#{gdoc.titulado.titulo.form.eliminar}">Eliminar Titulado</span></h5>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-8">
+                        <form th:action="${urlDel}" th:object="${gdocTitulados}" method="post" enctype="multipart/form-data">
+                            <input type="hidden" th:field="*{gdocConsejos.idGdocConsejo}" th:value="${bGdocConsejos.idGdocConsejo}">
+                            <input type="hidden" th:field="*{gdocArchivosAdjuntos.idGeodcArchivoAdjunto}"
+                                   th:value="${gdocResoluciones.gdocArchivosAdjuntos.idGeodcArchivoAdjunto}">
+                            <input type="hidden" th:field="*{idGdocTitulado}" th:value="${gdocTitulados.idGdocTitulado}">
+                            <input type="hidden" name="sigla" th:value="${bGdocConsejos.sigla}">
+
+                            <!-- Campos en modo lectura -->
+                            <div class="form-group row mb-3">
+                                <label class="col-sm-4 col-form-label" th:text="#{gdoc.titulado.form.nombre.titulado}">Nombre Titulado</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control form-select" th:field="*{personas.idPersona}" disabled>
+                                        <option th:each="lp : ${lPersonas}"
+                                                th:value="${lp.idPersona}"
+                                                th:text="${lp.nombres + ' ' + lp.paterno + ' ' + lp.materno}">Persona</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-3">
+                                <label class="col-sm-4 col-form-label" th:text="#{gdoc.titulado.form.nro.titulo}">Nro Titulo</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control form-select" th:field="*{gdocTitulos.idGdocTitulo}" disabled>
+                                        <option th:each="lti : ${lTitulos}"
+                                                th:value="${lti.idGdocTitulo}"
+                                                th:text="${lti.nroTitulo}">Titulo</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-3">
+                                <label class="col-sm-4 col-form-label" th:text="#{gdoc.titulado.form.valordep.titulado}">Valor Deposito</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" th:field="*{valorDeposito}" disabled>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-3">
+                                <label class="col-sm-4 col-form-label" th:text="#{report.account.dateStart}">Fecha Expedido</label>
+                                <div class="col-sm-8">
+                                    <input type="date" class="form-control" th:field="*{fecExpedido}" disabled>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-3">
+                                <label class="col-sm-4 col-form-label" th:text="#{contracts.form.attached.file}">Archivo</label>
+                                <div class="col-sm-8">
+                                    <input type="file" class="form-control" th:field="*{file}">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-3">
+                                <label class="col-sm-4 col-form-label" th:text="#{voucher.file.name}">Nombre Archivo</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" th:field="*{nombreArchivo}"
+                                           th:value="${gdocTitulos.gdocArchivosAdjuntos.nombreArchivo}">
+                                </div>
+                            </div>
+
+                            <hr />
+
+                            <!-- Botones -->
+                            <div class="form-group row mt-4">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-3">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                        <span th:text="#{expenses.btn.confirm}">Confirmar</span>
+                                    </button>
+                                </div>
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-3">
+                                    <a th:href="@{/titulos/inicioTitulos}" class="btn btn-secondary">
+                                        <i class="fa fa-undo" aria-hidden="true"></i>
+                                        <span th:text="#{expenses.btn.cancel}">Cancelar</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-4">
+                        <fieldset class="border p-3">
+                            <legend><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <span th:text="#{expenses.remove.info.title}">Información</span></legend>
+                            <p th:text="#{people.remove.msg}">Mensaje de advertencia</p>
+                            <div th:if="${mensage == 'err'}">
+                                <span class="text-warning">
+                                    <p class="h1"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></p>
+                                </span>
+                                <span th:text="#{people.warning.remove}">Advertencia</span>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <div th:replace="~{uap/usic/siga/gdoc/fragments/common :: scripts}"></div>
+    <script th:src="@{/resource/gdoc/resolucion.js}"></script>
+</body>
+</html>

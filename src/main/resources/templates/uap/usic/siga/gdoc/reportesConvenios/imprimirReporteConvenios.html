@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Convenios - Imprimir</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/resource/admReportes/reportes.css}">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table.bordered {
+            border: 1px solid #000;
+        }
+        table.bordered td,
+        table.bordered th {
+            border: 1px solid #000;
+            padding: 8px;
+        }
+        .header-logo {
+            text-align: center;
+        }
+        .header-title {
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .header-subtitle {
+            font-size: 12px;
+            text-align: center;
+        }
+        .content-section {
+            margin-top: 30px;
+        }
+        .signature-line {
+            border-top: 2px solid #000;
+            width: 200px;
+            margin: 0 auto;
+            margin-top: 50px;
+        }
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+    <script th:src="@{/resource/admReportes/reportes.js}"></script>
+</head>
+<body>
+    <center>
+        <table width="90%" border="0" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr>
+                    <td>
+                        <table width="100%" border="1" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td align="center" width="20%">
+                                    <img border="0" th:src="@{/resource/images/logs/logouap.jpg}"
+                                         class="img-rounded img-responsive" alt="UAP" width="65" height="80">
+                                </td>
+                                <td width="60%" height="100%">
+                                    <table border="1" width="100%" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td height="30" align="center">
+                                                <font size="3" face="sans-serif">
+                                                    <b><span th:text="#{rep.title}">UNIVERSIDAD AMAZÓNICA DE PANDO</span></b>
+                                                </font>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td height="50" align="center" valign="middle">
+                                                <font size="5" face="sans-serif"><b>REPORTES CONVENIOS</b></font>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td width="20%" align="center">
+                                    <table border="1" width="100%" height="100%" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td align="left">
+                                                <font size="1" face="sans-serif">&nbsp;&nbsp;&nbsp;&nbsp;REP: 003-C</font>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <font size="1" face="sans-serif">&nbsp;&nbsp;&nbsp;&nbsp;<span th:text="#{form.version}">Versión</span></font>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">
+                                                <font size="1" face="sans-serif">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <a href='javascript: window.print()' class="no-print">
+                                                        <span th:text="#{form.validity}">Vigencia</span>
+                                                    </a>
+                                                </font>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <br>
+                        <h1><font face="sans-serif"><span th:text="#{report.contracts.print.title}">Reporte de Convenios</span></font></h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100%">
+                        <br><br>
+                        <table width="100%" border="1" cellspacing="0" cellpadding="0">
+                            <tr class="trIngreso">
+                                <th align="center" th:text="#{items.year}">Gestión</th>
+                                <th align="center" th:text="#{contracts.form.contract.modality}">Modalidad</th>
+                            </tr>
+                            <tr id="thing">
+                                <td align="center" th:text="${gestion}">2024</td>
+                                <td align="center" th:text="${bConvneios.gdocTiposConvenios.tipoConvenio}">Tipo Convenio</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td align="center">
+                        <br><br>
+                        <table width="100%" border="1" cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr>
+                                    <th th:text="#{gdoc.convenio.form.representante}">Representante</th>
+                                    <th th:text="#{gdoc.resol.form.nro.folio}">Nro Folio</th>
+                                    <th th:text="#{gdoc.convenio.form.nro.convenio}">Nro Convenio</th>
+                                    <th th:text="#{items.year}">Gestión</th>
+                                    <th th:text="#{gdoc.resol.form.autoridad}">Autoridad</th>
+                                    <th th:text="#{gdoc.convenio.form.objeto.convenio}">Objeto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="lcnv : ${lConvneios}">
+                                    <td th:text="${lcnv.gdocRepresentantes.personas.paterno}">Apellido</td>
+                                    <td th:text="${lcnv.nroFolio}">Folio</td>
+                                    <td th:text="${lcnv.nroConvenio}">Convenio</td>
+                                    <td th:text="${lcnv.gestion}">Gestión</td>
+                                    <td>
+                                        <span th:text="${lcnv.gdocAutoridades.personas.nombres}">Nombres</span>
+                                        <span th:text="${lcnv.gdocAutoridades.personas.paterno}">Paterno</span>
+                                        <span th:text="${lcnv.gdocAutoridades.personas.materno}">Materno</span>
+                                    </td>
+                                    <td th:text="${lcnv.objetoConvenio}">Objeto</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <br><br>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td align="center">
+                                    <br><br>
+                                    <div class="signature-line"></div>
+                                </td>
+                                <td align="center">
+                                    <br><br>
+                                    <div class="signature-line"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <span th:text="#{report.noteOrder.signatureApplicant}">Firma Solicitante</span>
+                                </td>
+                                <td align="center">
+                                    <span th:text="#{report.noteOrder.signatureBoss}">Firma Jefe</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </center>
+
+    <div class="no-print text-center mt-3">
+        <button onclick="window.print()" class="btn btn-primary">
+            <i class="fa fa-print"></i> Imprimir
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{uap/usic/siga/gdoc/fragments/common :: head('Reportes Convenios')}"></head>
+<body>
+    <div class="container">
+        <section class="content-header">
+            <div class="row">
+                <div class="col-md-10 mb-3">
+                    <h1>
+                        <i class="fa fa-money" aria-hidden="true"></i>
+                        Reportes - <span th:text="#{gdoc.convenio.titulo.modulo}">Convenios</span>
+                    </h1>
+                </div>
+                <div class="col-sm-2 text-end" id="reporte">
+                    <div th:if="${busqueda == 'find'}">
+                        <form method="POST" th:action="${urlRIn}">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                <span th:text="#{income.btn.new}">Nuevo</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        </section>
+
+        <section>
+            <!-- Alerts -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="#{AbstractUserDetailsAuthenticationProvider.badCredentials}">Error</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Tabla de Reportes Convenios -->
+            <div th:if="${busqueda == 'find'}">
+                <div class="text-center mb-3">
+                    <h3>
+                        <i class="fa fa-list-alt" aria-hidden="true"></i>
+                        <span th:text="#{gdoc.convenio.titulo.tabla}">Lista de Convenios</span>
+                    </h3>
+                </div>
+
+                <table id="tComprobantes" class="table table-striped data-table" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>
+                                <span th:text="#{items.year}">Gestión</span>
+                                <span th:if="${id}">-- <span th:text="${id}"></span> --</span>
+                                <span th:if="${gestion}">-- <span th:text="${gestion}"></span></span>
+                            </th>
+                            <th th:text="#{gdoc.resol.form.autoridad}">Autoridad</th>
+                            <th th:text="#{gdoc.convenio.form.objeto.convenio}">Objeto Convenio</th>
+                            <th th:text="#{voucher.viem.pdf}">Ver PDF</th>
+                            <th th:text="#{expenses.modify}">Siguiente</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="lcnv, iterStat : ${lTiposConvenios}">
+                            <form method="post" th:action="${urlList}">
+                                <td th:text="${iterStat.count}">Nro</td>
+                                <td th:text="${lcnv.tipoConvenio}">Tipo</td>
+                                <td th:text="${lcnv.siglaConvenio}">Sigla</td>
+                                <td>
+                                    <input type="text" th:name="'gestion' + ${lcnv.idGdocTipoConvenio}" class="form-control">
+                                </td>
+                                <td>
+                                    <input type="hidden" name="idGdocTipoConvenio" th:value="${lcnv.idGdocTipoConvenio}">
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Siguiente
+                                    </button>
+                                </td>
+                            </form>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th th:text="#{items.year}">Gestión</th>
+                            <th th:text="#{gdoc.resol.form.autoridad}">Autoridad</th>
+                            <th th:text="#{gdoc.convenio.form.objeto.convenio}">Objeto Convenio</th>
+                            <th th:text="#{voucher.viem.pdf}">Ver PDF</th>
+                            <th th:text="#{expenses.modify}">Siguiente</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <hr />
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <div th:replace="~{uap/usic/siga/gdoc/fragments/common :: scripts}"></div>
+    <script th:src="@{/resource/gdoc/resolucion.js}"></script>
+</body>
+</html>
