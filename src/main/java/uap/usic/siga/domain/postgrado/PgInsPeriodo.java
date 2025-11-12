@@ -1,7 +1,7 @@
 package uap.usic.siga.domain.postgrado;
 
 import uap.usic.siga.domain.compartido.base.EntidadAuditable;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "pg_ins_periodos")

@@ -1,6 +1,6 @@
 package uap.usic.siga.web.gdoc;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

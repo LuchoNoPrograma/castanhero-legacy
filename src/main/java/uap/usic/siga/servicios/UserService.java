@@ -1,5 +1,7 @@
 package uap.usic.siga.servicios;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import uap.usic.siga.dto.UserDto;
 import uap.usic.siga.dto.UserUpdateDto;
 import uap.usic.siga.entidades.Roles;
@@ -7,7 +9,6 @@ import uap.usic.siga.entidades.Roles;
 import uap.usic.siga.entidades.UserRepository;
 import uap.usic.siga.entidades.Usuarios;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,21 +28,14 @@ import static java.util.Collections.emptyList;
  */
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private  BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final CacheManager cacheManager;
-
-    public UserService(UserRepository userRepository,
-                       RoleService roleService,
-                       CacheManager cacheManager) {
-        this.userRepository = userRepository;
-        this.roleService = roleService;
-        this.cacheManager = cacheManager;
-    }
 
     //region find methods
     //==============================================================================================

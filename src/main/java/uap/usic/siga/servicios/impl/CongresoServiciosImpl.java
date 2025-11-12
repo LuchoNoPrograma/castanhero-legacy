@@ -1,8 +1,9 @@
 package uap.usic.siga.servicios.impl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +19,11 @@ import uap.usic.siga.servicios.CongresoServicios;
  */
 @Service("congresoServicios")
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class CongresoServiciosImpl implements CongresoServicios {
 
-	 @Autowired
-	 private CongresoDao dao;
+	 private final CongresoDao dao;
 
 	@Override
 	public List<CngTiposCongresistas> listarTiposCongresistas() {

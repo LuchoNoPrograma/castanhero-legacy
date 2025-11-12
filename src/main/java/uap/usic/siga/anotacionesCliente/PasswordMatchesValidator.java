@@ -1,7 +1,7 @@
 package uap.usic.siga.anotacionesCliente;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 import uap.usic.siga.dto.UserDto;
 

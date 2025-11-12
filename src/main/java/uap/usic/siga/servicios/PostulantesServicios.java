@@ -3,7 +3,7 @@ package uap.usic.siga.servicios;
 
 import java.util.List;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import uap.usic.siga.entidades.PrsCiExpedidos;
 import uap.usic.siga.entidades.PrsPaises;

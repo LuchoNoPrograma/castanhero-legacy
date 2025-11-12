@@ -5,7 +5,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import uap.usic.siga.domain.compartido.base.EntidadAuditable;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Entidad que representa menús del sistema.

@@ -6,7 +6,6 @@ import uap.usic.siga.entidades.Usuarios;
 import uap.usic.siga.servicios.RoleService;
 import uap.usic.siga.servicios.UserService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

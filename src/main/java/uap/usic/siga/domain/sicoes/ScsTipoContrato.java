@@ -2,8 +2,8 @@ package uap.usic.siga.domain.sicoes;
 
 import uap.usic.siga.entidades.SigaUsicRevisiones;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "scs_tipos_contratos")

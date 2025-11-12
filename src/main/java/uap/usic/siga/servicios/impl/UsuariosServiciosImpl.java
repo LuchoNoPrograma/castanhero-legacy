@@ -1,7 +1,8 @@
 package uap.usic.siga.servicios.impl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uap.usic.siga.entidades.Roles;
@@ -15,10 +16,11 @@ import uap.usic.siga.servicios.UsuariosServicios;
  */
 @Service("usuariosServicios")
 @Transactional
+@Slf4j
+@RequiredArgsConstructor
 public class UsuariosServiciosImpl implements UsuariosServicios {
     
-    @Autowired
-    private UsuariosDao dao;
+    private final UsuariosDao dao;
     
     @Override
     public List<Roles> listarRoles() {

@@ -1,10 +1,11 @@
 package uap.usic.siga.web.admin;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,25 +39,21 @@ import uap.usic.siga.servicios.UsuariosServicios;
  */
 @Controller
 @RequestMapping("/users")
+@Slf4j
+@RequiredArgsConstructor
 public class UsuariosController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private UsuariosServicios usuariosServicios;
+    private final UsuariosServicios usuariosServicios;
 
-    @Autowired
-    private PersonasServicios personasServicios;
+    private final PersonasServicios personasServicios;
 
-    @Autowired
-    private InstitucionesServicios institucionesServicios;
+    private final InstitucionesServicios institucionesServicios;
 
-    @Autowired
-    private AdministrativosServicios administrativosServicios;
+    private final AdministrativosServicios administrativosServicios;
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
     /**
      * Muestra el formulario principal de gestión de usuarios

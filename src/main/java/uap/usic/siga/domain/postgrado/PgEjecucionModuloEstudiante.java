@@ -3,7 +3,7 @@ package uap.usic.siga.domain.postgrado;
 import uap.usic.siga.domain.compartido.base.EntidadAuditable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "ejecucion_modulo_estudiante")

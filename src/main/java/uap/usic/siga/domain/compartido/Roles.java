@@ -3,7 +3,7 @@ package uap.usic.siga.domain.compartido;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import uap.usic.siga.anotacionesCliente.ValidRoleName;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 

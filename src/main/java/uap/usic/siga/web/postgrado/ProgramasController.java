@@ -1,9 +1,10 @@
 package uap.usic.siga.web.postgrado;
 
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,10 +26,11 @@ import uap.usic.siga.service.postgrado.ProgramaService;
  */
 @Controller
 @RequestMapping("/pg")
+@Slf4j
+@RequiredArgsConstructor
 public class ProgramasController {
 
-    @Autowired
-    private ProgramaService programaService;
+    private final ProgramaService programaService;
 
     /**
      * Lista todos los programas de postgrado

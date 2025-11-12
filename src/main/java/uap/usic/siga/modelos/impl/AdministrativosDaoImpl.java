@@ -1,8 +1,8 @@
 package uap.usic.siga.modelos.impl;
 
 import java.util.List;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import uap.usic.siga.entidades.PnlCargos;

@@ -1,9 +1,10 @@
 package uap.usic.siga.web.sicoes;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +22,11 @@ import uap.usic.siga.service.sicoes.SicoesService;
  */
 @Controller
 @RequestMapping("/sicoes/reportes")
+@Slf4j
+@RequiredArgsConstructor
 public class ReportesController {
 
-    @Autowired
-    private SicoesService sicoesService;
+    private final SicoesService sicoesService;
 
     /**
      * Muestra el panel principal de reportes

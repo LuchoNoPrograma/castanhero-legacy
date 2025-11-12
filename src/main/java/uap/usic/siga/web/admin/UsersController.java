@@ -1,11 +1,12 @@
 package uap.usic.siga.web.admin;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -46,6 +47,8 @@ import static uap.usic.siga.paginaciones.InitialPagingSizes.*;
  */
 @Controller
 @RequestMapping("/adminPage")
+@Slf4j
+@RequiredArgsConstructor
 public class UsersController {
 
     private static final String VIEW_EDIT_USER = "adminPage/user/editUser";
@@ -53,23 +56,17 @@ public class UsersController {
     private static final String VIEW_USERS = "adminPage/user/users";
     private static final String REDIRECT_USERS = "redirect:/adminPage/users";
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private RoleService roleService;
+    private final RoleService roleService;
 
-    @Autowired
-    private UserUpdateDtoService userUpdateDtoService;
+    private final UserUpdateDtoService userUpdateDtoService;
 
-    @Autowired
-    private UserDtoService userDtoService;
+    private final UserDtoService userDtoService;
 
-    @Autowired
-    private UserFinder userFinder;
+    private final UserFinder userFinder;
 
-    @Autowired
-    private UserSearchErrorResponse userSearchErrorResponse;
+    private final UserSearchErrorResponse userSearchErrorResponse;
 
     /**
      * Lista todos los usuarios con paginación y búsqueda

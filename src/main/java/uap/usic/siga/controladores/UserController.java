@@ -5,7 +5,6 @@ import uap.usic.siga.entidades.Usuarios;
 import uap.usic.siga.dto.UserDto;
 import uap.usic.siga.entidades.AuthorityType;
 import uap.usic.siga.servicios.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +13,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Set;

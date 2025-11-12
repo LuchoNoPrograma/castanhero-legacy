@@ -1,5 +1,7 @@
 package uap.usic.siga.servicios;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import uap.usic.siga.dto.UserUpdateDto;
 
 import uap.usic.siga.entidades.Usuarios;
@@ -15,15 +17,12 @@ import java.util.List;
  */
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class UserUpdateDtoService {
 
-    private UserService userService;
-    private ModelMapper modelMapper;
-
-    public UserUpdateDtoService(UserService userService, ModelMapper modelMapper) {
-        this.userService = userService;
-        this.modelMapper = modelMapper;
-    }
+    private final UserService userService;
+    private final ModelMapper modelMapper;
 
     public List<UserUpdateDto> findAll(){
         List<Usuarios> userList = userService.findAllEagerly();

@@ -7,8 +7,8 @@ import uap.usic.siga.entidades.CjaTiposGastos;
 import uap.usic.siga.entidades.Personas;
 import uap.usic.siga.entidades.SigaUsicGestiones;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity

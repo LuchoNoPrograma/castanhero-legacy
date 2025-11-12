@@ -1,8 +1,9 @@
 package uap.usic.siga.web.gdoc;
 
-import javax.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,13 +25,13 @@ import uap.usic.siga.service.gdoc.GdocArchivosAdjuntosService;
  */
 @Controller
 @RequestMapping("/gdoc/resoluciones")
+@Slf4j
+@RequiredArgsConstructor
 public class ResolucionesController {
 
-    @Autowired
-    private GdocResolucionesService resolucionesService;
+    private final GdocResolucionesService resolucionesService;
 
-    @Autowired
-    private GdocArchivosAdjuntosService archivosService;
+    private final GdocArchivosAdjuntosService archivosService;
 
     /**
      * Lista todas las resoluciones

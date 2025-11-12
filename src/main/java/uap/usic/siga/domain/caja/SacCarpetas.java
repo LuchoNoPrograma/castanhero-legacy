@@ -12,8 +12,8 @@ import uap.usic.siga.entidades.SigaUsicGestiones;
 import uap.usic.siga.entidades.SisMeses;
 import uap.usic.siga.entidades.Usuarios;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Entidad de dominio para carpetas de archivo contable

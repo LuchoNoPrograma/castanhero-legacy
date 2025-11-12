@@ -1,6 +1,7 @@
 package uap.usic.siga.web.sicoes;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,21 +12,20 @@ import uap.usic.siga.service.sicoes.SicoesService;
 import uap.usic.siga.servicios.InstitucionesServicios;
 import uap.usic.siga.servicios.UserService;
 
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/sicoes/proyectos")
+@Slf4j
+@RequiredArgsConstructor
 public class ProyectoController {
 
-    @Autowired
-    private SicoesService sicoesService;
+    private final SicoesService sicoesService;
 
-    @Autowired
-    private InstitucionesServicios institucionesServicios;
+    private final InstitucionesServicios institucionesServicios;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping
     public String inicio(HttpSession session, Model model) {

@@ -1,6 +1,7 @@
 package uap.usic.siga.web.sicoes;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,19 +14,19 @@ import uap.usic.siga.service.sicoes.SicoesService;
 import uap.usic.siga.servicios.PersonasServicios;
 import uap.usic.siga.utilidades.AdjuntarArchivo;
 
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import java.io.IOException;
 
 @Controller
 @RequestMapping("/sicoes/contratados")
+@Slf4j
+@RequiredArgsConstructor
 public class ContratadoController {
 
-    @Autowired
-    private SicoesService sicoesService;
+    private final SicoesService sicoesService;
 
-    @Autowired
-    private PersonasServicios personasServicios;
+    private final PersonasServicios personasServicios;
 
     @GetMapping
     public String inicio(HttpSession session, Model model) {

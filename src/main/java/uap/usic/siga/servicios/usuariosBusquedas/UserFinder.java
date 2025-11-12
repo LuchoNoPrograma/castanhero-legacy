@@ -1,11 +1,12 @@
 package uap.usic.siga.servicios.usuariosBusquedas;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import uap.usic.siga.dto.UserDto;
 import uap.usic.siga.servicios.UserDtoService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -18,13 +19,12 @@ import static java.lang.Long.parseLong;
 @Log4j2
 @Data
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class UserFinder {
     private UserDtoService userDtoService;
 
     @Autowired
-    public UserFinder(UserDtoService userDtoService) {
-        this.userDtoService = userDtoService;
-    }
 
     public UserSearchResult searchUsersByProperty(PageRequest pageRequest, UserSearchParameters params) {
         Page<UserDto> userDtoPage = new PageImpl<>(Collections.emptyList(), pageRequest, 0);

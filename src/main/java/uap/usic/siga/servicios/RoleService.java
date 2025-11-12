@@ -1,5 +1,7 @@
 package uap.usic.siga.servicios;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -14,12 +16,10 @@ import java.util.Optional;
  * Created by Keno&Kemo on 04.11.2017..
  */
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class RoleService {
-    private RoleRepository roleRepository;
-
-    public RoleService(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
+    private final RoleRepository roleRepository;
 
     //region Find methods
     //==================================================================================
